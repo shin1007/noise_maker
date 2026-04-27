@@ -1,4 +1,4 @@
-const CACHE_NAME = 'noise-maker-v1';
+const CACHE_NAME = 'noise-maker-v2';
 const PRECACHE_URLS = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg'];
 
 self.addEventListener('install', (event) => {

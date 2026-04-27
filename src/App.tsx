@@ -35,7 +35,7 @@ export function App() {
   const [baseFrequency, setBaseFrequency] = useState(defaultState.baseFrequency);
   const [differenceFrequency, setDifferenceFrequency] = useState(defaultState.differenceFrequency);
   const [timerMinutes, setTimerMinutes] = useState(defaultState.timerMinutes);
-  const [useTimerDropdown, setUseTimerDropdown] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+  const [useTimerDropdown, setUseTimerDropdown] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
@@ -45,14 +45,32 @@ export function App() {
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (typeof window.matchMedia !== 'function') {
+      setUseTimerDropdown(false);
+      return;
+    }
+
     const mediaQuery = window.matchMedia('(max-width: 760px)');
     const onChange = (event: MediaQueryListEvent) => {
       setUseTimerDropdown(event.matches);
     };
+    const legacyMediaQuery = mediaQuery as MediaQueryList & {
+      addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+      removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    };
 
     setUseTimerDropdown(mediaQuery.matches);
-    mediaQuery.addEventListener('change', onChange);
-    return () => mediaQuery.removeEventListener('change', onChange);
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', onChange);
+      return () => mediaQuery.removeEventListener('change', onChange);
+    }
+
+    if (typeof legacyMediaQuery.addListener === 'function') {
+      legacyMediaQuery.addListener(onChange);
+      return () => legacyMediaQuery.removeListener?.(onChange);
+    }
+
+    return;
   }, []);
 
   useEffect(() => {
