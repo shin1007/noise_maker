@@ -27,6 +27,7 @@ export interface Copy {
   evidenceTitle: string;
   platformTitle: string;
   simpleExplanationTitle: string;
+  volumeLabel: string;
   timerLabel: string;
   timerOff: string;
 }

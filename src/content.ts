@@ -4,7 +4,7 @@ export const copy: Record<Locale, Copy> = {
   ja: {
     appName: 'Noise Maker',
     appTagline: 'シンプルに、静かに、聞きたい音だけ。',
-    install: 'インストール',
+    install: 'ホーム画面に追加',
     installHint: 'ホーム画面に追加すると、起動が速くなります。',
     play: '再生',
     stop: '停止',
@@ -12,13 +12,14 @@ export const copy: Record<Locale, Copy> = {
     evidenceTitle: '説明と論文',
     platformTitle: 'PWA と端末差分',
     simpleExplanationTitle: '短い説明',
+    volumeLabel: '音量',
     timerLabel: 'タイマー',
     timerOff: 'なし'
   },
   en: {
     appName: 'Noise Maker',
     appTagline: 'Simple noise and binaural beats, tuned for phones.',
-    install: 'Install',
+    install: 'Add to Home Screen',
     installHint: 'Adding to the home screen makes launch faster.',
     play: 'Play',
     stop: 'Stop',
@@ -26,6 +27,7 @@ export const copy: Record<Locale, Copy> = {
     evidenceTitle: 'Explanation and papers',
     platformTitle: 'PWA and platform differences',
     simpleExplanationTitle: 'Plain explanation',
+    volumeLabel: 'Volume',
     timerLabel: 'Timer',
     timerOff: 'Off'
   }

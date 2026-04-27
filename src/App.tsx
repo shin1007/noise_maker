@@ -38,6 +38,7 @@ export function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
   const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
+  const [isInstallHelpOpen, setIsInstallHelpOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
@@ -246,8 +247,34 @@ export function App() {
               <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
                 {strings.install}
               </button>
-              <p className="install-caption">{strings.installHint}</p>
+              <button
+                type="button"
+                className="help-button"
+                onClick={() => setIsInstallHelpOpen((current) => !current)}
+                aria-expanded={isInstallHelpOpen}
+                aria-label={locale === 'ja' ? 'インストール情報を表示' : 'Show installation info'}
+              >
+                ?
+              </button>
             </div>
+
+            {isInstallHelpOpen ? (
+              <div className="help-links-panel">
+                <div>
+                  <p className="help-panel-label">{locale === 'ja' ? 'ホーム画面に追加' : 'Add to home screen'}</p>
+                  <p>{strings.installHint}</p>
+                </div>
+
+                <div>
+                  <p className="help-panel-label">{locale === 'ja' ? 'バックグラウンドでの動作について' : 'About background playback'}</p>
+                  <ul className="platform-list compact">
+                    {platformNotes[locale].map((note) => (
+                      <li key={note}>{note}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : null}
           </div>
           <p className="lead">{strings.appTagline}</p>
         </div>
@@ -305,9 +332,8 @@ export function App() {
         <div className="hero-quick-controls">
           <div className="control-group">
             <label>
-              <span>Volume</span>
+              <span>{strings.volumeLabel}: {volume}%</span>
               <input type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} />
-              <strong>{volume}%</strong>
             </label>
           </div>
 
@@ -408,36 +434,10 @@ export function App() {
           </>
         ) : null}
 
-        <div className="action-row">
-          <button className="primary-button" type="button" onClick={() => void togglePlayback()}>{isPlaying ? strings.stop : strings.play}</button>
-          <button className="secondary-button" type="button" onClick={() => void stopPlayback()}>{strings.stop}</button>
-        </div>
-      </section>
-
-      <section className="card">
-        <div className="section-head">
-          <h2>{strings.platformTitle}</h2>
-          <p>実装上の制約を先に明記して、期待値をずらしません。</p>
-        </div>
-
-        <ul className="platform-list">
-          {platformNotes[locale].map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-
-        <div className="install-guide">
-          <button className="secondary-button" type="button" onClick={() => setInstallGuideOpen((current) => !current)}>{strings.addToHomeScreen}</button>
-          {installGuideOpen ? (
-            <div className="guide-panel">
-              <p>{locale === 'ja' ? 'Chrome/Android では「インストール」ボタン、iPhone では共有メニューから「ホーム画面に追加」を使ってください。' : 'Use the Install button on Chrome/Android, or the Share menu on iPhone to add this app to the home screen.'}</p>
-            </div>
-          ) : null}
-        </div>
       </section>
 
       <footer className="footer-note">
-        <p>{locale === 'ja' ? '医療効果は断定しません。用途に合わせて慎重に使ってください。' : 'No medical claims are made. Use it cautiously and fit it to your context.'}</p>
+        <p>{locale === 'ja' ? '医療効果を保証するものではありません。用途に合わせて慎重に使ってください。' : 'No medical claims are made. Use it cautiously and fit it to your context.'}</p>
       </footer>
     </main>
   );
