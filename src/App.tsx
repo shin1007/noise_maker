@@ -37,6 +37,7 @@ export function App() {
   const [timerMinutes, setTimerMinutes] = useState(defaultState.timerMinutes);
   const [useTimerDropdown, setUseTimerDropdown] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
@@ -90,6 +91,17 @@ export function App() {
 
   useEffect(() => {
     if (!('serviceWorker' in navigator)) {
+      return;
+    }
+
+    const isLocalPreview = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalPreview) {
+      navigator.serviceWorker
+        .getRegistrations()
+        .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+        .catch(() => {
+          // Ignore cleanup failures in dev.
+        });
       return;
     }
 
@@ -230,6 +242,13 @@ export function App() {
   }
 
   const activeEvidence = evidenceCards.find((card) => card.key === selectedEvidenceKey) ?? evidenceCards[0];
+  const binauralTargetByKey: Record<string, number> = {
+    delta: 2,
+    theta: 6,
+    alpha: 10,
+    beta: 18,
+    gamma: 36
+  };
   const activeBinauralBand =
     binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
     binauralBands[1];
@@ -276,73 +295,115 @@ export function App() {
             </button>
           ))}
         </div>
+
+        <div className="hero-quick-controls">
+          <div className="control-group">
+            <label>
+              <span>Volume</span>
+              <input type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} />
+              <strong>{volume}%</strong>
+            </label>
+          </div>
+
+          <div className="timer-row">
+            <span>{strings.timerLabel}</span>
+            {useTimerDropdown ? (
+              <label className="timer-select-wrap">
+                <span className="visually-hidden">{locale === 'ja' ? 'タイマー分数を選択' : 'Select timer minutes'}</span>
+                <select className="timer-select" value={timerMinutes} onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}>
+                  {timerOptions.map((timerOption) => (
+                    <option key={timerOption} value={timerOption}>
+                      {timerOption}m
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : (
+              <div className="timer-pills">
+                {timerOptions.map((timerOption) => (
+                  <button key={timerOption} type="button" className={timerMinutes === timerOption ? 'pill selected' : 'pill'} onClick={() => setTimerMinutes(clampTimerValue(timerOption))}>
+                    {timerOption}m
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
       <section className="card controls-card">
-        <div className="control-group">
-          <label>
-            <span>Volume</span>
-            <input type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} />
-            <strong>{volume}%</strong>
-          </label>
-        </div>
-
         <div className="toggle-row">
           <label className="switch">
-            <input type="checkbox" checked={binauralEnabled} onChange={(event) => setBinauralEnabled(event.target.checked)} />
+            <input
+              type="checkbox"
+              checked={binauralEnabled}
+              onChange={(event) => {
+                const isEnabled = event.target.checked;
+                setBinauralEnabled(isEnabled);
+                if (!isEnabled) {
+                  setIsBinauralHelpOpen(false);
+                }
+              }}
+            />
             <span>{locale === 'ja' ? 'バイノーラルビート ON' : 'Binaural beats on'}</span>
           </label>
+          <button
+            type="button"
+            className="help-button"
+            onClick={() => setIsBinauralHelpOpen((current) => !current)}
+            aria-expanded={isBinauralHelpOpen}
+            aria-label={locale === 'ja' ? 'バイノーラルビートの説明を表示' : 'Show binaural beat help'}
+          >
+            ?
+          </button>
         </div>
 
-        <div className="frequency-grid" aria-disabled={!binauralEnabled}>
-          <label>
-            <span>{locale === 'ja' ? 'ベース周波数' : 'Base frequency'}</span>
-            <input type="number" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => setBaseFrequency(Number(event.target.value) || defaultState.baseFrequency)} disabled={!binauralEnabled} />
-          </label>
-          <label>
-            <span>{locale === 'ja' ? '差分周波数' : 'Beat frequency'}</span>
-            <input type="number" min="0" max="40" step="0.5" value={differenceFrequency} onChange={(event) => setDifferenceFrequency(Number(event.target.value) || defaultState.differenceFrequency)} disabled={!binauralEnabled} />
-          </label>
-        </div>
+        {isBinauralHelpOpen ? (
+          <div className="binaural-help-panel">
+            <p>
+              {locale === 'ja'
+                ? '左右の耳に少し異なる周波数を流し、差分周波数を体感しやすくする機能です。'
+                : 'This sends slightly different tones to each ear so the beat difference can be perceived more clearly.'}
+            </p>
+            <p>
+              {locale === 'ja'
+                ? 'ヘッドホン使用を推奨します。医療目的ではなく、集中やリラックスのための音の調整として使ってください。'
+                : 'Headphones are recommended. Use this as a sound-tuning aid for focus or relaxation, not as a medical treatment.'}
+            </p>
+          </div>
+        ) : null}
 
-        <div className="binaural-guide" aria-live="polite">
-          <p className="binaural-current">
-            {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{activeBinauralBand.label[locale]}</strong>
-          </p>
-          <p className="binaural-effect">{activeBinauralBand.effect[locale]}</p>
-          <ul className="binaural-band-list">
-            {binauralBands.map((band) => (
-              <li key={band.key} className={band.key === activeBinauralBand.key ? 'active' : ''}>
-                <strong>{band.label[locale]}</strong>
-                <span>{band.effect[locale]}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="timer-row">
-          <span>{strings.timerLabel}</span>
-          {useTimerDropdown ? (
-            <label className="timer-select-wrap">
-              <span className="visually-hidden">{locale === 'ja' ? 'タイマー分数を選択' : 'Select timer minutes'}</span>
-              <select className="timer-select" value={timerMinutes} onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}>
-                {timerOptions.map((timerOption) => (
-                  <option key={timerOption} value={timerOption}>
-                    {timerOption}m
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : (
-            <div className="timer-pills">
-              {timerOptions.map((timerOption) => (
-                <button key={timerOption} type="button" className={timerMinutes === timerOption ? 'pill selected' : 'pill'} onClick={() => setTimerMinutes(clampTimerValue(timerOption))}>
-                  {timerOption}m
-                </button>
-              ))}
+        {binauralEnabled ? (
+          <>
+            <div className="frequency-grid">
+              <label>
+                <span>{locale === 'ja' ? 'ベース周波数' : 'Base frequency'}: {Math.round(baseFrequency)}Hz</span>
+                <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => setBaseFrequency(Number(event.target.value) || defaultState.baseFrequency)} />
+              </label>
             </div>
-          )}
-        </div>
+
+            <div className="binaural-guide" aria-live="polite">
+              <p className="binaural-current">
+                {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{activeBinauralBand.label[locale]}</strong>
+              </p>
+              <ul className="binaural-band-list">
+                {binauralBands.map((band) => (
+                  <li key={band.key} className={band.key === activeBinauralBand.key ? 'active' : ''}>
+                    <button
+                      type="button"
+                      className={band.key === activeBinauralBand.key ? 'band-button active' : 'band-button'}
+                      onClick={() => setDifferenceFrequency(binauralTargetByKey[band.key] ?? differenceFrequency)}
+                      aria-pressed={band.key === activeBinauralBand.key}
+                    >
+                      <strong>{band.label[locale]} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
+                      <span>{band.effect[locale]}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : null}
 
         <div className="action-row">
           <button className="primary-button" type="button" onClick={() => void togglePlayback()}>{isPlaying ? strings.stop : strings.play}</button>

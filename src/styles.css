@@ -92,6 +92,11 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
 .section-head p { max-width: 32rem; color: rgba(238, 244, 255, 0.68); }
 .noise-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
 .hero-noise-grid { margin-top: 14px; }
+.hero-quick-controls {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
 .noise-chip {
   text-align: left;
   border-radius: 20px;
@@ -142,6 +147,31 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
 }
 .switch { display: inline-flex; gap: 10px; align-items: center; color: rgba(238, 244, 255, 0.92); }
 .switch input { accent-color: #77f2d0; }
+.toggle-row {
+  justify-content: space-between;
+}
+.help-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(122, 168, 255, 0.4);
+  background: rgba(122, 168, 255, 0.14);
+  color: #d6e6ff;
+  font-weight: 700;
+}
+.binaural-help-panel {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 168, 255, 0.24);
+  background: rgba(122, 168, 255, 0.08);
+}
+.binaural-help-panel p {
+  margin: 0;
+  color: rgba(238, 244, 255, 0.86);
+}
+.binaural-help-panel p + p {
+  margin-top: 8px;
+}
 .timer-row { align-items: flex-start; }
 .timer-pills, .evidence-selector { display: flex; flex-wrap: wrap; gap: 8px; }
 .binaural-guide {
@@ -154,10 +184,6 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
   margin-bottom: 6px;
   color: rgba(238, 244, 255, 0.95);
 }
-.binaural-effect {
-  margin-bottom: 10px;
-  color: rgba(238, 244, 255, 0.8);
-}
 .binaural-band-list {
   margin: 0;
   padding: 0;
@@ -165,19 +191,22 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
   display: grid;
   gap: 6px;
 }
-.binaural-band-list li {
+.band-button {
+  width: 100%;
+  text-align: left;
   display: grid;
   gap: 2px;
   padding: 8px 10px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.04);
+  color: rgba(238, 244, 255, 0.96);
 }
-.binaural-band-list li span {
+.band-button span {
   color: rgba(238, 244, 255, 0.75);
   font-size: 0.9rem;
 }
-.binaural-band-list li.active {
+.band-button.active {
   border-color: rgba(119, 242, 208, 0.42);
   background: rgba(119, 242, 208, 0.12);
 }

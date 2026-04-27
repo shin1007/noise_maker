@@ -56,8 +56,8 @@ export const binauralBands: Array<{
     max: 4,
     label: { ja: 'デルタ (0.5-4 Hz)', en: 'Delta (0.5-4 Hz)' },
     effect: {
-      ja: '深い休息に関連づけられる帯域です。睡眠改善を断定できるほどの一貫した証拠はありません。',
-      en: 'Often associated with deep rest. Evidence is not consistent enough for firm sleep claims.'
+      ja: '深い休息モードに寄せたいときの目安です。夜の静かな時間に合わせやすい帯域です。',
+      en: 'A common target when aiming for a deeper rest mood, especially in quiet night sessions.'
     }
   },
   {
@@ -76,8 +76,8 @@ export const binauralBands: Array<{
     max: 13,
     label: { ja: 'アルファ (8-13 Hz)', en: 'Alpha (8-13 Hz)' },
     effect: {
-      ja: 'リラックスしつつ覚醒している状態の目安として使われます。研究結果は混在しています。',
-      en: 'Used as a relaxed-but-awake target. Findings in studies are mixed.'
+      ja: 'リラックスしつつ作業したいときに選ばれやすい、バランス型の帯域です。',
+      en: 'A balanced range often chosen for relaxed but awake sessions.'
     }
   },
   {
@@ -96,8 +96,8 @@ export const binauralBands: Array<{
     max: 40,
     label: { ja: 'ガンマ (30-40 Hz)', en: 'Gamma (30-40 Hz)' },
     effect: {
-      ja: '高い認知負荷や明瞭感と関連づけられることがありますが、エビデンスは限定的です。',
-      en: 'Sometimes linked to high cognitive engagement, but evidence remains limited.'
+      ja: '切り替えや短時間の高集中に向けた高めの帯域です。刺激が強く感じる場合があります。',
+      en: 'A higher band often used for short, high-focus pushes; it can feel intense for some.'
     }
   }
 ];
