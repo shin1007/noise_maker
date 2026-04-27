@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { copy, evidenceCards, getNoiseLabel, noiseTypes, platformNotes, timerOptions } from './content';
+import { binauralBands, copy, evidenceCards, getNoiseLabel, noiseTypes, platformNotes, timerOptions } from './content';
 import { clampSettings, NoiseEngine } from './audio/noiseEngine';
 import type { Locale, NoiseType } from './types';
 
@@ -9,7 +9,7 @@ const defaultState = {
   binauralEnabled: false,
   baseFrequency: 220,
   differenceFrequency: 6,
-  timerMinutes: 0
+  timerMinutes: 30
 };
 
 function resolveLocale(): Locale {
@@ -22,7 +22,7 @@ function resolveLocale(): Locale {
 }
 
 function clampTimerValue(value: number): number {
-  return timerOptions.includes(value as 0 | 15 | 30 | 60) ? value : 0;
+  return timerOptions.includes(value as (typeof timerOptions)[number]) ? value : timerOptions[0];
 }
 
 export function App() {
@@ -35,6 +35,7 @@ export function App() {
   const [baseFrequency, setBaseFrequency] = useState(defaultState.baseFrequency);
   const [differenceFrequency, setDifferenceFrequency] = useState(defaultState.differenceFrequency);
   const [timerMinutes, setTimerMinutes] = useState(defaultState.timerMinutes);
+  const [useTimerDropdown, setUseTimerDropdown] = useState(() => window.matchMedia('(max-width: 760px)').matches);
   const [isPlaying, setIsPlaying] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
@@ -42,6 +43,17 @@ export function App() {
   const [selectedEvidenceKey, setSelectedEvidenceKey] = useState(evidenceCards[0].key);
   const engineRef = useRef<NoiseEngine | null>(null);
   const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 760px)');
+    const onChange = (event: MediaQueryListEvent) => {
+      setUseTimerDropdown(event.matches);
+    };
+
+    setUseTimerDropdown(mediaQuery.matches);
+    mediaQuery.addEventListener('change', onChange);
+    return () => mediaQuery.removeEventListener('change', onChange);
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -200,6 +212,9 @@ export function App() {
   }
 
   const activeEvidence = evidenceCards.find((card) => card.key === selectedEvidenceKey) ?? evidenceCards[0];
+  const activeBinauralBand =
+    binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
+    binauralBands[1];
 
   return (
     <main className="app-shell">
@@ -236,7 +251,7 @@ export function App() {
             <button
               key={noiseTypeOption.key}
               type="button"
-              className={`noise-chip ${noiseType === noiseTypeOption.key ? 'selected' : ''}`}
+              className={`noise-chip noise-${noiseTypeOption.key} ${noiseType === noiseTypeOption.key ? 'selected' : ''}`}
               onClick={() => setNoiseType(noiseTypeOption.key)}
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
@@ -275,15 +290,43 @@ export function App() {
           </label>
         </div>
 
+        <div className="binaural-guide" aria-live="polite">
+          <p className="binaural-current">
+            {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{activeBinauralBand.label[locale]}</strong>
+          </p>
+          <p className="binaural-effect">{activeBinauralBand.effect[locale]}</p>
+          <ul className="binaural-band-list">
+            {binauralBands.map((band) => (
+              <li key={band.key} className={band.key === activeBinauralBand.key ? 'active' : ''}>
+                <strong>{band.label[locale]}</strong>
+                <span>{band.effect[locale]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="timer-row">
           <span>{strings.timerLabel}</span>
-          <div className="timer-pills">
-            {timerOptions.map((timerOption) => (
-              <button key={timerOption} type="button" className={timerMinutes === timerOption ? 'pill selected' : 'pill'} onClick={() => setTimerMinutes(clampTimerValue(timerOption))}>
-                {timerOption === 0 ? strings.timerOff : `${timerOption}m`}
-              </button>
-            ))}
-          </div>
+          {useTimerDropdown ? (
+            <label className="timer-select-wrap">
+              <span className="visually-hidden">{locale === 'ja' ? 'タイマー分数を選択' : 'Select timer minutes'}</span>
+              <select className="timer-select" value={timerMinutes} onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}>
+                {timerOptions.map((timerOption) => (
+                  <option key={timerOption} value={timerOption}>
+                    {timerOption}m
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <div className="timer-pills">
+              {timerOptions.map((timerOption) => (
+                <button key={timerOption} type="button" className={timerMinutes === timerOption ? 'pill selected' : 'pill'} onClick={() => setTimerMinutes(clampTimerValue(timerOption))}>
+                  {timerOption}m
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="action-row">

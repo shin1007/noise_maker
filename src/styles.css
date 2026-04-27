@@ -93,6 +93,29 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
 }
 .noise-chip span { color: rgba(238, 244, 255, 0.72); font-size: 0.92rem; }
 .noise-chip.selected, .pill.selected { background: rgba(122, 168, 255, 0.16); border-color: rgba(122, 168, 255, 0.35); }
+.noise-chip.noise-white {
+  background: linear-gradient(180deg, rgba(245, 248, 255, 0.1), rgba(255, 255, 255, 0.04));
+  border-color: rgba(214, 227, 255, 0.36);
+}
+.noise-chip.noise-pink {
+  background: linear-gradient(180deg, rgba(255, 148, 193, 0.16), rgba(255, 148, 193, 0.04));
+  border-color: rgba(255, 148, 193, 0.34);
+}
+.noise-chip.noise-brown {
+  background: linear-gradient(180deg, rgba(169, 117, 84, 0.2), rgba(130, 88, 63, 0.08));
+  border-color: rgba(196, 141, 104, 0.38);
+}
+.noise-chip.noise-blue {
+  background: linear-gradient(180deg, rgba(93, 165, 255, 0.2), rgba(93, 165, 255, 0.05));
+  border-color: rgba(127, 187, 255, 0.36);
+}
+.noise-chip.noise-violet {
+  background: linear-gradient(180deg, rgba(198, 131, 255, 0.2), rgba(198, 131, 255, 0.05));
+  border-color: rgba(211, 157, 255, 0.34);
+}
+.noise-chip.selected {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 8px 24px rgba(0, 0, 0, 0.25);
+}
 .controls-card { display: grid; gap: 14px; }
 .control-group label, .frequency-grid label { display: grid; gap: 8px; }
 .control-group input[type='range'] { width: 100%; }
@@ -109,6 +132,65 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
 .switch input { accent-color: #77f2d0; }
 .timer-row { align-items: flex-start; }
 .timer-pills, .evidence-selector { display: flex; flex-wrap: wrap; gap: 8px; }
+.binaural-guide {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(122, 168, 255, 0.08);
+  border: 1px solid rgba(122, 168, 255, 0.24);
+}
+.binaural-current {
+  margin-bottom: 6px;
+  color: rgba(238, 244, 255, 0.95);
+}
+.binaural-effect {
+  margin-bottom: 10px;
+  color: rgba(238, 244, 255, 0.8);
+}
+.binaural-band-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.binaural-band-list li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+.binaural-band-list li span {
+  color: rgba(238, 244, 255, 0.75);
+  font-size: 0.9rem;
+}
+.binaural-band-list li.active {
+  border-color: rgba(119, 242, 208, 0.42);
+  background: rgba(119, 242, 208, 0.12);
+}
+.timer-select-wrap {
+  min-width: 170px;
+}
+.timer-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #eef4ff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .evidence-panel {
   margin-top: 14px;
   padding: 16px;
@@ -137,4 +219,7 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
   .card { padding: 14px; border-radius: 22px; }
   .hero-actions, .action-row, .section-head { align-items: stretch; }
   .hero-actions > button, .action-row > button { flex: 1 1 140px; }
+  .timer-pills {
+    display: none;
+  }
 }

@@ -36,11 +36,70 @@ export const noiseTypes: Array<{
   label: Record<Locale, string>;
   short: Record<Locale, string>;
 }> = [
-  { key: 'white', label: { ja: 'ホワイト', en: 'White' }, short: { ja: '全体の帯域を広く含む、基準に近いノイズです。', en: 'A baseline noise with energy spread broadly across the spectrum.' } },
-  { key: 'pink', label: { ja: 'ピンク', en: 'Pink' }, short: { ja: '低い音がやや強く、耳にやわらかく感じやすいノイズです。', en: 'Lower frequencies are relatively stronger, so it often feels softer.' } },
-  { key: 'brown', label: { ja: 'ブラウン', en: 'Brown' }, short: { ja: 'さらに低音寄りで、深くこもった感じになりやすいノイズです。', en: 'Even more low-frequency weighted and usually deeper sounding.' } },
-  { key: 'blue', label: { ja: 'ブルー', en: 'Blue' }, short: { ja: '高音が相対的に強く、少し明るく感じるノイズです。', en: 'Higher frequencies are emphasized, which can sound brighter.' } },
-  { key: 'violet', label: { ja: 'ヴァイオレット', en: 'Violet' }, short: { ja: 'さらに高音寄りで、鋭さのあるノイズです。', en: 'A very high-frequency weighted noise with a sharper feel.' } }
+  { key: 'white', label: { ja: 'ホワイト', en: 'White' }, short: { ja: '環境音を目立ちにくくして、作業や休憩の切り替えに使われることがあります。', en: 'Often used to mask background sounds and support task or rest transitions.' } },
+  { key: 'pink', label: { ja: 'ピンク', en: 'Pink' }, short: { ja: '就寝前に落ち着きやすいと感じる人がいます。睡眠への効果は研究でも個人差があります。', en: 'Some people find it easier to settle before sleep. Sleep effects vary across studies and individuals.' } },
+  { key: 'brown', label: { ja: 'ブラウン', en: 'Brown' }, short: { ja: '低めで包まれる感覚があり、リラックス目的で選ばれることがあります。', en: 'Its deeper tone can feel enveloping, so some listeners choose it for relaxation.' } },
+  { key: 'blue', label: { ja: 'ブルー', en: 'Blue' }, short: { ja: '気分を切り替えたい場面で、短時間の集中スイッチとして使う人もいます。', en: 'Sometimes used as a short focus reset when people want a quick mental shift.' } },
+  { key: 'violet', label: { ja: 'ヴァイオレット', en: 'Violet' }, short: { ja: '高めの刺激で注意を向けやすいと感じる人がいますが、長時間は疲れやすいことがあります。', en: 'Some listeners feel more alert with it, though long sessions can become fatiguing.' } }
+];
+
+export const binauralBands: Array<{
+  key: string;
+  min: number;
+  max: number;
+  label: Record<Locale, string>;
+  effect: Record<Locale, string>;
+}> = [
+  {
+    key: 'delta',
+    min: 0.5,
+    max: 4,
+    label: { ja: 'デルタ (0.5-4 Hz)', en: 'Delta (0.5-4 Hz)' },
+    effect: {
+      ja: '深い休息に関連づけられる帯域です。睡眠改善を断定できるほどの一貫した証拠はありません。',
+      en: 'Often associated with deep rest. Evidence is not consistent enough for firm sleep claims.'
+    }
+  },
+  {
+    key: 'theta',
+    min: 4,
+    max: 8,
+    label: { ja: 'シータ (4-8 Hz)', en: 'Theta (4-8 Hz)' },
+    effect: {
+      ja: '落ち着きや内省の感覚と結びつけられることがあります。体感は人によって大きく変わります。',
+      en: 'Sometimes linked to calm or inward attention, with large person-to-person variation.'
+    }
+  },
+  {
+    key: 'alpha',
+    min: 8,
+    max: 13,
+    label: { ja: 'アルファ (8-13 Hz)', en: 'Alpha (8-13 Hz)' },
+    effect: {
+      ja: 'リラックスしつつ覚醒している状態の目安として使われます。研究結果は混在しています。',
+      en: 'Used as a relaxed-but-awake target. Findings in studies are mixed.'
+    }
+  },
+  {
+    key: 'beta',
+    min: 13,
+    max: 30,
+    label: { ja: 'ベータ (13-30 Hz)', en: 'Beta (13-30 Hz)' },
+    effect: {
+      ja: '注意や課題集中に関連づけられる帯域です。人によっては刺激が強すぎる場合があります。',
+      en: 'Often associated with attention and task focus, though it may feel overstimulating for some.'
+    }
+  },
+  {
+    key: 'gamma',
+    min: 30,
+    max: 40,
+    label: { ja: 'ガンマ (30-40 Hz)', en: 'Gamma (30-40 Hz)' },
+    effect: {
+      ja: '高い認知負荷や明瞭感と関連づけられることがありますが、エビデンスは限定的です。',
+      en: 'Sometimes linked to high cognitive engagement, but evidence remains limited.'
+    }
+  }
 ];
 
 export const evidenceCards: EvidenceCard[] = [
@@ -54,7 +113,7 @@ export const platformNotes: Record<Locale, string[]> = {
   en: ['iOS has stricter browser limits, so background playback still depends on OS behavior.', 'Android usually handles PWA and Media Session well, but battery optimization can still interrupt playback.', 'Desktop is the most stable, though closing the tab will stop playback as expected.']
 };
 
-export const timerOptions = [0, 15, 30, 60] as const;
+export const timerOptions = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60] as const;
 
 export function getNoiseLabel(locale: Locale, key: NoiseType): string {
   const item = noiseTypes.find((noiseType) => noiseType.key === key);
