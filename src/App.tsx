@@ -229,20 +229,27 @@ export function App() {
       <section className="hero card">
         <div>
           <p className="eyebrow">PWA · Vercel-ready</p>
-          <h1>{strings.appName}</h1>
-          <p className="lead">{strings.appTagline}</p>
-        </div>
-
-        <div className="hero-actions">
-          <button className="primary-button" type="button" onClick={() => void togglePlayback()}>
-            {isPlaying ? strings.stop : strings.play}
-          </button>
-          <div className="install-action">
-            <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
-              {strings.install}
-            </button>
-            <p className="install-caption">{strings.installHint}</p>
+          <div className="hero-actions">
+            <div className="title-inline">
+              <h1 className="hero-title">{strings.appName}</h1>
+              <button
+                className="play-icon-button"
+                type="button"
+                onClick={() => void togglePlayback()}
+                aria-label={isPlaying ? strings.stop : strings.play}
+                title={isPlaying ? strings.stop : strings.play}
+              >
+                {isPlaying ? '■' : '▶'}
+              </button>
+            </div>
+            <div className="install-action">
+              <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
+                {strings.install}
+              </button>
+              <p className="install-caption">{strings.installHint}</p>
+            </div>
           </div>
+          <p className="lead">{strings.appTagline}</p>
         </div>
 
         {remainingSeconds !== null ? (
