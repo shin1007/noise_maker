@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { binauralBands, copy, evidenceCards, getNoiseLabel, noiseTypes, platformNotes, timerOptions } from './content';
+import { binauralBands, copy, evidenceCards, getNoiseLabel, getPlatformNotes, noiseTypes, resolveLocalizedText, timerOptions } from './content';
+import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supportedLocales } from './i18n';
 import { clampSettings, NoiseEngine } from './audio/noiseEngine';
 import type { Locale, NoiseType } from './types';
 
@@ -13,12 +14,12 @@ const defaultState = {
 };
 
 function resolveLocale(): Locale {
-  const urlLocale = new URLSearchParams(window.location.search).get('lang');
-  if (urlLocale === 'ja' || urlLocale === 'en') {
+  const urlLocale = normalizeLocale(new URLSearchParams(window.location.search).get('lang'));
+  if (urlLocale) {
     return urlLocale;
   }
 
-  return navigator.language.toLowerCase().startsWith('ja') ? 'ja' : 'en';
+  return resolveLocaleFromBrowserLang(navigator.language);
 }
 
 function clampTimerValue(value: number): number {
@@ -26,8 +27,8 @@ function clampTimerValue(value: number): number {
 }
 
 export function App() {
-  const locale = resolveLocale();
-  const strings = copy[locale];
+  const [locale, setLocale] = useState<Locale>(() => resolveLocale());
+  const strings = copy[locale] ?? copy.en;
 
   const [noiseType, setNoiseType] = useState<NoiseType>(defaultState.noiseType);
   const [volume, setVolume] = useState(defaultState.volume);
@@ -47,6 +48,7 @@ export function App() {
 
   useEffect(() => {
     document.documentElement.lang = locale;
+    document.documentElement.dir = localeMetadata[locale].dir;
     document.title = strings.appName;
   }, [locale, strings.appName]);
 
@@ -212,6 +214,13 @@ export function App() {
     setInstallPrompt(null);
   }
 
+  function handleLocaleChange(nextLocale: Locale) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', nextLocale);
+    window.history.replaceState({}, '', url.toString());
+    setLocale(nextLocale);
+  }
+
   const noiseEvidence = evidenceCards.find((card) => card.key === 'noise-colors') ?? evidenceCards[0];
   const binauralEvidence = evidenceCards.find((card) => card.key === 'binaural-beats') ?? evidenceCards[0];
   const binauralTargetByKey: Record<string, number> = {
@@ -229,7 +238,18 @@ export function App() {
     <main className="app-shell">
       <section className="hero card">
         <div>
-          <p className="eyebrow">PWA · Vercel-ready</p>
+          <div className="hero-meta-row">
+            <p className="eyebrow">PWA · Vercel-ready</p>
+            <div className="locale-select-wrap">
+              <select className="locale-select" value={locale} onChange={(event) => handleLocaleChange(event.target.value as Locale)} aria-label="Language">
+                {supportedLocales.map((supportedLocale) => (
+                  <option key={supportedLocale} value={supportedLocale}>
+                    {localeMetadata[supportedLocale].nativeName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div className="hero-actions">
             <div className="title-inline">
               <h1 className="hero-title">{strings.appName}</h1>
@@ -268,7 +288,7 @@ export function App() {
                 <div>
                   <p className="help-panel-label">{locale === 'ja' ? 'バックグラウンドでの動作について' : 'About background playback'}</p>
                   <ul className="platform-list compact">
-                    {platformNotes[locale].map((note) => (
+                    {getPlatformNotes(locale).map((note) => (
                       <li key={note}>{note}</li>
                     ))}
                   </ul>
@@ -323,8 +343,8 @@ export function App() {
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
             >
-              <strong>{noiseTypeOption.label[locale]}</strong>
-              <span>{noiseTypeOption.short[locale]}</span>
+              <strong>{resolveLocalizedText(noiseTypeOption.label, locale)}</strong>
+              <span>{resolveLocalizedText(noiseTypeOption.short, locale)}</span>
             </button>
           ))}
         </div>
@@ -413,7 +433,7 @@ export function App() {
 
             <div className="binaural-guide" aria-live="polite">
               <p className="binaural-current">
-                {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{activeBinauralBand.label[locale]}</strong>
+                {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{resolveLocalizedText(activeBinauralBand.label, locale)}</strong>
               </p>
               <ul className="binaural-band-list">
                 {binauralBands.map((band) => (
@@ -424,8 +444,8 @@ export function App() {
                       onClick={() => setDifferenceFrequency(binauralTargetByKey[band.key] ?? differenceFrequency)}
                       aria-pressed={band.key === activeBinauralBand.key}
                     >
-                      <strong>{band.label[locale]} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
-                      <span>{band.effect[locale]}</span>
+                      <strong>{resolveLocalizedText(band.label, locale)} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
+                      <span>{resolveLocalizedText(band.effect, locale)}</span>
                     </button>
                   </li>
                 ))}

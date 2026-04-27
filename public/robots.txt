@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://noise-maker-pwa.vercel.app/sitemap.xml
+
+# Block crawling of build/dev internals
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /src/
+
+# Allow important assets
+Allow: /manifest.webmanifest
+Allow: /sw.js
+Allow: /icon.svg

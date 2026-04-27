@@ -1,6 +1,37 @@
-export type Locale = 'ja' | 'en';
+export type Locale =
+  | 'ja'
+  | 'en'
+  | 'zh-Hans'
+  | 'es'
+  | 'hi'
+  | 'bn'
+  | 'pt'
+  | 'ru'
+  | 'yue'
+  | 'vi'
+  | 'mr'
+  | 'te'
+  | 'tr'
+  | 'ko'
+  | 'pa'
+  | 'ta'
+  | 'jv'
+  | 'it'
+  | 'fr'
+  | 'de'
+  | 'id';
 export type NoiseType = 'white' | 'pink' | 'brown' | 'blue' | 'violet';
 export type EvidenceStrength = 'Strong' | 'Moderate' | 'Limited' | 'Mixed';
+
+export type LocalizedText = {
+  ja: string;
+  en: string;
+} & Partial<Record<Locale, string>>;
+
+export type LocalizedList = {
+  ja: string[];
+  en: string[];
+} & Partial<Record<Locale, string[]>>;
 
 export interface EvidenceLink {
   label: string;
@@ -9,10 +40,10 @@ export interface EvidenceLink {
 
 export interface EvidenceCard {
   key: string;
-  title: Record<Locale, string>;
-  summary: Record<Locale, string>;
+  title: LocalizedText;
+  summary: LocalizedText;
   strength: EvidenceStrength;
-  caveat: Record<Locale, string>;
+  caveat: LocalizedText;
   links: EvidenceLink[];
 }
 
