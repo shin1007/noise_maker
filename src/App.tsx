@@ -229,15 +229,19 @@ export function App() {
           <button className="primary-button" type="button" onClick={() => void togglePlayback()}>
             {isPlaying ? strings.stop : strings.play}
           </button>
-          <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
-            {strings.install}
-          </button>
+          <div className="install-action">
+            <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
+              {strings.install}
+            </button>
+            <p className="install-caption">{strings.installHint}</p>
+          </div>
         </div>
 
-        <div className="status-row">
-          <span className={`status-pill ${isPlaying ? 'is-active' : ''}`}>{isPlaying ? 'Playing' : 'Stopped'}</span>
-          <span className="status-pill subtle">{remainingSeconds !== null ? formatRemaining(locale, remainingSeconds) : strings.installHint}</span>
-        </div>
+        {remainingSeconds !== null ? (
+          <div className="status-row">
+            <span className="status-pill subtle">{formatRemaining(locale, remainingSeconds)}</span>
+          </div>
+        ) : null}
       </section>
 
       <section className="card">
