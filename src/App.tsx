@@ -35,44 +35,14 @@ export function App() {
   const [baseFrequency, setBaseFrequency] = useState(defaultState.baseFrequency);
   const [differenceFrequency, setDifferenceFrequency] = useState(defaultState.differenceFrequency);
   const [timerMinutes, setTimerMinutes] = useState(defaultState.timerMinutes);
-  const [useTimerDropdown, setUseTimerDropdown] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
   const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
-  const [selectedEvidenceKey, setSelectedEvidenceKey] = useState(evidenceCards[0].key);
   const engineRef = useRef<NoiseEngine | null>(null);
   const timerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') {
-      setUseTimerDropdown(false);
-      return;
-    }
-
-    const mediaQuery = window.matchMedia('(max-width: 760px)');
-    const onChange = (event: MediaQueryListEvent) => {
-      setUseTimerDropdown(event.matches);
-    };
-    const legacyMediaQuery = mediaQuery as MediaQueryList & {
-      addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-      removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
-    };
-
-    setUseTimerDropdown(mediaQuery.matches);
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', onChange);
-      return () => mediaQuery.removeEventListener('change', onChange);
-    }
-
-    if (typeof legacyMediaQuery.addListener === 'function') {
-      legacyMediaQuery.addListener(onChange);
-      return () => legacyMediaQuery.removeListener?.(onChange);
-    }
-
-    return;
-  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -241,7 +211,8 @@ export function App() {
     setInstallPrompt(null);
   }
 
-  const activeEvidence = evidenceCards.find((card) => card.key === selectedEvidenceKey) ?? evidenceCards[0];
+  const noiseEvidence = evidenceCards.find((card) => card.key === 'noise-colors') ?? evidenceCards[0];
+  const binauralEvidence = evidenceCards.find((card) => card.key === 'binaural-beats') ?? evidenceCards[0];
   const binauralTargetByKey: Record<string, number> = {
     delta: 2,
     theta: 6,
@@ -280,6 +251,34 @@ export function App() {
           </div>
         ) : null}
 
+        <div className="noise-head">
+          <strong>{locale === 'ja' ? 'ノイズタイプ' : 'Noise type'}</strong>
+          <button
+            type="button"
+            className="help-button"
+            onClick={() => setIsNoiseHelpOpen((current) => !current)}
+            aria-expanded={isNoiseHelpOpen}
+            aria-label={locale === 'ja' ? 'ノイズの論文リンクを表示' : 'Show noise papers'}
+          >
+            ?
+          </button>
+        </div>
+
+        {isNoiseHelpOpen ? (
+          <div className="help-links-panel">
+            <p>{locale === 'ja' ? 'ノイズに関する参考論文' : 'References for noise studies'}</p>
+            <ul className="paper-list compact">
+              {noiseEvidence.links.map((link) => (
+                <li key={link.url}>
+                  <a href={link.url} target="_blank" rel="noreferrer">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
         <div className="noise-grid hero-noise-grid" role="tablist" aria-label="Noise types">
           {noiseTypes.map((noiseTypeOption) => (
             <button
@@ -306,27 +305,20 @@ export function App() {
           </div>
 
           <div className="timer-row">
-            <span>{strings.timerLabel}</span>
-            {useTimerDropdown ? (
-              <label className="timer-select-wrap">
-                <span className="visually-hidden">{locale === 'ja' ? 'タイマー分数を選択' : 'Select timer minutes'}</span>
-                <select className="timer-select" value={timerMinutes} onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}>
-                  {timerOptions.map((timerOption) => (
-                    <option key={timerOption} value={timerOption}>
-                      {timerOption}m
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ) : (
-              <div className="timer-pills">
-                {timerOptions.map((timerOption) => (
-                  <button key={timerOption} type="button" className={timerMinutes === timerOption ? 'pill selected' : 'pill'} onClick={() => setTimerMinutes(clampTimerValue(timerOption))}>
-                    {timerOption}m
-                  </button>
-                ))}
-              </div>
-            )}
+            <label className="timer-slider-wrap">
+              <span>
+                {strings.timerLabel}: <strong>{timerMinutes}m</strong>
+              </span>
+              <input
+                className="timer-slider"
+                type="range"
+                min="5"
+                max="60"
+                step="5"
+                value={timerMinutes}
+                onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}
+              />
+            </label>
           </div>
         </div>
       </section>
@@ -359,17 +351,21 @@ export function App() {
         </div>
 
         {isBinauralHelpOpen ? (
-          <div className="binaural-help-panel">
+          <div className="binaural-help-panel help-links-panel">
             <p>
               {locale === 'ja'
                 ? '左右の耳に少し異なる周波数を流し、差分周波数を体感しやすくする機能です。'
                 : 'This sends slightly different tones to each ear so the beat difference can be perceived more clearly.'}
             </p>
-            <p>
-              {locale === 'ja'
-                ? 'ヘッドホン使用を推奨します。医療目的ではなく、集中やリラックスのための音の調整として使ってください。'
-                : 'Headphones are recommended. Use this as a sound-tuning aid for focus or relaxation, not as a medical treatment.'}
-            </p>
+            <ul className="paper-list compact">
+              {binauralEvidence.links.map((link) => (
+                <li key={link.url}>
+                  <a href={link.url} target="_blank" rel="noreferrer">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
 
@@ -409,39 +405,6 @@ export function App() {
           <button className="primary-button" type="button" onClick={() => void togglePlayback()}>{isPlaying ? strings.stop : strings.play}</button>
           <button className="secondary-button" type="button" onClick={() => void stopPlayback()}>{strings.stop}</button>
         </div>
-      </section>
-
-      <section className="card">
-        <div className="section-head">
-          <h2>{strings.evidenceTitle}</h2>
-          <p>説明は短く、詳細はリンク先で確認できる二層構造です。</p>
-        </div>
-
-        <div className="evidence-selector" role="tablist" aria-label="Evidence sections">
-          {evidenceCards.map((card) => (
-            <button key={card.key} type="button" className={selectedEvidenceKey === card.key ? 'pill selected' : 'pill'} onClick={() => setSelectedEvidenceKey(card.key)}>
-              {card.title[locale]}
-            </button>
-          ))}
-        </div>
-
-        <article className="evidence-panel">
-          <div className="evidence-panel-head">
-            <h3>{activeEvidence.title[locale]}</h3>
-            <span className={`evidence-badge strength-${activeEvidence.strength.toLowerCase()}`}>{activeEvidence.strength}</span>
-          </div>
-          <p>{activeEvidence.summary[locale]}</p>
-          <p className="caution">{activeEvidence.caveat[locale]}</p>
-          <ul className="paper-list">
-            {activeEvidence.links.map((link) => (
-              <li key={link.url}>
-                <a href={link.url} target="_blank" rel="noreferrer">
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </article>
       </section>
 
       <section className="card">
