@@ -242,15 +242,8 @@ export function App() {
             <span className="status-pill subtle">{formatRemaining(locale, remainingSeconds)}</span>
           </div>
         ) : null}
-      </section>
 
-      <section className="card">
-        <div className="section-head">
-          <h2>{strings.simpleExplanationTitle}</h2>
-          <p>「今すぐ使えること」と「研究の強さ」を分けて表示します。</p>
-        </div>
-
-        <div className="noise-grid" role="tablist" aria-label="Noise types">
+        <div className="noise-grid hero-noise-grid" role="tablist" aria-label="Noise types">
           {noiseTypes.map((noiseTypeOption) => (
             <button
               key={noiseTypeOption.key}

@@ -91,6 +91,7 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.02; 
 .section-head { align-items: baseline; margin-bottom: 14px; }
 .section-head p { max-width: 32rem; color: rgba(238, 244, 255, 0.68); }
 .noise-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.hero-noise-grid { margin-top: 14px; }
 .noise-chip {
   text-align: left;
   border-radius: 20px;
