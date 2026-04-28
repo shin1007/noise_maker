@@ -6,7 +6,16 @@ import type { Locale, NoiseType } from './types';
 
 const STORAGE_KEY = 'noise_maker_settings';
 
-const defaultState = {
+interface UserSettings {
+  noiseType: NoiseType;
+  volume: number;
+  binauralEnabled: boolean;
+  baseFrequency: number;
+  differenceFrequency: number;
+  timerMinutes: number;
+}
+
+const defaultState: UserSettings = {
   noiseType: 'pink' as NoiseType,
   volume: 55,
   binauralEnabled: false,
@@ -15,10 +24,10 @@ const defaultState = {
   timerMinutes: 30
 };
 
-function loadSettings() {
+function loadSettings(): UserSettings {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : defaultState;
+    return saved ? { ...defaultState, ...JSON.parse(saved) } : defaultState;
   } catch {
     return defaultState;
   }
@@ -46,15 +55,14 @@ export function App() {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale());
   const strings = copy[locale] ?? copy.en;
 
-  const [settings, setSettings] = useState(() => loadSettings());
+  const [settings, setSettings] = useState<UserSettings>(() => loadSettings());
   
-  // Destructure for easy access, but we'll use setters that update both state and storage
+  // Destructure for easy access
   const { noiseType, volume, binauralEnabled, baseFrequency, differenceFrequency, timerMinutes } = settings;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
   const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
-  const [isInstallHelpOpen, setIsInstallHelpOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
@@ -62,8 +70,8 @@ export function App() {
   const timerRef = useRef<number | null>(null);
 
   // Helper to update specific setting
-  const updateSetting = useCallback((key: string, value: any) => {
-    setSettings((prev: any) => {
+  const updateSetting = useCallback((key: keyof UserSettings, value: any) => {
+    setSettings((prev) => {
       const next = { ...prev, [key]: value };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       return next;
