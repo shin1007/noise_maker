@@ -1,9 +1,10 @@
-import type { NoiseType } from '../types';
+import type { AudioMode, NoiseType } from '../types';
 
 export interface AudioSettings {
   noiseType: NoiseType;
   volume: number;
-  binauralEnabled: boolean;
+  beatEnabled: boolean;
+  beatMode: AudioMode;
   baseFrequency: number;
   differenceFrequency: number;
 }
@@ -96,11 +97,16 @@ export class NoiseEngine {
   private rightToneGain: GainNode | null = null;
   private leftOscillator: OscillatorNode | null = null;
   private rightOscillator: OscillatorNode | null = null;
+  private modulator: OscillatorNode | null = null;
+  private modulatorGain: GainNode | null = null;
+  private masterGain: GainNode | null = null;
   private currentSettings: AudioSettings | null = null;
   private audioElement: HTMLAudioElement | null = null;
+  private isFirstUpdate: boolean = true;
 
   async start(settings: AudioSettings): Promise<void> {
     this.currentSettings = settings;
+    this.isFirstUpdate = true;
 
     if (!this.context) {
       const AudioContextImpl = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -127,13 +133,10 @@ export class NoiseEngine {
 
     if (this.audioElement) {
       // Priming for Safari browser:
-      // First, play a real (though silent) file to "prime" the media session
       this.audioElement.src = SILENCE_WAV;
       this.audioElement.load();
       await this.audioElement.play().catch(() => {});
       
-      // If we are using srcObject (built in buildGraph), it should be set there.
-      // We just need to ensure it's playing the right thing.
       await this.audioElement.play().catch((err) => {
         console.error('Audio element playback failed:', err);
       });
@@ -145,7 +148,7 @@ export class NoiseEngine {
   update(settings: AudioSettings): void {
     this.currentSettings = settings;
 
-    if (!this.context || !this.worklet || !this.leftMix || !this.rightMix || !this.leftToneGain || !this.rightToneGain) {
+    if (!this.context || !this.worklet || !this.leftMix || !this.rightMix || !this.leftToneGain || !this.rightToneGain || !this.masterGain) {
       return;
     }
 
@@ -157,15 +160,22 @@ export class NoiseEngine {
     this.worklet.port.postMessage({ type: settings.noiseType });
 
     const level = Math.max(0, Math.min(1, settings.volume / 100));
-    const noiseLevel = settings.binauralEnabled ? level * 0.86 : level;
-    const toneLevel = settings.binauralEnabled ? level * 0.12 : 0;
+    const noiseLevel = settings.beatEnabled ? level * 0.86 : level;
+    const toneLevel = settings.beatEnabled ? level * 0.12 : 0;
+
+    const fadeTime = this.isFirstUpdate ? 1.5 : 0.05;
+    if (this.isFirstUpdate) {
+      this.masterGain.gain.setValueAtTime(0, this.context.currentTime);
+      this.masterGain.gain.exponentialRampToValueAtTime(1, this.context.currentTime + fadeTime);
+      this.isFirstUpdate = false;
+    }
 
     this.leftMix.gain.setTargetAtTime(noiseLevel, this.context.currentTime, 0.05);
     this.rightMix.gain.setTargetAtTime(noiseLevel, this.context.currentTime, 0.05);
     this.leftToneGain.gain.setTargetAtTime(toneLevel, this.context.currentTime, 0.05);
     this.rightToneGain.gain.setTargetAtTime(toneLevel, this.context.currentTime, 0.05);
 
-    if (settings.binauralEnabled) {
+    if (settings.beatEnabled) {
       this.ensureTones(settings);
     } else {
       this.stopTones();
@@ -173,6 +183,12 @@ export class NoiseEngine {
   }
 
   async stop(): Promise<void> {
+    if (this.context && this.masterGain) {
+      this.masterGain.gain.setTargetAtTime(0, this.context.currentTime, 0.05);
+      // Wait a bit for fade-out before full stop
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
     this.stopTones();
 
     if (this.audioElement) {
@@ -192,6 +208,7 @@ export class NoiseEngine {
     this.leftToneGain?.disconnect();
     this.rightToneGain?.disconnect();
     this.merger?.disconnect();
+    this.masterGain?.disconnect();
 
     if (this.context) {
       await this.context.close();
@@ -210,6 +227,7 @@ export class NoiseEngine {
     this.rightMix = this.context.createGain();
     this.leftToneGain = this.context.createGain();
     this.rightToneGain = this.context.createGain();
+    this.masterGain = this.context.createGain();
 
     this.worklet.connect(this.leftMix);
     this.worklet.connect(this.rightMix);
@@ -218,19 +236,19 @@ export class NoiseEngine {
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
     
-    // Check if we are on iOS/Safari which requires the <audio> element hack for background playback
+    this.merger.connect(this.masterGain);
+
+    // Check if we are on iOS/Safari
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     if (isIOS) {
-      // iOS specific: Use MediaStreamDestination + <audio> element to keep playback alive in background
       const destination = this.context.createMediaStreamDestination();
-      this.merger.connect(destination);
+      this.masterGain.connect(destination);
 
       this.audioElement = new Audio();
       this.audioElement.srcObject = destination.stream;
       this.audioElement.muted = false;
       this.audioElement.setAttribute('playsinline', '');
-      // Ensure it's in the DOM and "visible" to the OS, but hidden from the user
       this.audioElement.style.position = 'fixed';
       this.audioElement.style.pointerEvents = 'none';
       this.audioElement.style.opacity = '0.001';
@@ -240,8 +258,7 @@ export class NoiseEngine {
       this.audioElement.style.height = '1px';
       document.body.appendChild(this.audioElement);
     } else {
-      // PC/Android: Connect directly to destination for maximum stability and lowest latency
-      this.merger.connect(this.context.destination);
+      this.masterGain.connect(this.context.destination);
     }
   }
 
@@ -250,8 +267,9 @@ export class NoiseEngine {
       return;
     }
 
-    const leftFrequency = Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2);
-    const rightFrequency = Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2);
+    const isEarphone = settings.beatMode === 'earphone';
+    const leftFrequency = isEarphone ? Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2) : settings.baseFrequency;
+    const rightFrequency = isEarphone ? Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2) : settings.baseFrequency;
 
     if (!this.leftOscillator) {
       this.leftOscillator = this.context.createOscillator();
@@ -269,6 +287,51 @@ export class NoiseEngine {
 
     this.leftOscillator.frequency.setTargetAtTime(leftFrequency, this.context.currentTime, 0.01);
     this.rightOscillator.frequency.setTargetAtTime(rightFrequency, this.context.currentTime, 0.01);
+
+    if (settings.beatMode === 'speaker') {
+      // Isochronic tone logic: Modulate gain with a square wave
+      if (!this.modulator) {
+        this.modulator = this.context.createOscillator();
+        this.modulator.type = 'square';
+        this.modulatorGain = this.context.createGain();
+        
+        // Modulate gain between 0 and 1
+        // Modulator outputs -1 to 1. We want 0 to 1.
+        // So we add 1 and multiply by 0.5.
+        // Actually, we can just connect oscillator to gain param.
+        this.modulatorGain.gain.value = 0.5; // DC offset
+        const modulationScale = this.context.createGain();
+        modulationScale.gain.value = 0.5;
+        this.modulator.connect(modulationScale);
+        modulationScale.connect(this.modulatorGain.gain);
+        
+        // Now modulatorGain.gain cycles between 0 and 1
+        // We need to insert this into the tone path.
+        this.leftToneGain!.disconnect();
+        this.rightToneGain!.disconnect();
+        this.leftToneGain!.connect(this.modulatorGain);
+        this.rightToneGain!.connect(this.modulatorGain);
+        this.modulatorGain.connect(this.merger!);
+
+        this.modulator.start();
+      }
+      this.modulator.frequency.setTargetAtTime(settings.differenceFrequency, this.context.currentTime, 0.01);
+    } else {
+      // Remove isochronic modulation if exists
+      if (this.modulator) {
+        this.modulator.stop();
+        this.modulator.disconnect();
+        this.modulatorGain?.disconnect();
+        this.modulator = null;
+        this.modulatorGain = null;
+
+        // Reconnect tone gains directly to merger
+        this.leftToneGain!.disconnect();
+        this.rightToneGain!.disconnect();
+        this.leftToneGain!.connect(this.merger!, 0, 0);
+        this.rightToneGain!.connect(this.merger!, 0, 1);
+      }
+    }
   }
 
   private stopTones(): void {
@@ -278,6 +341,16 @@ export class NoiseEngine {
     this.rightOscillator?.disconnect();
     this.leftOscillator = null;
     this.rightOscillator = null;
+
+    if (this.modulator) {
+      this.modulator.stop();
+      this.modulator.disconnect();
+      this.modulatorGain?.disconnect();
+      this.modulator = null;
+      this.modulatorGain = null;
+
+      // Ensure tone gains are reconnected for next time (though they'll be null anyway)
+    }
   }
 }
 
@@ -285,7 +358,8 @@ export function clampSettings(settings: AudioSettings): AudioSettings {
   return {
     noiseType: settings.noiseType,
     volume: Math.max(0, Math.min(100, settings.volume)),
-    binauralEnabled: settings.binauralEnabled,
+    beatEnabled: settings.beatEnabled,
+    beatMode: settings.beatMode,
     baseFrequency: Math.max(40, Math.min(1000, settings.baseFrequency)),
     differenceFrequency: Math.max(0, Math.min(40, settings.differenceFrequency))
   };

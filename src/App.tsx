@@ -9,7 +9,8 @@ const STORAGE_KEY = 'noise_maker_settings';
 interface UserSettings {
   noiseType: NoiseType;
   volume: number;
-  binauralEnabled: boolean;
+  beatEnabled: boolean;
+  beatMode: AudioMode;
   baseFrequency: number;
   differenceFrequency: number;
   timerMinutes: number;
@@ -18,8 +19,9 @@ interface UserSettings {
 const defaultState: UserSettings = {
   noiseType: 'brown' as NoiseType,
   volume: 55,
-  binauralEnabled: true,
-  baseFrequency: 220,
+  beatEnabled: true,
+  beatMode: 'earphone',
+  baseFrequency: 528,
   differenceFrequency: 10,
   timerMinutes: 30
 };
@@ -109,11 +111,11 @@ export function App() {
   const [settings, setSettings] = useState<UserSettings>(() => loadSettings());
   
   // Destructure for easy access
-  const { noiseType, volume, binauralEnabled, baseFrequency, differenceFrequency, timerMinutes } = settings;
+  const { noiseType, volume, beatEnabled, beatMode, baseFrequency, differenceFrequency, timerMinutes } = settings;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
-  const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
+  const [isBeatHelpOpen, setIsBeatHelpOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
@@ -143,7 +145,8 @@ export function App() {
       clampSettings({
         noiseType: currentToUse.noiseType,
         volume: currentToUse.volume,
-        binauralEnabled: currentToUse.binauralEnabled,
+        beatEnabled: currentToUse.beatEnabled,
+        beatMode: currentToUse.beatMode,
         baseFrequency: currentToUse.baseFrequency,
         differenceFrequency: currentToUse.differenceFrequency
       })
@@ -188,7 +191,8 @@ export function App() {
         engineRef.current.update({
           noiseType,
           volume,
-          binauralEnabled,
+          beatEnabled,
+          beatMode,
           baseFrequency,
           differenceFrequency
         });
@@ -197,7 +201,7 @@ export function App() {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
+  }, [baseFrequency, beatEnabled, beatMode, differenceFrequency, isPlaying, noiseType, volume]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -293,12 +297,13 @@ export function App() {
       clampSettings({
         noiseType,
         volume,
-        binauralEnabled,
+        beatEnabled,
+        beatMode,
         baseFrequency,
         differenceFrequency
       })
     );
-  }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
+  }, [baseFrequency, beatEnabled, beatMode, differenceFrequency, isPlaying, noiseType, volume]);
 
   const activeBinauralBand =
     binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
@@ -310,8 +315,8 @@ export function App() {
     }
 
     const noiseLabel = getNoiseLabel(locale, noiseType);
-    const bandReading = binauralEnabled ? resolveLocalizedText(activeBinauralBand.reading, locale) : '';
-    const displayTitle = binauralEnabled ? `${noiseLabel} + ${bandReading}` : noiseLabel;
+    const bandReading = beatEnabled ? resolveLocalizedText(activeBinauralBand.reading, locale) : '';
+    const displayTitle = beatEnabled ? `${noiseLabel} + ${bandReading}` : noiseLabel;
 
     const colors: Record<NoiseType, string> = {
       white: '#ffffff',
@@ -326,7 +331,7 @@ export function App() {
       artist: strings.appName,
       album: strings.appTagline,
       artwork: [
-        { src: generateMediaArtwork(colors[noiseType], binauralEnabled ? activeBinauralBand.symbol : ''), sizes: '256x256', type: 'image/jpeg' }
+        { src: generateMediaArtwork(colors[noiseType], beatEnabled ? activeBinauralBand.symbol : ''), sizes: '256x256', type: 'image/jpeg' }
       ]
     });
 
@@ -342,7 +347,7 @@ export function App() {
     navigator.mediaSession.setActionHandler('stop', () => {
       void stopPlayback();
     });
-  }, [activeBinauralBand.reading, activeBinauralBand.symbol, binauralEnabled, isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
+  }, [activeBinauralBand.reading, activeBinauralBand.symbol, beatEnabled, isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
 
   async function triggerInstall() {
     if (!installPrompt) {
@@ -417,7 +422,7 @@ export function App() {
               <div className="title-inline">
                 <div className="title-with-symbol">
                   <h1 className="hero-title">{strings.appName}</h1>
-                  {binauralEnabled && <span className="wave-symbol" aria-hidden="true">{activeBinauralBand.symbol}</span>}
+                  {beatEnabled && <span className="wave-symbol" aria-hidden="true">{activeBinauralBand.symbol}</span>}
                 </div>
                 <button
                   className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
@@ -483,7 +488,11 @@ export function App() {
               <label>
                 <div className="label-row">
                   <span className="label-text">{strings.volumeLabel}</span>
-                  <span className="value-display">{volume}%</span>
+                  <div className="value-with-stepper">
+                    <button className="step-button" onClick={() => updateSetting('volume', Math.max(0, volume - 1))}>-</button>
+                    <span className="value-display">{volume}%</span>
+                    <button className="step-button" onClick={() => updateSetting('volume', Math.min(100, volume + 1))}>+</button>
+                  </div>
                 </div>
                 <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
               </label>
@@ -499,7 +508,11 @@ export function App() {
                         {formatRemaining(locale, remainingSeconds, strings)}
                       </span>
                     )}
-                    <span className="value-display">{timerMinutes}{strings.minute}</span>
+                    <div className="value-with-stepper">
+                      <button className="step-button" onClick={() => updateSetting('timerMinutes', Math.max(0, timerMinutes - 5))}>-</button>
+                      <span className="value-display">{timerMinutes}{strings.minute}</span>
+                      <button className="step-button" onClick={() => updateSetting('timerMinutes', Math.min(60, timerMinutes + 5))}>+</button>
+                    </div>
                   </div>
                 </div>
                 <input
@@ -561,21 +574,21 @@ export function App() {
       </section>
 
       <section className="card controls-card">
-        <details className="binaural-details" open={binauralEnabled}>
+        <details className="binaural-details" open={beatEnabled}>
           <summary className="toggle-row">
             <label className="switch" onClick={(e) => e.stopPropagation()}>
               <input
                 type="checkbox"
-                checked={binauralEnabled}
+                checked={beatEnabled}
                 onChange={(event) => {
                   const isEnabled = event.target.checked;
-                  updateSetting('binauralEnabled', isEnabled);
+                  updateSetting('beatEnabled', isEnabled);
                   if (!isEnabled) {
-                    setIsBinauralHelpOpen(false);
+                    setIsBeatHelpOpen(false);
                   }
                 }}
               />
-              <span className="binaural-label">{strings.binauralOn}</span>
+              <span className="binaural-label">{strings.beatOn}</span>
             </label>
             <button
               type="button"
@@ -583,20 +596,20 @@ export function App() {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsBinauralHelpOpen((current) => !current);
+                setIsBeatHelpOpen((current) => !current);
               }}
-              aria-expanded={isBinauralHelpOpen}
-              aria-label={strings.binauralHelp}
+              aria-expanded={isBeatHelpOpen}
+              aria-label={strings.beatHelp}
             >
               ?
             </button>
           </summary>
 
           <div className="binaural-content">
-            {isBinauralHelpOpen ? (
+            {isBeatHelpOpen ? (
               <div className="binaural-help-panel help-links-panel">
                 <p>
-                  {strings.binauralDesc}
+                  {strings.beatDesc}
                 </p>
                 <ul className="paper-list compact">
                   {binauralEvidence.links.map((link) => (
@@ -610,12 +623,33 @@ export function App() {
               </div>
             ) : null}
 
+            <div className="mode-toggle-group">
+              <button
+                type="button"
+                className={`mode-button ${beatMode === 'earphone' ? 'active' : ''}`}
+                onClick={() => updateSetting('beatMode', 'earphone')}
+              >
+                {strings.earphoneMode}
+              </button>
+              <button
+                type="button"
+                className={`mode-button ${beatMode === 'speaker' ? 'active' : ''}`}
+                onClick={() => updateSetting('beatMode', 'speaker')}
+              >
+                {strings.speakerMode}
+              </button>
+            </div>
+
             <div className="frequency-grid">
               <div className="control-group">
                 <label>
                   <div className="label-row">
                     <span className="label-text">{strings.baseFreq}</span>
-                    <span className="value-display">{Math.round(baseFrequency)}Hz</span>
+                    <div className="value-with-stepper">
+                      <button className="step-button" onClick={() => updateSetting('baseFrequency', Math.max(40, baseFrequency - 1))}>-</button>
+                      <span className="value-display">{Math.round(baseFrequency)}Hz</span>
+                      <button className="step-button" onClick={() => updateSetting('baseFrequency', Math.min(1000, baseFrequency + 1))}>+</button>
+                    </div>
                   </div>
                   <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => updateSetting('baseFrequency', Number(event.target.value) || defaultState.baseFrequency)} />
                 </label>

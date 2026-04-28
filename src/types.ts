@@ -21,6 +21,7 @@ export type Locale =
   | 'de'
   | 'id';
 export type NoiseType = 'white' | 'pink' | 'brown' | 'blue' | 'violet';
+export type AudioMode = 'earphone' | 'speaker';
 export type EvidenceStrength = 'Strong' | 'Moderate' | 'Limited' | 'Mixed';
 
 export type LocalizedText = {
@@ -67,9 +68,11 @@ export interface Copy {
   noiseType: string;
   noisePapers: string;
   noiseReferences: string;
-  binauralOn: string;
-  binauralHelp: string;
-  binauralDesc: string;
+  beatOn: string;
+  beatHelp: string;
+  beatDesc: string;
+  earphoneMode: string;
+  speakerMode: string;
   baseFreq: string;
   currentBand: string;
   footerNote: string;
@@ -82,4 +85,6 @@ export interface Copy {
   androidStep2: string;
   gotIt: string;
   close: string;
+  presetsTitle: string;
+  resetPreset: string;
 }
