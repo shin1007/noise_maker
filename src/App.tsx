@@ -59,25 +59,47 @@ function generateMediaArtwork(color: string, symbol?: string): string {
   const ctx = canvas.getContext('2d');
   if (!ctx) return '/icon.svg';
 
-  // Background
-  ctx.fillStyle = '#080c14';
+  // Background gradient
+  const bgGrad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size);
+  bgGrad.addColorStop(0, '#121826');
+  bgGrad.addColorStop(1, '#080c14');
+  ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, size, size);
+
+  // Glow effect
+  ctx.shadowBlur = 40;
+  ctx.shadowColor = color;
 
   // Decorative Circle
   ctx.beginPath();
-  ctx.arc(size / 2, size / 2, size * 0.4, 0, Math.PI * 2);
+  ctx.arc(size / 2, size / 2, size * 0.35, 0, Math.PI * 2);
   ctx.fillStyle = color;
-  ctx.globalAlpha = 0.15;
+  ctx.globalAlpha = 0.2;
   ctx.fill();
+
+  // Reset shadow for text to be crisp or keep it for glow? Let's keep a subtle one.
+  ctx.shadowBlur = 20;
 
   // Symbol
   if (symbol) {
     ctx.globalAlpha = 1.0;
     ctx.fillStyle = color;
-    ctx.font = `800 ${size * 0.5}px "Avenir Next", "SF Pro Display", "Hiragino Sans", sans-serif`;
+    ctx.font = `800 ${size * 0.45}px "Avenir Next", "SF Pro Display", "Hiragino Sans", sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(symbol, size / 2, size / 2);
+  } else {
+    // If no symbol (binaural off), draw a stylized wave
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 12;
+    ctx.globalAlpha = 0.8;
+    ctx.beginPath();
+    for (let x = 0; x <= size; x += 10) {
+      const y = size / 2 + Math.sin(x * 0.02) * 40;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
   }
 
   return canvas.toDataURL('image/png');
