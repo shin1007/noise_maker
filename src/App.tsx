@@ -4,6 +4,8 @@ import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supporte
 import { clampSettings, NoiseEngine } from './audio/noiseEngine';
 import type { Locale, NoiseType } from './types';
 
+const STORAGE_KEY = 'noise_maker_settings';
+
 const defaultState = {
   noiseType: 'pink' as NoiseType,
   volume: 55,
@@ -13,7 +15,21 @@ const defaultState = {
   timerMinutes: 30
 };
 
+function loadSettings() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : defaultState;
+  } catch {
+    return defaultState;
+  }
+}
+
 function resolveLocale(): Locale {
+  const savedLocale = localStorage.getItem('noise_maker_locale') as Locale;
+  if (savedLocale && supportedLocales.includes(savedLocale)) {
+    return savedLocale;
+  }
+
   const urlLocale = normalizeLocale(new URLSearchParams(window.location.search).get('lang'));
   if (urlLocale) {
     return urlLocale;
@@ -30,12 +46,11 @@ export function App() {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale());
   const strings = copy[locale] ?? copy.en;
 
-  const [noiseType, setNoiseType] = useState<NoiseType>(defaultState.noiseType);
-  const [volume, setVolume] = useState(defaultState.volume);
-  const [binauralEnabled, setBinauralEnabled] = useState(defaultState.binauralEnabled);
-  const [baseFrequency, setBaseFrequency] = useState(defaultState.baseFrequency);
-  const [differenceFrequency, setDifferenceFrequency] = useState(defaultState.differenceFrequency);
-  const [timerMinutes, setTimerMinutes] = useState(defaultState.timerMinutes);
+  const [settings, setSettings] = useState(() => loadSettings());
+  
+  // Destructure for easy access, but we'll use setters that update both state and storage
+  const { noiseType, volume, binauralEnabled, baseFrequency, differenceFrequency, timerMinutes } = settings;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
   const [isBinauralHelpOpen, setIsBinauralHelpOpen] = useState(false);
@@ -46,23 +61,18 @@ export function App() {
   const engineRef = useRef<NoiseEngine | null>(null);
   const timerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && isPlaying && engineRef.current) {
-        // Resume engine if it was throttled by the OS
-        void engineRef.current.start({
-          noiseType,
-          volume,
-          binauralEnabled,
-          baseFrequency,
-          differenceFrequency
-        });
-      }
-    };
+  // Helper to update specific setting
+  const updateSetting = useCallback((key: string, value: any) => {
+    setSettings((prev: any) => {
+      const next = { ...prev, [key]: value };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
+  useEffect(() => {
+    localStorage.setItem('noise_maker_locale', locale);
+  }, [locale]);
 
   const startPlayback = useCallback(async () => {
     const engine = engineRef.current ?? new NoiseEngine();
@@ -382,7 +392,7 @@ export function App() {
               key={noiseTypeOption.key}
               type="button"
               className={`noise-chip noise-${noiseTypeOption.key} ${noiseType === noiseTypeOption.key ? 'selected' : ''}`}
-              onClick={() => setNoiseType(noiseTypeOption.key)}
+              onClick={() => updateSetting('noiseType', noiseTypeOption.key)}
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
             >
@@ -396,7 +406,7 @@ export function App() {
           <div className="control-group">
             <label>
               <span>{strings.volumeLabel}: {volume}%</span>
-              <input type="range" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} />
+              <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
             </label>
           </div>
 
@@ -412,7 +422,7 @@ export function App() {
                 max="60"
                 step="5"
                 value={timerMinutes}
-                onChange={(event) => setTimerMinutes(clampTimerValue(Number(event.target.value)))}
+                onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
               />
             </label>
           </div>
@@ -427,7 +437,7 @@ export function App() {
               checked={binauralEnabled}
               onChange={(event) => {
                 const isEnabled = event.target.checked;
-                setBinauralEnabled(isEnabled);
+                updateSetting('binauralEnabled', isEnabled);
                 if (!isEnabled) {
                   setIsBinauralHelpOpen(false);
                 }
@@ -468,7 +478,7 @@ export function App() {
             <div className="frequency-grid">
               <label>
                 <span>{strings.baseFreq}: {Math.round(baseFrequency)}Hz</span>
-                <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => setBaseFrequency(Number(event.target.value) || defaultState.baseFrequency)} />
+                <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => updateSetting('baseFrequency', Number(event.target.value) || defaultState.baseFrequency)} />
               </label>
             </div>
 
@@ -482,7 +492,7 @@ export function App() {
                     <button
                       type="button"
                       className={band.key === activeBinauralBand.key ? 'band-button active' : 'band-button'}
-                      onClick={() => setDifferenceFrequency(binauralTargetByKey[band.key] ?? differenceFrequency)}
+                      onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key] ?? differenceFrequency)}
                       aria-pressed={band.key === activeBinauralBand.key}
                     >
                       <strong>{resolveLocalizedText(band.label, locale)} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>

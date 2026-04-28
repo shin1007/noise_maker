@@ -77,6 +77,15 @@ const SILENT_VIDEO = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21hdmMxcAAA
 // 1 second of silence as a base64 WAV
 const SILENCE_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
 
+let cachedWorkletUrl: string | null = null;
+
+function getWorkletUrl(): string {
+  if (!cachedWorkletUrl) {
+    cachedWorkletUrl = URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' }));
+  }
+  return cachedWorkletUrl;
+}
+
 export class NoiseEngine {
   private context: AudioContext | null = null;
   private worklet: AudioWorkletNode | null = null;
@@ -103,7 +112,7 @@ export class NoiseEngine {
         latencyHint: 'playback'
       });
       
-      await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
+      await this.context.audioWorklet.addModule(getWorkletUrl());
       this.buildGraph();
     }
 
