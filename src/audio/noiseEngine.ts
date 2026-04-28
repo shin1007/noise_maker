@@ -224,7 +224,14 @@ export class NoiseEngine {
       this.audioElement.srcObject = destination.stream;
       this.audioElement.muted = false;
       this.audioElement.setAttribute('playsinline', '');
-      this.audioElement.style.display = 'none';
+      // Ensure it's in the DOM and "visible" to the OS, but hidden from the user
+      this.audioElement.style.position = 'fixed';
+      this.audioElement.style.pointerEvents = 'none';
+      this.audioElement.style.opacity = '0.001';
+      this.audioElement.style.left = '0';
+      this.audioElement.style.top = '0';
+      this.audioElement.style.width = '1px';
+      this.audioElement.style.height = '1px';
       document.body.appendChild(this.audioElement);
     } else {
       // PC/Android: Connect directly to destination for maximum stability and lowest latency
