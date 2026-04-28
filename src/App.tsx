@@ -52,7 +52,7 @@ function clampTimerValue(value: number): number {
 }
 
 function generateMediaArtwork(color: string, symbol?: string): string {
-  const size = 512;
+  const size = 256;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -67,7 +67,7 @@ function generateMediaArtwork(color: string, symbol?: string): string {
   ctx.fillRect(0, 0, size, size);
 
   // Glow effect
-  ctx.shadowBlur = 40;
+  ctx.shadowBlur = 20;
   ctx.shadowColor = color;
 
   // Decorative Circle
@@ -76,9 +76,6 @@ function generateMediaArtwork(color: string, symbol?: string): string {
   ctx.fillStyle = color;
   ctx.globalAlpha = 0.2;
   ctx.fill();
-
-  // Reset shadow for text to be crisp or keep it for glow? Let's keep a subtle one.
-  ctx.shadowBlur = 20;
 
   // Symbol
   if (symbol) {
@@ -89,20 +86,20 @@ function generateMediaArtwork(color: string, symbol?: string): string {
     ctx.textBaseline = 'middle';
     ctx.fillText(symbol, size / 2, size / 2);
   } else {
-    // If no symbol (binaural off), draw a stylized wave
+    // Stylized wave for no-symbol
     ctx.strokeStyle = color;
-    ctx.lineWidth = 12;
+    ctx.lineWidth = 8;
     ctx.globalAlpha = 0.8;
     ctx.beginPath();
-    for (let x = 0; x <= size; x += 10) {
-      const y = size / 2 + Math.sin(x * 0.02) * 40;
+    for (let x = 0; x <= size; x += 5) {
+      const y = size / 2 + Math.sin(x * 0.04) * 20;
       if (x === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
     ctx.stroke();
   }
 
-  return canvas.toDataURL('image/png');
+  return canvas.toDataURL('image/jpeg', 0.8);
 }
 
 export function App() {
@@ -328,7 +325,9 @@ export function App() {
       title: displayTitle,
       artist: strings.appName,
       album: strings.appTagline,
-      artwork: [{ src: generateMediaArtwork(colors[noiseType], binauralEnabled ? activeBinauralBand.symbol : ''), sizes: '512x512', type: 'image/png' }]
+      artwork: [
+        { src: generateMediaArtwork(colors[noiseType], binauralEnabled ? activeBinauralBand.symbol : ''), sizes: '256x256', type: 'image/jpeg' }
+      ]
     });
 
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
