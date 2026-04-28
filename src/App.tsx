@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { binauralBands, copy, evidenceCards, getNoiseLabel, getPlatformNotes, noiseTypes, resolveLocalizedText, timerOptions } from './content';
 import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supportedLocales } from './i18n';
 import { clampSettings, NoiseEngine } from './audio/noiseEngine';
@@ -45,6 +45,44 @@ export function App() {
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
   const engineRef = useRef<NoiseEngine | null>(null);
   const timerRef = useRef<number | null>(null);
+
+  const startPlayback = useCallback(async () => {
+    const engine = engineRef.current ?? new NoiseEngine();
+    engineRef.current = engine;
+
+    await engine.start(
+      clampSettings({
+        noiseType,
+        volume,
+        binauralEnabled,
+        baseFrequency,
+        differenceFrequency
+      })
+    );
+
+    setIsPlaying(true);
+  }, [baseFrequency, binauralEnabled, differenceFrequency, noiseType, volume]);
+
+  const stopPlayback = useCallback(async () => {
+    if (timerRef.current) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    setRemainingSeconds(null);
+    setIsPlaying(false);
+    await engineRef.current?.stop();
+    engineRef.current = null;
+  }, []);
+
+  const togglePlayback = useCallback(async () => {
+    if (isPlaying) {
+      await stopPlayback();
+      return;
+    }
+
+    await startPlayback();
+  }, [isPlaying, startPlayback, stopPlayback]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -124,7 +162,7 @@ export function App() {
         timerRef.current = null;
       }
     };
-  }, [isPlaying, timerMinutes]);
+  }, [isPlaying, stopPlayback, timerMinutes]);
 
   useEffect(() => {
     if (!isPlaying || !engineRef.current) {
@@ -150,7 +188,10 @@ export function App() {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: strings.appName,
       artist: strings.appTagline,
-      album: getNoiseLabel(locale, noiseType)
+      album: getNoiseLabel(locale, noiseType),
+      artwork: [
+        { src: '/icon.svg', sizes: '512x512', type: 'image/svg+xml' }
+      ]
     });
 
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
@@ -163,45 +204,7 @@ export function App() {
     navigator.mediaSession.setActionHandler('stop', () => {
       void stopPlayback();
     });
-  }, [isPlaying, locale, noiseType, strings.appName, strings.appTagline]);
-
-  async function startPlayback() {
-    const engine = engineRef.current ?? new NoiseEngine();
-    engineRef.current = engine;
-
-    await engine.start(
-      clampSettings({
-        noiseType,
-        volume,
-        binauralEnabled,
-        baseFrequency,
-        differenceFrequency
-      })
-    );
-
-    setIsPlaying(true);
-  }
-
-  async function stopPlayback() {
-    if (timerRef.current) {
-      window.clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-
-    setRemainingSeconds(null);
-    setIsPlaying(false);
-    await engineRef.current?.stop();
-    engineRef.current = null;
-  }
-
-  async function togglePlayback() {
-    if (isPlaying) {
-      await stopPlayback();
-      return;
-    }
-
-    await startPlayback();
-  }
+  }, [isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
 
   async function triggerInstall() {
     if (!installPrompt) {

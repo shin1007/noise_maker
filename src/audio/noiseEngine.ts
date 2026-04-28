@@ -82,6 +82,7 @@ export class NoiseEngine {
   private leftOscillator: OscillatorNode | null = null;
   private rightOscillator: OscillatorNode | null = null;
   private currentSettings: AudioSettings | null = null;
+  private silenceElement: HTMLAudioElement | null = null;
 
   async start(settings: AudioSettings): Promise<void> {
     this.currentSettings = settings;
@@ -93,12 +94,26 @@ export class NoiseEngine {
       }
 
       this.context = new AudioContextImpl();
+      this.context.onstatechange = () => {
+        console.log(`AudioContext state changed to: ${this.context?.state}`);
+        if (this.context?.state === 'suspended' && this.currentSettings) {
+          // If it's suspended while we think it should be playing, try to resume
+          void this.context.resume();
+        }
+      };
       await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
       this.buildGraph();
     }
 
     if (this.context.state === 'suspended') {
       await this.context.resume();
+    }
+
+    if (this.silenceElement) {
+      this.silenceElement.play().catch(() => {
+        // Play might fail if not triggered by user interaction,
+        // but start() is usually called from a click handler.
+      });
     }
 
     this.update(settings);
@@ -131,6 +146,13 @@ export class NoiseEngine {
 
   async stop(): Promise<void> {
     this.stopTones();
+
+    if (this.silenceElement) {
+      this.silenceElement.pause();
+      this.silenceElement.srcObject = null;
+      this.silenceElement.remove();
+      this.silenceElement = null;
+    }
 
     if (this.worklet) {
       this.worklet.disconnect();
@@ -168,6 +190,19 @@ export class NoiseEngine {
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
     this.merger.connect(this.context.destination);
+
+    // Create a dummy audio element to keep the session alive on iOS.
+    // By connecting a MediaStreamDestination to an HTMLAudioElement,
+    // iOS treats the AudioContext as a primary media session.
+    const destination = this.context.createMediaStreamDestination();
+    this.merger.connect(destination);
+
+    this.silenceElement = new Audio();
+    this.silenceElement.srcObject = destination.stream;
+    this.silenceElement.muted = true; // Prevent double volume, iOS still respects this for background session
+    this.silenceElement.setAttribute('playsinline', '');
+    this.silenceElement.style.display = 'none';
+    document.body.appendChild(this.silenceElement);
   }
 
   private ensureTones(settings: AudioSettings): void {
