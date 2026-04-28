@@ -75,4 +75,11 @@ export interface Copy {
   footerNote: string;
   minute: string;
   second: string;
+  iosStep1: string;
+  iosStep2: string;
+  iosStep3: string;
+  androidStep1: string;
+  androidStep2: string;
+  gotIt: string;
+  close: string;
 }

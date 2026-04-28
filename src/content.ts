@@ -28,7 +28,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: '現在の差分周波数の目安',
     footerNote: '医療効果を保証するものではありません。用途に合わせて慎重に使ってください。',
     minute: '分',
-    second: '秒'
+    second: '秒',
+    iosStep1: '共有ボタン（四角に上矢印）をタップします。',
+    iosStep2: '下にスクロールして「ホーム画面に追加」をタップします。',
+    iosStep3: '右上の「追加」をタップします。',
+    androidStep1: 'ブラウザの3点リーダーメニューをタップします。',
+    androidStep2: '「アプリをインストール」または「ホーム画面に追加」をタップします。',
+    gotIt: '了解',
+    close: '閉じる'
   },
   en: {
     appName: 'Noise Maker',
@@ -57,7 +64,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Current beat band',
     footerNote: 'No medical claims are made. Use it cautiously and fit it to your context.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Tap the Share button (square with arrow up).',
+    iosStep2: 'Scroll down and tap "Add to Home Screen".',
+    iosStep3: 'Tap "Add" in the top right.',
+    androidStep1: 'Tap the three-dot menu in the browser.',
+    androidStep2: 'Tap "Install app" or "Add to home screen".',
+    gotIt: 'Got it',
+    close: 'Close'
   },
   'zh-Hans': {
     appName: 'Noise Maker',
@@ -86,7 +100,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: '当前节拍频带',
     footerNote: '不作医疗声明。请谨慎使用并适应您的环境。',
     minute: '分',
-    second: '秒'
+    second: '秒',
+    iosStep1: '点击“分享”按钮（带上箭头的方块）。',
+    iosStep2: '向下滚动并点击“添加到主屏幕”。',
+    iosStep3: '点击右上角的“添加”。',
+    androidStep1: '点击浏览器中的三点菜单。',
+    androidStep2: '点击“安装应用”或“添加到主屏幕”。',
+    gotIt: '知道了',
+    close: '关闭'
   },
   es: {
     appName: 'Noise Maker',
@@ -115,7 +136,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Banda de pulso actual',
     footerNote: 'No se realizan afirmaciones médicas. Úselo con precaución y adáptelo a su contexto.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Toca el botón Compartir (cuadrado con flecha arriba).',
+    iosStep2: 'Desplázate hacia abajo y toca "Agregar a pantalla de inicio".',
+    iosStep3: 'Toca "Agregar" en la esquina superior derecha.',
+    androidStep1: 'Toca el menú de tres puntos en el navegador.',
+    androidStep2: 'Toca "Instalar aplicación" o "Agregar a pantalla de inicio".',
+    gotIt: 'Entendido',
+    close: 'Cerrar'
   },
   hi: {
     appName: 'Noise Maker',
@@ -144,7 +172,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'वर्तमान बीट बैंड',
     footerNote: 'कोई चिकित्सा दावा नहीं किया गया है। इसका सावधानीपूर्वक उपयोग करें और अपने संदर्भ के अनुसार ढालें।',
     minute: 'म',
-    second: 'से'
+    second: 'से',
+    iosStep1: 'शेयर बटन (ऊपर तीर वाला वर्ग) पर टैप करें।',
+    iosStep2: 'नीचे स्क्रॉल करें और "होम स्क्रीन पर जोड़ें" पर टैप करें।',
+    iosStep3: 'ऊपर दाईं ओर "जोड़ें" पर टैप करें।',
+    androidStep1: 'ब्राउज़र में तीन-बिंदु वाले मेनू पर टैप करें।',
+    androidStep2: '"ऐप इंस्टॉल करें" या "होम स्क्रीन पर जोड़ें" पर टैप करें।',
+    gotIt: 'समझ गए',
+    close: 'बंद करें'
   },
   bn: {
     appName: 'Noise Maker',
@@ -173,7 +208,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'বর্তমান বিট ব্যান্ড',
     footerNote: 'কোন চিকিৎসা দাবি করা হয় না। এটি সাবধানতার সাথে ব্যবহার করুন এবং আপনার প্রেক্ষাপটের সাথে খাপ খাইয়ে নিন।',
     minute: 'মি',
-    second: 'সে'
+    second: 'সে',
+    iosStep1: 'শেয়ার বোতামটি (উপরে তীর সহ বর্গক্ষেত্র) আলতো চাপুন।',
+    iosStep2: 'নিচে স্ক্রোল করুন এবং "হোম স্ক্রিনে যোগ করুন" আলতো চাপুন।',
+    iosStep3: 'উপরে ডানদিকে "যোগ করুন" আলতো চাপুন।',
+    androidStep1: 'ব্রাউজারে তিন-বিন্দু মেনু আলতো চাপুন।',
+    androidStep2: '"অ্যাপ ইনস্টল করুন" বা "হোম স্ক্রিনে যোগ করুন" আলতো চাপুন।',
+    gotIt: 'বুঝেছি',
+    close: 'বন্ধ করুন'
   },
   pt: {
     appName: 'Noise Maker',
@@ -202,7 +244,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Banda de batida atual',
     footerNote: 'Nenhuma alegacao medica e feita. Use com cautela e adapte ao seu contexto.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Toque no botão Compartilhar (quadrado com seta para cima).',
+    iosStep2: 'Role para baixo e toque em "Adicionar à Tela de Início".',
+    iosStep3: 'Toque em "Adicionar" no canto superior direito.',
+    androidStep1: 'Toque no menu de três pontos no navegador.',
+    androidStep2: 'Toque em "Instalar aplicativo" ou "Adicionar à tela inicial".',
+    gotIt: 'Entendido',
+    close: 'Fechar'
   },
   ru: {
     appName: 'Noise Maker',
@@ -231,7 +280,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Текущий диапазон ритма',
     footerNote: 'Медицинские заявления не делаются. Используйте с осторожностью и адаптируйте под себя.',
     minute: 'мин',
-    second: 'сек'
+    second: 'сек',
+    iosStep1: 'Нажмите кнопку «Поделиться» (квадрат со стрелкой вверх).',
+    iosStep2: 'Прокрутите вниз и нажмите «На экран "Домой"».',
+    iosStep3: 'Нажмите «Добавить» в правом верхнем углу.',
+    androidStep1: 'Нажмите на меню из трех точек в браузере.',
+    androidStep2: 'Нажмите «Установить приложение» или «На экран "Домой"».',
+    gotIt: 'Понятно',
+    close: 'Закрыть'
   },
   yue: {
     appName: 'Noise Maker',
@@ -260,7 +316,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: '當前節拍頻帶',
     footerNote: '唔作醫療聲明。請謹慎使用並適應你嘅環境。',
     minute: '分',
-    second: '秒'
+    second: '秒',
+    iosStep1: '撳「分享」掣（帶上箭頭嘅方塊）。',
+    iosStep2: '向下捲動並撳「加入主畫面」。',
+    iosStep3: '撳右上角嘅「加入」。',
+    androidStep1: '撳瀏覽器入面個三點選單。',
+    androidStep2: '撳「安裝應用程式」或者「加入主畫面」。',
+    gotIt: '知道喇',
+    close: '關閉'
   },
   vi: {
     appName: 'Noise Maker',
@@ -289,7 +352,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Bang nhip hien tai',
     footerNote: 'Khong co tuyen bo y te nao duoc dua ra. Su dung than trong va phu hop voi boi canh cua ban.',
     minute: 'p',
-    second: 'g'
+    second: 'g',
+    iosStep1: 'Chạm vào nút Chia sẻ (hình vuông có mũi tên lên).',
+    iosStep2: 'Cuộn xuống và chạm vào "Thêm vào màn hình chính".',
+    iosStep3: 'Chạm vào "Thêm" ở góc trên bên phải.',
+    androidStep1: 'Chạm vào menu ba dấu chấm trong trình duyệt.',
+    androidStep2: 'Chạm vào "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".',
+    gotIt: 'Đã hiểu',
+    close: 'Đóng'
   },
   mr: {
     appName: 'Noise Maker',
@@ -318,7 +388,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'सध्याचा बीट बँड',
     footerNote: 'कोणताही वैद्यकीय दावा केला जात नाही. सावधगिरीने वापरा आणि तुमच्या संदर्भानुसार वापरा.',
     minute: 'मि',
-    second: 'से'
+    second: 'से',
+    iosStep1: 'शेअर बटण (वर बाण असलेला चौरस) टॅप करा.',
+    iosStep2: 'खाली स्क्रोल करा आणि "होम स्क्रीनवर जोडा" टॅप करा.',
+    iosStep3: 'वरच्या उजव्या कोपऱ्यात "जोडा" टॅप करा.',
+    androidStep1: 'ब्राउझरमधील तीन-बिंदू मेनू टॅप करा.',
+    androidStep2: '"अॅप इंस्टॉल करा" किंवा "होम स्क्रीनवर जोडा" टॅप करा.',
+    gotIt: 'समजले',
+    close: 'बंद करा'
   },
   te: {
     appName: 'Noise Maker',
@@ -347,7 +424,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'ప్రస్తుత బీట్ బ్యాండ్',
     footerNote: 'వైద్యపరమైన క్లెయిమ్‌లు ఏవీ చేయబడలేదు. జాగ్రత్తగా ఉపయోగించండి మరియు మీ సందర్భానికి తగినట్లుగా అమర్చుకోండి.',
     minute: 'ని',
-    second: 'సె'
+    second: 'సె',
+    iosStep1: 'షోర్ బటన్ (పైకి బాణం ఉన్న చతురస్రం) నొక్కండి.',
+    iosStep2: 'క్రిందికి స్క్రోల్ చేసి "హోమ్ స్క్రీన్‌కు చేర్చు" నొక్కండి.',
+    iosStep3: 'పైన కుడివైపున ఉన్న "చేర్చు" నొక్కండి.',
+    androidStep1: 'బ్రౌజర్‌లోని మూడు చుక్కల మెనూని నొక్కండి.',
+    androidStep2: '"యాప్‌ను ఇన్‌స్టాల్ చేయి" లేదా "హోమ్ స్క్రీన్‌కు చేర్చు" నొక్కండి.',
+    gotIt: 'అర్థమైంది',
+    close: 'మూసివేయి'
   },
   tr: {
     appName: 'Noise Maker',
@@ -376,7 +460,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Guncel vurus bandi',
     footerNote: 'Tibbi bir iddiada bulunulmamaktadir. Dikkatli kullanin ve baglaminiza gore uyarlayin.',
     minute: 'dk',
-    second: 'sn'
+    second: 'sn',
+    iosStep1: 'Paylaş düğmesine (yukarı oklu kare) dokunun.',
+    iosStep2: 'Aşağı kaydırın ve "Ana Ekrana Ekle"ye dokunun.',
+    iosStep3: 'Sağ üstteki "Ekle"ye dokunun.',
+    androidStep1: 'Tarayıcıdaki üç nokta menüsüne dokunun.',
+    androidStep2: '"Uygulamayı yükle" veya "Ana ekrana ekle"ye dokunun.',
+    gotIt: 'Anladım',
+    close: 'Kapat'
   },
   ko: {
     appName: 'Noise Maker',
@@ -405,7 +496,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: '현재 비트 밴드',
     footerNote: '의료적 효과를 보장하지 않습니다. 용도에 맞게 주의해서 사용하십시오.',
     minute: '분',
-    second: '초'
+    second: '초',
+    iosStep1: '공유 버튼(위쪽 화살표가 있는 사각형)을 누릅니다.',
+    iosStep2: '아래로 스크롤하여 \'홈 화면에 추가\'를 누릅니다.',
+    iosStep3: '오른쪽 상단의 \'추가\'를 누릅니다.',
+    androidStep1: '브라우저에서 점 3개 메뉴를 누릅니다.',
+    androidStep2: '\'앱 설치\' 또는 \'홈 화면에 추가\'를 누릅니다.',
+    gotIt: '확인',
+    close: '닫기'
   },
   pa: {
     appName: 'Noise Maker',
@@ -429,12 +527,19 @@ export const copy: Record<Locale, Copy> = {
     noiseReferences: 'ਸ਼ੋਰ ਅਧਿਐਨ ਦੇ ਹਵਾਲੇ',
     binauralOn: 'ਬਾਇਨੋਰਲ ਬੀਟਸ ਚਾਲੂ',
     binauralHelp: 'ਬਾਇਨੋਰਲ ਬੀਟ ਸਹਾਇਤਾ ਦਿਖਾਓ',
-    binauralDesc: 'ਹਰੇਕ ਕੰਨ ਵਿੱਚ ਥੋੜੇ ਵੱਖਰੇ ਟੋਨ ਭੇਜਦਾ ਹੈ ਤਾਂ ਜੋ ਬੀਟ ਦੇ ਅੰਤਰ ਨੂੰ ਹੋਰ ਸਪਸ਼ਟ ਰੂਪ ਵਿੱਚ ਸਮਝਿਆ ਜਾ ਸਕੇ।',
+    binauralDesc: 'ਹਰੇਕ ਕੰਨ ਵਿੱਚ ਥੋੜੇ ਵੱਖਰੇ ਟੋਨ ਭੇਜਦਾ ਹੈ ਤਾਂ ਜੋ ਬੀਟ ਦੇ ਅੰਤਰ ਨੂੰ ਹੋਰ ਸਪਸ਼ਟ ਰੂਪ ਵਿੱਚ سمجھਿਆ ਜਾ ਸਕੇ।',
     baseFreq: 'ਬੇਸ ਫ੍ਰੀਕੁਐਂਸੀ',
     currentBand: 'ਮੌਜੂਦਾ ਬੀਟ ਬੈਂਡ',
     footerNote: 'ਕੋਈ ਡਾਕਟਰੀ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ। ਇਸਦੀ ਸਾਵਧਾਨੀ ਨਾਲ ਵਰਤੋਂ ਕਰੋ ਅਤੇ ਆਪਣੇ ਸੰਦਰਭ ਅਨੁਸਾਰ ਢਾਲੋ।',
     minute: 'ਮਿੰਟ',
-    second: 'ਸਕਿੰਟ'
+    second: 'ਸਕਿੰਟ',
+    iosStep1: 'ਸ਼ੇਅਰ ਬਟਨ (ਉੱਪਰ ਤੀਰ ਵਾਲਾ ਵਰਗ) \'ਤੇ ਟੈਪ ਕਰੋ।',
+    iosStep2: 'ਹੇਠਾਂ ਸਕ੍ਰੋਲ ਕਰੋ ਅਤੇ "ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ" ਤੇ ਟੈਪ ਕਰੋ।',
+    iosStep3: 'ਉੱਪਰ ਸੱਜੇ ਪਾਸੇ "ਜੋੜੋ" ਤੇ ਟੈਪ ਕਰੋ।',
+    androidStep1: 'ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਤਿੰਨ-ਬਿੰਦੂ ਮੀਨੂ \'ਤੇ ਟੈਪ ਕਰੋ।',
+    androidStep2: '"ਐਪ ਇੰਸਟਾਲ ਕਰੋ" ਜਾਂ "ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ" ਤੇ ਟੈਪ ਕਰੋ।',
+    gotIt: 'ਸਮਝ ਗਏ',
+    close: 'ਬੰਦ ਕਰੋ'
   },
   ta: {
     appName: 'Noise Maker',
@@ -463,7 +568,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'தற்போதைய பீட் பேண்ட்',
     footerNote: 'மருத்துவ ரீதியான உரிமைகோரல்கள் எதுவும் செய்யப்படவில்லை. எச்சரிக்கையுடன் பயன்படுத்தவும்.',
     minute: 'நி',
-    second: 'வி'
+    second: 'வி',
+    iosStep1: 'பகிர் பொத்தானைத் (மேல் அம்புக்குறியுடன் கூடிய சதுரம்) தட்டவும்.',
+    iosStep2: 'கீழே உருட்டி "முதற்பக்கத்தில் சேர்க்க" என்பதைத் தட்டவும்.',
+    iosStep3: 'மேல் வலதுபுறத்தில் உள்ள "சேர்" என்பதைத் தட்டவும்.',
+    androidStep1: 'உலாவியில் உள்ள மூன்று புள்ளி மெனுவைத் தட்டவும்.',
+    androidStep2: '"பயன்பாட்டை நிறுவு" அல்லது "முதற்பக்கத்தில் சேர்க்க" என்பதைத் தட்டவும்.',
+    gotIt: 'புரிந்தது',
+    close: 'மூடு'
   },
   jv: {
     appName: 'Noise Maker',
@@ -492,7 +604,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Band ketukan saiki',
     footerNote: 'Ora ana klaim medis. Gunakake kanthi teliti lan cocogake karo konteksmu.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Tutul tombol Dum (kothak nganggo panah munggah).',
+    iosStep2: 'Gulung mudhun lan tutul "Tambahna menyang layar ngarep".',
+    iosStep3: 'Tutul "Tambah" ing sisih tengen ndhuwur.',
+    androidStep1: 'Tutul menu telu titik ing browser.',
+    androidStep2: 'Tutul "Pasang aplikasi" utawa "Tambahna menyang layar ngarep".',
+    gotIt: 'Ngerti',
+    close: 'Tutup'
   },
   it: {
     appName: 'Noise Maker',
@@ -521,7 +640,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Banda di battito attuale',
     footerNote: 'Non si effettuano affermazioni mediche. Usalo con cautela e adattalo al tuo contesto.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Tocca il pulsante Condividi (quadrato con freccia verso l\'alto).',
+    iosStep2: 'Scorri verso il basso e tocca "Aggiungi alla schermata Home".',
+    iosStep3: 'Tocca "Aggiungi" in alto a destra.',
+    androidStep1: 'Tocca il menu con i tre puntini nel browser.',
+    androidStep2: 'Tocca "Installa app" o "Aggiungi alla schermata Home".',
+    gotIt: 'Ho capito',
+    close: 'Chiudi'
   },
   fr: {
     appName: 'Noise Maker',
@@ -550,7 +676,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Bande de battement actuelle',
     footerNote: 'Aucune reclamation medicale n est faite. Utilisez-le avec prudence et adaptez-le a votre contexte.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Appuyez sur le bouton Partager (carré avec une flèche vers le haut).',
+    iosStep2: 'Faites défiler vers le bas et appuyez sur « Sur l\'écran d\'accueil ».',
+    iosStep3: 'Appuyez sur « Ajouter » en haut à droite.',
+    androidStep1: 'Appuyez sur le menu à trois points dans le navigateur.',
+    androidStep2: 'Appuyez sur « Installer l\'application » ou « Sur l\'écran d\'accueil ».',
+    gotIt: 'J\'ai compris',
+    close: 'Fermer'
   },
   de: {
     appName: 'Noise Maker',
@@ -579,7 +712,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Aktuelles Beat-Band',
     footerNote: 'Es werden keine medizinischen Anspruche erhoben. Vorsichtig verwenden und an den Kontext anpassen.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Tippen Sie auf die Teilen-Schaltfläche (Quadrat mit Pfeil nach oben).',
+    iosStep2: 'Scrollen Sie nach unten und tippen Sie auf „Zum Home-Bildschirm“.',
+    iosStep3: 'Tippen Sie oben rechts auf „Hinzufügen“.',
+    androidStep1: 'Tippen Sie im Browser auf das Drei-Punkte-Menü.',
+    androidStep2: 'Tippen Sie auf „App installieren“ oder „Zum Home-Bildschirm hinzufügen“.',
+    gotIt: 'Verstanden',
+    close: 'Schließen'
   },
   id: {
     appName: 'Noise Maker',
@@ -608,7 +748,14 @@ export const copy: Record<Locale, Copy> = {
     currentBand: 'Pita ketukan saat ini',
     footerNote: 'Tidak ada klaim medis yang dibuat. Gunakan dengan hati-hati dan sesuaikan dengan konteks Anda.',
     minute: 'm',
-    second: 's'
+    second: 's',
+    iosStep1: 'Ketuk tombol Bagikan (persegi dengan panah ke atas).',
+    iosStep2: 'Gulir ke bawah dan ketuk "Tambahkan ke Layar Utama".',
+    iosStep3: 'Ketuk "Tambah" di kanan atas.',
+    androidStep1: 'Ketuk menu tiga titik di browser.',
+    androidStep2: 'Ketuk "Instal aplikasi" atau "Tambahkan ke layar utama".',
+    gotIt: 'Mengerti',
+    close: 'Tutup'
   }
 };
 
@@ -627,7 +774,10 @@ export const noiseTypes: Array<{
 }> = [
   { 
     key: 'white', 
-    label: { ja: 'ホワイト', en: 'White', 'zh-Hans': '白噪音', es: 'Blanco', ko: '화이트', fr: 'Blanc', de: 'Weiß' }, 
+    label: { 
+      ja: 'ホワイト', en: 'White', 'zh-Hans': '白噪音', es: 'Blanco', ko: '화이트', fr: 'Blanc', de: 'Weiß',
+      hi: 'सफ़ेद', bn: 'সাদা', pt: 'Branco', ru: 'Белый', yue: '白噪音', vi: 'Trắng', mr: 'पांढरा', te: 'తెలుపు', tr: 'Beyaz', pa: 'ਚਿੱਟਾ', ta: 'வெள்ளை', jv: 'Putih', it: 'Bianco', id: 'Putih'
+    }, 
     short: { 
       ja: '環境音を目立ちにくくして、作業や休憩の切り替えに使われることがあります。', 
       en: 'Often used to mask background sounds and support task or rest transitions.',
@@ -635,12 +785,29 @@ export const noiseTypes: Array<{
       es: 'A menudo se usa para enmascarar sonidos de fondo y apoyar transiciones de tareas.',
       ko: '주변 소음을 차단하고 작업이나 휴식의 전환을 돕는 데 사용됩니다.',
       fr: 'Souvent utilisé pour masquer les bruits de fond et faciliter les transitions.',
-      de: 'Wird oft verwendet, um Hintergrundgeräusche zu maskieren.'
+      de: 'Wird oft verwendet, um Hintergrundgeräusche zu maskieren.',
+      hi: 'अक्सर पृष्ठभूमि की आवाज़ों को छिपाने और कार्य या आराम के संक्रमण का समर्थन करने के लिए उपयोग किया जाता है।',
+      bn: 'প্রায়শই পটভূমির শব্দ মাস্ক করতে এবং কাজ বা বিশ্রামের ট্রানজিশন সমর্থন করতে ব্যবহৃত হয়।',
+      pt: 'Frequentemente usado para mascarar sons de fundo e apoiar transições de tarefas ou descanso.',
+      ru: 'Часто используется для маскировки фоновых звуков и поддержки переходов между задачами или отдыхом.',
+      yue: '通常用於遮蔽背景噪音，支持工作或休息嘅切換。',
+      vi: 'Thường được sử dụng để che bớt âm thanh nền và hỗ trợ chuyển đổi công việc hoặc nghỉ ngơi.',
+      mr: 'बऱ्याचदा पार्श्वभूमीचे आवाज मास्क करण्यासाठी आणि कार्य किंवा विश्रांती संक्रमणास समर्थन देण्यासाठी वापरले जाते.',
+      te: 'తరచుగా నేపథ్య శబ్దాలను దాచడానికి మరియు పని లేదా విశ్రాంతి పరివర్తనలకు మద్దతు ఇవ్వడానికి ఉపయోగిస్తారు.',
+      tr: 'Genellikle arka plan seslerini maskelemek ve görev veya dinlenme geçişlerini desteklemek için kullanılır.',
+      pa: 'ਅਕਸਰ ਪਿਛੋਕੜ ਦੀਆਂ ਆਵਾਜ਼ਾਂ ਨੂੰ ਲੁਕਾਉਣ ਅਤੇ ਕੰਮ ਜਾਂ ਆਰਾਮ ਦੇ ਸੰਕਰਮਣ ਦਾ ਸਮਰਥਨ ਕਰਨ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ।',
+      ta: 'பின்னணி ஒலிகளை மறைக்கவும், வேலை அல்லது ஓய்வு மாற்றங்களுக்கு ஆதரவளிக்கவும் பெரும்பாலும் பயன்படுத்தப்படுகிறது.',
+      jv: 'Asring digunakake kanggo nutupi swara latar mburi lan ndhukung transisi tugas utawa istirahat.',
+      it: 'Spesso utilizzato per mascherare i suoni di sottofondo e supportare le transizioni tra attività o riposo.',
+      id: 'Sering digunakan untuk menyamarkan suara latar belakang dan mendukung transisi tugas atau istirahat.'
     } 
   },
   { 
     key: 'pink', 
-    label: { ja: 'ピンク', en: 'Pink', 'zh-Hans': '粉红噪音', es: 'Rosa', ko: '핑크', fr: 'Rose', de: 'Rosa' }, 
+    label: { 
+      ja: 'ピンク', en: 'Pink', 'zh-Hans': '粉红噪音', es: 'Rosa', ko: '핑크', fr: 'Rose', de: 'Rosa',
+      hi: 'गुलाबी', bn: 'গোলাপী', pt: 'Rosa', ru: 'Розовый', yue: '粉紅噪音', vi: 'Hồng', mr: 'गुलाबी', te: 'గులాబీ', tr: 'Pembe', pa: 'ਗੁਲਾਬੀ', ta: 'இளஞ்சிவப்பு', jv: 'Abang enom', it: 'Rosa', id: 'Merah muda'
+    }, 
     short: { 
       ja: '就寝前に落ち着きやすいと感じる人がいます。睡眠への効果は研究でも個人差があります。', 
       en: 'Some people find it easier to settle before sleep. Sleep effects vary across studies.',
@@ -648,12 +815,29 @@ export const noiseTypes: Array<{
       es: 'A algunas personas les resulta más fácil calmarse antes de dormir.',
       ko: '취침 전에 마음을 진정시키는 데 도움이 될 수 있습니다. 수면 효과는 개인차가 있습니다.',
       fr: 'Certaines personnes le trouvent apaisant avant de dormir.',
-      de: 'Manche finden es vor dem Schlafengehen beruhigend.'
+      de: 'Manche finden es vor dem Schlafengehen beruhigend.',
+      hi: 'कुछ लोगों को सोने से पहले शांत होना आसान लगता है। नींद पर इसके प्रभाव अध्ययनों में भिन्न होते हैं।',
+      bn: 'কিছু মানুষ ঘুমানোর আগে শান্ত হওয়া সহজ মনে করেন। ঘুমের উপর এর প্রভাব বিভিন্ন গবেষণায় ভিন্ন ভিন্ন হয়।',
+      pt: 'Algumas pessoas acham mais fácil relaxar antes de dormir. Os efeitos no sono variam entre los estudos.',
+      ru: 'Некоторым людям легче успокоиться перед сном. Эффект на сон варьируется в разных исследованиях.',
+      yue: '有啲人覺得睡前更容易安靜。睡眠效果喺研究中因人而異。',
+      vi: 'Một số người cảm thấy dễ dàng bình tĩnh hơn trước khi ngủ. Hiệu quả giấc ngủ thay đổi tùy theo nghiên cứu.',
+      mr: 'काही लोकांना झोपण्यापूर्वी शांत होणे सोपे वाटते. झोपेवर होणारे परिणाम अभ्यासानुसार बदलतात.',
+      te: 'కొంతమంది నిద్రపోయే ముందు ప్రశాంతంగా ఉండటం సులభం అని భావిస్తారు. నిద్రపై దీని ప్రభావాలు అధ్యయనాలలో మారుతుంటాయి.',
+      tr: 'Bazı insanlar uykudan önce sakinleşmeyi daha kolay bulur. Uyku etkileri çalışmalar arasında farklılık gösterir.',
+      pa: 'ਕੁਝ ਲੋਕਾਂ ਨੂੰ ਸੌਣ ਤੋਂ ਪਹਿਲਾਂ ਸ਼ਾਂਤ ਹੋਣਾ ਸੌਖਾ ਲੱਗਦਾ ਹੈ। ਨੀਂਦ \'ਤੇ ਇਸਦੇ ਪ੍ਰਭਾਵ ਵੱਖ-ਵੱਖ ਅਧਿਐਨਾਂ ਵਿੱਚ ਵੱਖਰੇ ਹੁੰਦੇ ਹਨ।',
+      ta: 'சிலர் தூங்குவதற்கு முன் அமைதியடைவது எளிது என்று கருதுகின்றனர். தூக்கத்தின் மீதான இதன் விளைவுகள் ஆய்வுகளில் மாறுபடும்.',
+      jv: 'Sawetara wong ngrasa luwih gampang tenang sadurunge turu. Efek turu beda-beda ing saben panaliten.',
+      it: 'Alcune persone trovano più facile calmarsi prima di dormire. Gli effetti sul sonno variano a seconda degli studi.',
+      id: 'Beberapa orang merasa lebih mudah untuk tenang sebelum tidur. Efek tidur bervariasi di berbagai penelitian.'
     } 
   },
   { 
     key: 'brown', 
-    label: { ja: 'ブラウン', en: 'Brown', 'zh-Hans': '褐噪音', es: 'Marrón', ko: '브라운', fr: 'Brun', de: 'Braun' }, 
+    label: { 
+      ja: 'ブラウン', en: 'Brown', 'zh-Hans': '褐噪音', es: 'Marrón', ko: '브라운', fr: 'Brun', de: 'Braun',
+      hi: 'भूरा', bn: 'बादামী', pt: 'Castanho', ru: 'Коричневый', yue: '褐噪音', vi: 'Nâu', mr: 'तपकिरी', te: 'గోధుమ', tr: 'Kahverengi', pa: 'ਭੂਰਾ', ta: 'பழுப்பு', jv: 'Coklat', it: 'Marrone', id: 'Cokelat'
+    }, 
     short: { 
       ja: '低めで包まれる感覚があり、リラックス目的で選ばれることがあります。', 
       en: 'Its deeper tone can feel enveloping, so some listeners choose it for relaxation.',
@@ -661,12 +845,29 @@ export const noiseTypes: Array<{
       es: 'Su tono más profundo puede sentirse envolvente, ideal para la relajación.',
       ko: '낮은 톤으로 감싸이는 느낌이 있어 휴식을 위해 선택되기도 합니다.',
       fr: 'Son ton plus profond peut sembler enveloppant, idéal pour la relaxation.',
-      de: 'Sein tieferer Ton kann sich einhüllend anfühlen, ideal zur Entspannung.'
+      de: 'Sein tieferer Ton kann sich einhüllend anfühlen, ideal zur Entspannung.',
+      hi: 'इसकी गहरी ध्वनि घेरने वाली महसूस हो सकती है, इसलिए कुछ सुनने वाले इसे विश्राम के लिए चुनते हैं।',
+      bn: 'এর গভীর সুর আপনাকে ঘিরে রাখার অনুভূতি দিতে পারে, তাই কিছু শ্রোতা এটি বিশ্রামের জন্য বেছে নেন।',
+      pt: 'Seu tom mais profundo pode parecer envolvente, por isso alguns ouvintes o escolhem para relaxar.',
+      ru: 'Его более глубокий тон может казаться обволакивающим, поэтому некоторые слушатели выбирают его для расслабления.',
+      yue: '低沉嘅包圍感，常用於放鬆目的。',
+      vi: 'Tông màu sâu hơn của nó có thể tạo cảm giác bao bọc, vì vậy một số người nghe chọn nó để thư giãn.',
+      mr: 'याचा सखोल सूर वेढून घेणारा वाटू शकतो, म्हणून काही श्रोते विश्रांतीसाठी याची निवड करतात.',
+      te: 'దీని లోతైన టోన్ ఆవరించినట్లు అనిపిస్తుంది, కాబట్టి కొంతమంది శ్రోతలు విశ్రాంతి కోసం దీనిని ఎంచుకుంటారు.',
+      tr: 'Daha derin tonu çevreleyici hissettirebilir, bu nedenle bazı dinleyiciler bunu rahatlama için seçer.',
+      pa: 'ਇਸਦਾ ਡੂੰਘਾ ਸੁਰ ਘੇਰਨ ਵਾਲਾ ਮਹਿਸੂਸ ਹੋ ਸਕਦਾ ਹੈ, ਇਸ ਲਈ ਕੁਝ ਸੁਣਨ ਵਾਲੇ ਇਸਨੂੰ ਆਰਾਮ ਲਈ ਚੁਣਦੇ ਹਨ।',
+      ta: 'இதன் ஆழமான ஒலி சூழ்ந்திருப்பது போன்ற உணர்வைத் தரும், எனவே சில கேட்பவர்கள் இதை ஓய்வெடுக்கத் தேர்வு செய்கிறார்கள்।',
+      jv: 'Nada sing luwih jero bisa krasa ngrangkul, mula sawetara wong milih iki kanggo relaksasi.',
+      it: 'Il suo tono più profondo può sembrare avvolgente, quindi alcuni ascoltatori lo scelgono per il rilassamento.',
+      id: 'Nadanya yang lebih dalam bisa terasa menyelimuti, sehingga beberapa pendengar memilihnya untuk relaksasi.'
     } 
   },
   { 
     key: 'blue', 
-    label: { ja: 'ブルー', en: 'Blue', 'zh-Hans': '蓝噪音', es: 'Azul', ko: '블루', fr: 'Bleu', de: 'Blau' }, 
+    label: { 
+      ja: 'ブルー', en: 'Blue', 'zh-Hans': '蓝噪音', es: 'Azul', ko: '블루', fr: 'Bleu', de: 'Blau',
+      hi: 'नीला', bn: 'নীল', pt: 'Azul', ru: 'Голубой', yue: '藍噪音', vi: 'Xanh dương', mr: 'निळा', te: 'నీలం', tr: 'Mavi', pa: 'ਨੀਲਾ', ta: 'நீலம்', jv: 'Biru', it: 'Blu', id: 'Biru'
+    }, 
     short: { 
       ja: '気分を切り替えたい場面で、短時間の集中スイッチとして使う人もいます。', 
       en: 'Sometimes used as a short focus reset when people want a quick mental shift.',
@@ -674,20 +875,51 @@ export const noiseTypes: Array<{
       es: 'A veces se usa como un breve reinicio de enfoque para un cambio mental rápido.',
       ko: '기분 전환이 필요한 상황에서 단시간 집중을 위한 스위치로 사용되기도 합니다.',
       fr: 'Parfois utilisé pour réinitialiser la concentration rapidement.',
-      de: 'Wird manchmal für einen kurzen Fokus-Reset verwendet.'
+      de: 'Wird manchmal für einen kurzen Fokus-Reset verwendet.',
+      hi: 'कभी-कभी एक संक्षिप्त ध्यान रीसेट के रूप में उपयोग किया जाता है जब लोग एक त्वरित मानसिक बदलाव चाहते हैं।',
+      bn: 'কখনও কখনও একটি সংক্ষিপ্ত ফোকাস রিসেট হিসাবে ব্যবহৃত হয় যখন লোকেরা দ্রুত মানসিক পরিবর্তন চান।',
+      pt: 'Às vezes usado como um breve reinício de foco quando as pessoas querem uma mudança mental rápida.',
+      ru: 'Иногда используется как кратковременная перезагрузка внимания, когда требуется быстрая смена психического состояния.',
+      yue: '喺需要轉換心情時，有人將佢作為短時間集中嘅開關。',
+      vi: 'Đôi khi được sử dụng như một lần đặt lại sự tập trung ngắn khi mọi người muốn có một sự thay đổi tinh thần nhanh chóng.',
+      mr: 'जेव्हा लोकांना त्वरित मानसिक बदल हवा असतो तेव्हा कधीकधी संक्षिप्त फोकस रीसेट म्हणून वापरले जाते.',
+      te: 'ప్రజలు త్వరిత మానసిక మార్పును కోరుకున్నప్పుడు కొన్నిసార్లు చిన్న ఫోక스 రీసెట్‌గా ఉపయోగించబడుతుంది.',
+      tr: 'İnsanlar hızlı bir zihinsel değişim istediğinde bazen kısa bir odaklanma sıfırlaması olarak kullanılır.',
+      pa: 'ਕਦੇ-ਕਦੇ ਇੱਕ ਸੰਖੇਪ ਫੋਕਸ ਰੀਸੈਟ ਵਜੋਂ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ਜਦੋਂ ਲੋਕ ਇੱਕ ਤੇਜ਼ ਮਾਨਸਿਕ ਤਬਦੀਲੀ ਚਾਹੁੰਦੇ ਹਨ।',
+      ta: 'மக்கள் விரைவான மன மாற்றத்தை விரும்பும்போது சில நேரங்களில் குறுகிய கவனம் மீட்டமைப்பாகப் பயன்படுத்தப்படுகிறது.',
+      jv: 'Sok-sok digunakake minangka reset fokus cendhak nalika wong pengin owah-owahan mental sing cepet.',
+      it: 'A volte usato come breve reset della messa a fuoco quando si desidera un rapido cambiamento mentale.',
+      id: 'Terkadang digunakan sebagai reset fokus singkat ketika orang menginginkan perubahan mental yang cepat.'
     } 
   },
   { 
     key: 'violet', 
-    label: { ja: 'ヴァイオレット', en: 'Violet', 'zh-Hans': '紫噪音', es: 'Violeta', ko: '바이올렛', fr: 'Violet', de: 'Violett' }, 
+    label: { 
+      ja: 'ヴァイオレット', en: 'Violet', 'zh-Hans': '紫噪音', es: 'Violeta', ko: '바이올렛', fr: 'Violet', de: 'Violett',
+      hi: 'बैंगनी', bn: 'বেগুনী', pt: 'Violeta', ru: 'Фиолетовый', yue: '紫噪音', vi: 'Tím', mr: 'जांभळा', te: 'వైలెట్', tr: 'Mor', pa: 'ਬੈਂਗਣੀ', ta: 'ஊதா', jv: 'Ungu', it: 'Violetto', id: 'Violet'
+    }, 
     short: { 
       ja: '高めの刺激で注意を向けやすいと感じる人がいますが、長時間は疲れやすいことがあります。', 
       en: 'Some listeners feel more alert with it, though long sessions can be fatiguing.',
       'zh-Hans': '高频率刺激让人更容易集中注意力，但长时间使用可能会疲劳。',
       es: 'Algunos oyentes se sienten más alerta, aunque sesiones largas pueden fatigar.',
       ko: '높은 자극으로 주의를 끌기 쉽지만, 장시간 사용 시 피로할 수 있습니다.',
-      fr: 'Certains auditeurs se sentent plus alertes, mais cela peut être fatiguant.',
-      de: 'Manche fühlen sich wacher, aber lange Sitzungen können ermüdend sein.'
+      fr: 'Certaines personnes le trouvent apaisant avant de dormir.',
+      de: 'Manche fühlen sich wacher, aber lange Sitzungen können ermüdend sein.',
+      hi: 'कुछ सुनने वाले इससे अधिक सतर्क महसूस करते हैं, हालांकि लंबे सत्र थकाने वाले हो सकते हैं।',
+      bn: 'কিছু শ্রোতা এটি দিয়ে আরও সতর্ক বোধ করেন, যদিও দীর্ঘ সেশন ক্লান্তিকর হতে পারে।',
+      pt: 'Alguns ouvintes sentem-se mais alertas com ele, embora sessões longas possam ser cansativas.',
+      ru: 'Некоторые слушатели чувствуют себя бодрее с ним, хотя длительные сеансы могут утомлять.',
+      yue: '高頻率刺激令人更容易集中注意力，但長時間使用可能會疲勞。',
+      vi: 'Một số người nghe cảm thấy tỉnh táo hơn với nó, mặc dù các phiên kéo dài có thể gây mệt mỏi.',
+      mr: 'काही श्रोत्यांना यामुळे अधिक सतर्क वाटते, जरी दीर्घ सत्र थकवणारे असू शकतात.',
+      te: 'కొంతమంది శ్రోతలు దీనితో మరింత అప్రమత్తంగా ఉన్నట్లు భావిస్తారు, అయితే సుదీర్ఘ సెషన్లు అలసటను కలిగిస్తాయి.',
+      tr: 'Bazı dinleyiciler bununla daha uyanık hisseder, ancak uzun seanslar yorucu olabilir.',
+      pa: 'ਕੁਝ ਸੁਣਨ ਵਾਲੇ ਇਸ ਨਾਲ ਵਧੇਰੇ ਸੁਚੇਤ ਮਹਿਸੂਸ ਕਰਦੇ ਹਨ, ਹਾਲਾਂਕਿ ਲੰਬੇ ਸੈਸ਼ਨ ਥਕਾਊ ਹੋ ਸਕਦੇ ਹਨ।',
+      ta: 'சில கேட்பவர்கள் இதனுடன் அதிக விழிப்புடன் இருப்பதாக உணர்கிறார்கள், இருப்பினும் நீண்ட அமர்வுகள் சோர்வாக இருக்கலாம்.',
+      jv: 'Sawetara wong ngrasa luwih waspada karo iki, sanajan sesi sing suwe bisa nggawe kesel.',
+      it: 'Alcuni ascoltatori si sentono più vigili con esso, anche se sessioni lunghe possono essere affaticanti.',
+      id: 'Beberapa pendengar merasa lebih waspada dengannya, meskipun sesi yang lama bisa melelahkan.'
     } 
   }
 ];
@@ -706,16 +938,34 @@ export const binauralBands: Array<{
     min: 0.5,
     max: 4,
     symbol: 'Δ',
-    label: { ja: 'デルタ', en: 'Delta', 'zh-Hans': 'Delta', ko: '델타' },
-    reading: { ja: 'デルタ波', en: 'Delta wave', 'zh-Hans': 'Delta 波', ko: '델타파' },
+    label: { 
+      ja: 'デルタ', en: 'Delta', 'zh-Hans': 'Delta', es: 'Delta', hi: 'डेल्टा', bn: 'ডেল্টা', pt: 'Delta', ru: 'Дельта', yue: 'Delta', vi: 'Delta', mr: 'डेल्टा', te: 'డెల్టా', tr: 'Delta', ko: '델타', pa: 'ਡੈਲਟਾ', ta: 'டெல்டா', jv: 'Delta', it: 'Delta', fr: 'Delta', de: 'Delta', id: 'Delta'
+    },
+    reading: { 
+      ja: 'デルタ波', en: 'Delta wave', 'zh-Hans': 'Delta 波', es: 'Ondas delta', hi: 'डेल्टा तरंग', bn: 'ডেল্টা তরঙ্গ', pt: 'Ondas delta', ru: 'Дельта-волны', yue: 'Delta 波', vi: 'Sóng Delta', mr: 'डेल्टा लहरी', te: 'డెల్టా తరంగాలు', tr: 'Delta dalgası', ko: '델타파', pa: 'ਡੈਲਟਾ ਲਹਿਰ', ta: 'டெல்டா அலை', jv: 'Gelombang delta', it: 'Onde delta', fr: 'Ondes delta', de: 'Delta-Wellen', id: 'Gelombang delta'
+    },
     effect: {
       ja: '深い休息モードに寄せたいときの目安です。夜の静かな時間に合わせやすい帯域です。',
       en: 'A common target when aiming for a deeper rest mood, especially in quiet night sessions.',
       'zh-Hans': '想要进入深度休息模式时的参考，适合安静的夜晚。',
-      es: 'Un objetivo común para un estado de descanso profundo, especialmente de noche.',
+      es: 'Un objetivo común para un estado de descanso profundo, especially de noche.',
       ko: '깊은 휴식 모드를 원할 때의 기준입니다. 조용한 밤 시간에 적합합니다.',
       fr: 'Idéal pour un repos profond, surtout lors de sessions nocturnes calmes.',
-      de: 'Ein häufiges Ziel für tiefe Ruhe, besonders in ruhigen Nachtsitzungen.'
+      de: 'Ein häufiges Ziel für tiefe Ruhe, besonders in ruhigen Nachtsitzungen.',
+      hi: 'गहरी विश्राम की स्थिति प्राप्त करने के लिए एक सामान्य लक्ष्य, विशेष रूप से शांत रात के सत्रों में।',
+      bn: 'গভীর বিশ্রামের মেজাজ লক্ষ্য করার সময় একটি সাধারণ লক্ষ্য, বিশেষ করে শান্ত রাতের সেশনে।',
+      pt: 'Um alvo comum ao buscar um estado de descanso profundo, especialmente em sessões noturnas tranquilas.',
+      ru: 'Обычная цель при стремлении к состоянию глубокого отдыха, особенно во время спокойных ночных сеансов.',
+      yue: '想要進入深度休息模式時嘅參考，適合安靜嘅夜晚。',
+      vi: 'Một mục tiêu phổ biến khi hướng tới tâm trạng nghỉ ngơi sâu hơn, đặc biệt là trong các phiên đêm yên tĩnh.',
+      mr: 'खोल विश्रांतीच्या मनःस्थितीचे लक्ष्य ठेवताना एक सामान्य उद्दिष्ट, विशेषतः शांत रात्रीच्या सत्रांमध्ये।',
+      te: 'లోతైన విశ్రాంతిని లక్ష్యంగా చేసుకున్నప్పుడు సాధారణ లక్ష్యం, ముఖ్యంగా నిశ్శబ్ద రాత్రి సమయాల్లో.',
+      tr: 'Özellikle sessiz gece seanslarında daha derin bir dinlenme modu hedeflendiğinde ortak bir hedef.',
+      pa: 'ਡੂੰਘੇ ਆਰਾਮ ਦੇ ਮੂਡ ਨੂੰ ਨਿਸ਼ਾਨਾ ਬਣਾਉਣ ਵੇਲੇ ਇੱਕ ਆਮ ਟੀਚਾ, ਖਾਸ ਕਰਕੇ ਸ਼ਾਂਤ ਰਾਤ ਦੇ ਸੈਸ਼ਨਾਂ ਵਿੱਚ।',
+      ta: 'ஆழ்ந்த ஓய்வு மனநிலையை இலக்காகக் கொள்ளும்போது ஒரு பொதுவான இலக்கு, குறிப்பாக அமைதியான இரவு அமர்வுகளில்.',
+      jv: 'Target umum nalika ngarahake swasana istirahat sing luwih jero, utamane ing sesi wengi sing tenang.',
+      it: 'Un obiettivo comune quando si mira a un umore di riposo più profondo, specialmente nelle sessioni notturne tranquille.',
+      id: 'Target umum saat bertujuan untuk suasana istirahat yang lebih dalam, terutama dalam sesi malam yang tenang.'
     }
   },
   {
@@ -723,16 +973,34 @@ export const binauralBands: Array<{
     min: 4,
     max: 8,
     symbol: 'θ',
-    label: { ja: 'シータ', en: 'Theta', 'zh-Hans': 'Theta', ko: '시타' },
-    reading: { ja: 'シータ波', en: 'Theta wave', 'zh-Hans': 'Theta 波', ko: '시타파' },
+    label: { 
+      ja: 'シータ', en: 'Theta', 'zh-Hans': 'Theta', es: 'Theta', hi: 'थीटा', bn: 'থিটা', pt: 'Theta', ru: 'Тета', yue: 'Theta', vi: 'Theta', mr: 'थीटा', te: 'తీటా', tr: 'Teta', ko: '시타', pa: 'ਥੀਟਾ', ta: 'தீட்டா', jv: 'Theta', it: 'Theta', fr: 'Theta', de: 'Theta', id: 'Theta'
+    },
+    reading: { 
+      ja: 'シータ波', en: 'Theta wave', 'zh-Hans': 'Theta 波', es: 'Ondas theta', hi: 'थीटा तरंग', bn: 'থিটা তরঙ্গ', pt: 'Ondas theta', ru: 'Тета-волны', yue: 'Theta 波', vi: 'Sóng Theta', mr: 'थीटा लहरी', te: 'తీటా తరంగాలు', tr: 'Teta dalgası', ko: '시타파', pa: 'ਥੀਟਾ ਲਹਿਰ', ta: 'தீட்டா அலை', jv: 'Gelombang theta', it: 'Onde theta', fr: 'Ondes theta', de: 'Theta-Wellen', id: 'Gelombang theta'
+    },
     effect: {
       ja: '落ち着きや内省の感覚と結びつけられることがあります。体感は人によって大きく変わります。',
       en: 'Sometimes linked to calm or inward attention, with large person-to-person variation.',
-      'zh-Hans': '有时与平静或内省感相关。体感因人而异。',
+      'zh-Hans': '有时与平静 or 内省感相关。体感因人而异。',
       es: 'A veces vinculado a la calma o atención interior, con gran variación personal.',
       ko: '진정이나 내면의 성찰과 연결되기도 합니다. 체감은 사람에 따라 다릅니다.',
       fr: 'Parfois lié au calme ou à l attention intérieure, varie selon les personnes.',
-      de: 'Manchmal mit Ruhe oder innerer Aufmerksamkeit verbunden.'
+      de: 'Manchmal mit Ruhe oder innerer Aufmerksamkeit verbunden.',
+      hi: 'कभी-कभी शांति या आंतरिक ध्यान से जुड़ा होता है, जिसमें व्यक्ति-दर-व्यक्ति बहुत भिन्नता होती है।',
+      bn: 'কখনও কখনও শান্ত বা অভ্যন্তরীণ মনোযোগের সাথে যুক্ত, যা ব্যক্তিভেদে ব্যাপকভাবে পরিবর্তিত হয়।',
+      pt: 'Às vezes ligado à calma ou atenção interior, com grande variação de pessoa para pessoa.',
+      ru: 'Иногда связывается со спокойствием или внутренним вниманием, с большими индивидуальными различиями.',
+      yue: '有時與平靜或內省感相關。體感因人而異。',
+      vi: 'Đôi khi liên quan đến sự bình tĩnh hoặc sự chú ý bên trong, với sự thay đổi lớn giữa người với người.',
+      mr: 'कधीकधी शांतता किंवा आंतरिक लक्ष्याशी संबंधित असते, ज्यामध्ये व्यक्तीनुसार मोठी भिन्नता असते.',
+      te: 'కొన్నిసార్లు ప్రశాంతత లేదా అంతర్గత శ్రద్ధతో ముడిపడి ఉంటుంది, వ్యక్తి నుండి వ్యక్తికి పెద్ద వైవిధ్యం ఉంటుంది.',
+      tr: 'Bazen sakinlik veya içsel dikkat ile bağlantılıdır ve kişiden kişiye büyük farklılıklar gösterir.',
+      pa: 'ਕਦੇ-ਕਦੇ ਸ਼ਾਂਤੀ ਜਾਂ ਅੰਦਰੂਨੀ ਧਿਆਨ ਨਾਲ ਜੁੜਿਆ ਹੁੰਦਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਵਿਅਕਤੀ-ਦਰ-ਵਿਅਕਤੀ ਬਹੁਤ ਭਿੰਨਤਾ ਹੁੰਦੀ ਹੈ।',
+      ta: 'சில நேரங்களில் அமைதி அல்லது உள்முகக் கவனத்துடன் இணைக்கப்படுகிறது, இது நபருக்கு நபர் பெரிதும் மாறுபடும்.',
+      jv: 'Sok-sok digandhengake karo tenang utawa perhatian batin, kanthi variasi gedhe ing saben wong.',
+      it: 'A volte collegato alla calma o all attenzione interiore, con ampie variazioni da persona a persona.',
+      id: 'Terkadang dikaitkan dengan ketenangan atau perhatian batin, dengan variasi besar antar individu.'
     }
   },
   {
@@ -740,8 +1008,12 @@ export const binauralBands: Array<{
     min: 8,
     max: 13,
     symbol: 'α',
-    label: { ja: 'アルファ', en: 'Alpha', 'zh-Hans': 'Alpha', ko: '알파' },
-    reading: { ja: 'アルファ波', en: 'Alpha wave', 'zh-Hans': 'Alpha 波', ko: '알파파' },
+    label: { 
+      ja: 'アルファ', en: 'Alpha', 'zh-Hans': 'Alpha', es: 'Alfa', hi: 'अल्फा', bn: 'আলফা', pt: 'Alfa', ru: 'Альфа', yue: 'Alpha', vi: 'Alpha', mr: 'अल्फा', te: 'ఆల్ఫా', tr: 'Alfa', ko: '알파', pa: 'ਅਲਫਾ', ta: 'ஆல்பா', jv: 'Alpha', it: 'Alfa', fr: 'Alpha', de: 'Alpha', id: 'Alpha'
+    },
+    reading: { 
+      ja: 'アルファ波', en: 'Alpha wave', 'zh-Hans': 'Alpha 波', es: 'Ondas alfa', hi: 'अल्फा तरंग', bn: 'আলফা তরঙ্গ', pt: 'Ondas alfa', ru: 'Альфа-волны', yue: 'Alpha 波', vi: 'Sóng Alpha', mr: 'अल्फा लहरी', te: 'ఆల్ఫా తరంగాలు', tr: 'Alfa dalgası', ko: '알파파', pa: 'ਅਲਫਾ ਲਹਿਰ', ta: 'ஆல்பா அலை', jv: 'Gelombang alpha', it: 'Onde alfa', fr: 'Ondes alfa', de: 'Alpha-Wellen', id: 'Gelombang alpha'
+    },
     effect: {
       ja: 'リラックスしつつ作業したいときに選ばれやすい、バランス型の帯域です。',
       en: 'A balanced range often chosen for relaxed but awake sessions.',
@@ -749,7 +1021,21 @@ export const binauralBands: Array<{
       es: 'Un rango equilibrado a menudo elegido para sesiones relajadas pero despiertas.',
       ko: '휴식하면서 작업하고 싶을 때 선택하기 좋은 밸런스형 대역입니다.',
       fr: 'Une plage équilibrée souvent choisie pour des sessions relaxantes mais éveillées.',
-      de: 'Ein ausgewogener Bereich für entspannte, aber wache Sitzungen.'
+      de: 'Ein ausgewogener Bereich für entspannte, aber wache Sitzungen.',
+      hi: 'एक संतुलित सीमा जो अक्सर शिथिल लेकिन जागृत सत्रों के लिए चुनी जाती है।',
+      bn: 'একটি সুষম পরিসর যা প্রায়শই শিথিল কিন্তু জাগ্রত সেশনের জন্য বেছে নেওয়া হয়।',
+      pt: 'Uma faixa equilibrada frequentemente escolhida para sessões relaxadas, mas despertas.',
+      ru: 'Сбалансированный диапазон, часто выбираемый для расслабленных, но бодрствующих сеансов.',
+      yue: '平衡型頻帶，常用於喺放鬆嘅同時進行工作。',
+      vi: 'Một phạm vi cân bằng thường được chọn cho các phiên thư giãn nhưng vẫn tỉnh táo.',
+      mr: 'एक संतुलित श्रेणी जी बऱ्याचदा शिथिल परंतु जागृत सत्रांसाठी निवडली जाते.',
+      te: 'సడలించినప్పటికీ మేల్కొని ఉండే సెషన్ల కోసం తరచుగా ఎంచుకోబడే సమతుల్య శ్రేణి.',
+      tr: 'Genellikle rahat ama uyanık seanslar için seçilen dengeli bir aralık.',
+      pa: 'ਇੱਕ ਸੰਤੁਲਿਤ ਸੀਮਾ ਜੋ ਅਕਸਰ ਆਰਾਮਦਾਇਕ ਪਰ ਜਾਗਦੇ ਸੈਸ਼ਨਾਂ ਲਈ ਚੁਣੀ ਜਾਂਦੀ ਹੈ।',
+      ta: 'நிதானமான ஆனால் விழித்திருக்கும் அமர்வுகளுக்கு பெரும்பாலும் தேர்ந்தெடுக்கப்பட்ட ஒரு சீரான வரம்பு.',
+      jv: 'Kisaran sing seimbang asring dipilih kanggo sesi santai nanging tanggi.',
+      it: 'Una gamma equilibrata spesso scelta per sessioni rilassate ma sveglie.',
+      id: 'Kisaran seimbang yang sering dipilih untuk sesi santai namun tetap terjaga.'
     }
   },
   {
@@ -757,16 +1043,34 @@ export const binauralBands: Array<{
     min: 13,
     max: 30,
     symbol: 'β',
-    label: { ja: 'ベータ', en: 'Beta', 'zh-Hans': 'Beta', ko: '베타' },
-    reading: { ja: 'ベータ波', en: 'Beta wave', 'zh-Hans': 'Beta 波', ko: '베타파' },
+    label: { 
+      ja: 'ベータ', en: 'Beta', 'zh-Hans': 'Beta', es: 'Beta', hi: 'बीटा', bn: 'বিটা', pt: 'Beta', ru: 'Бета', yue: 'Beta', vi: 'Beta', mr: 'बीटा', te: 'బీటా', tr: 'Beta', ko: '베타', pa: 'ਬੀਟਾ', ta: 'பீட்டா', jv: 'Beta', it: 'Beta', fr: 'Beta', de: 'Beta', id: 'Beta'
+    },
+    reading: { 
+      ja: 'ベータ波', en: 'Beta wave', 'zh-Hans': 'Beta 波', es: 'Ondas beta', hi: 'बीटा तरंग', bn: 'বিটা তরঙ্গ', pt: 'Ondas beta', ru: 'Бета-волны', yue: 'Beta 波', vi: 'Sóng Beta', mr: 'बीटा लहरी', te: 'బీటా తరంగాలు', tr: 'Beta dalgası', ko: '베타파', pa: 'ਬੀਟਾ ਲਹਿਰ', ta: 'பீட்டா அலை', jv: 'Gelombang beta', it: 'Onde beta', fr: 'Ondes beta', de: 'Beta-Wellen', id: 'Gelombang beta'
+    },
     effect: {
       ja: '注意や課題集中に関連づけられる帯域です。人によっては刺激が強すぎる場合があります。',
       en: 'Often associated with attention and task focus, though it may feel overstimulating.',
       'zh-Hans': '与注意力和任务集中相关的频带。对某些人来说可能过于刺激。',
       es: 'Asociado con la atención y el enfoque, aunque puede resultar sobreestimulante.',
+      hi: 'ध्यान और कार्य एकाग्रता से जुड़ा है, हालांकि यह अत्यधिक उत्तेजक महसूस हो सकता है।',
+      bn: 'মনোযোগ এবং টাস্ক ফোকাসের সাথে যুক্ত, যদিও এটি অতিরিক্ত উত্তেজক মনে হতে পারে।',
+      pt: 'Associado à atenção e foco em tarefas, embora possa parecer superestimulante.',
+      ru: 'Связано с вниманием и концентрацией, но может казаться излишне стимулирующим.',
+      yue: '與注意力和任務集中相關嘅頻帶。對某啲人嚟講可能過於刺激。',
+      vi: 'Thường liên quan đến sự chú ý và tập trung, mặc dù có thể gây kích thích quá mức.',
+      mr: 'लक्ष आणि कार्यावर लक्ष केंद्रित करण्याशी संबंधित, जरी ते अति-उत्तेजक वाटू शकते।',
+      te: 'శ్రద్ధ మరియు పని ఏకాగ్రతతో ముడిపడి ఉంటుంది, అయితే ఇది అతిగా ఉత్తేజపరిచేదిగా అనిపించవచ్చు.',
+      tr: 'Dikkat ve görev odağı ile ilişkilendirilir, ancak aşırı uyarıcı hissedilebilir.',
       ko: '주의력이나 과제 집중과 관련된 대역입니다. 자극이 너무 강하게 느껴질 수 있습니다.',
-      fr: 'Associé à l attention et à la concentration, peut être surstimulant.',
-      de: 'Verbunden mit Aufmerksamkeit und Fokus, kann überstimulierend sein.'
+      pa: 'ਧਿਆਨ ਅਤੇ ਕਾਰਜ ਇਕਾਗਰਤਾ ਨਾਲ ਜੁੜਿਆ ਹੋਇਆ ਹੈ, ਹਾਲਾਂਕਿ ਇਹ ਬਹੁਤ ਜ਼ਿਆਦਾ ਉਤੇਜਕ ਮਹਿਸੂਸ ਹੋ ਸਕਦਾ ਹੈ।',
+      ta: 'கவனம் மற்றும் பணிச் செறிவுடன் தொடர்புடையது, இருப்பினும் இது அதிகப்படியான தூண்டுதலாக உணரப்படலாம்.',
+      jv: 'Gandheng karo perhatian lan fokus tugas, sanajan bisa ngrasa kakehan stimulasi.',
+      it: 'Associato all\'attenzione e al focus sul compito, sebbene possa sembrare sovrastimolante.',
+      fr: 'Associé à l\'attention et à la concentration, peut être surstimulant.',
+      de: 'Verbunden mit Aufmerksamkeit und Fokus, kann überstimulierend sein.',
+      id: 'Terkait dengan perhatian dan fokus tugas, meskipun mungkin terasa terlalu merangsang.'
     }
   },
   {
@@ -774,16 +1078,34 @@ export const binauralBands: Array<{
     min: 30,
     max: 40,
     symbol: 'γ',
-    label: { ja: 'ガンマ', en: 'Gamma', 'zh-Hans': 'Gamma', ko: '감마' },
-    reading: { ja: 'ガンマ波', en: 'Gamma wave', 'zh-Hans': 'Gamma 波', ko: 'ガンマ파' },
+    label: { 
+      ja: 'ガンマ', en: 'Gamma', 'zh-Hans': 'Gamma', es: 'Gamma', hi: 'गामा', bn: 'গামা', pt: 'Gamma', ru: 'Гамма', yue: 'Gamma', vi: 'Gamma', mr: 'गामा', te: 'గామా', tr: 'Gamma', ko: '감마', pa: 'ਗਾਮਾ', ta: 'காமா', jv: 'Gamma', it: 'Gamma', fr: 'Gamma', de: 'Gamma', id: 'Gamma'
+    },
+    reading: { 
+      ja: 'ガンマ波', en: 'Gamma wave', 'zh-Hans': 'Gamma 波', es: 'Ondas gamma', hi: 'गामा तरंग', bn: 'গামা তরঙ্গ', pt: 'Ondas gamma', ru: 'Гамма-волны', yue: 'Gamma 波', vi: 'Sóng Gamma', mr: 'गामा लहरी', te: 'గామా తరంగాలు', tr: 'Gamma dalgası', ko: '감마파', pa: 'ਗਾਮਾ ਲਹਿਰ', ta: 'காமா அலை', jv: 'Gelombang gamma', it: 'Onde gamma', fr: 'Ondes gamma', de: 'Gamma-Wellen', id: 'Gelombang gamma'
+    },
     effect: {
       ja: '切り替えや短時間の高集中に向けた高めの帯域です。刺激が強く感じる場合があります。',
       en: 'A higher band often used for short, high-focus pushes; it can feel intense.',
       'zh-Hans': '用于切换心情或短时间高度集中的高频带。可能会感到强烈刺激。',
       es: 'Una banda superior para ráfagas de alta concentración; puede sentirse intensa.',
+      hi: 'अल्पकालिक उच्च एकाग्रता के लिए उपयोग किया जाने वाला उच्च बैंड; यह तीव्र महसूस हो सकता है।',
+      bn: 'স্বল্পমেয়াদী উচ্চ ঘনত্বের জন্য ব্যবহৃত একটি উচ্চ ব্যান্ড; এটি তীব্র মনে হতে পারে।',
+      pt: 'Uma faixa mais alta usada para picos curtos de foco intenso; pode parecer intensa.',
+      ru: 'Высокий диапазон для кратковременной концентрации; может ощущаться интенсивно.',
+      yue: '用於切換心情或短時間高度集中嘅高頻帶。可能會感到強烈刺激。',
+      vi: 'Một dải cao hơn thường được dùng cho sự tập trung cao độ ngắn hạn; nó có thể gây cảm giác mạnh.',
+      mr: 'अल्पकालीन उच्च एकाग्रतेसाठी वापरला जाणारा उच्च बँड; तो तीव्र वाटू शकतो।',
+      te: 'స్వల్పకాలిక అధిక ఏకాగ్రత కోసం ఉపయోగించే అధిక బ్యాండ్; ఇది తీవ్రంగా అనిపించవచ్చు.',
+      tr: 'Kısa, yüksek odaklı itişler için kullanılan daha yüksek bir bant; yoğun hissedilebilir.',
       ko: '전환이나 단시간 고집중을 위한 높은 대역입니다. 자극이 강할 수 있습니다.',
-      fr: 'Une bande plus élevée pour une concentration intense et courte.',
-      de: 'Ein höheres Band für kurze, hochkonzentrierte Phasen.'
+      pa: 'ਥੋੜ੍ਹੇ ਸਮੇਂ ਦੇ ਉੱਚ ਇਕਾਗਰਤਾ ਲਈ ਵਰਤਿਆ ਜਾਣ ਵਾਲਾ ਉੱਚ ਬੈਂਡ; ਇਹ ਤੀਬਰ ਮਹਿਸੂਸ ਹੋ ਸਕਦਾ ਹੈ।',
+      ta: 'குறுகிய கால உயர் செறிவுக்காகப் பயன்படுத்தப்படும் உயர் இசைக்குழு; இது தீவிரமாக உணரப்படலாம்.',
+      jv: 'Pita sing luwih dhuwur kanggo fokus dhuwur sedhela; bisa krasa kuat.',
+      it: 'Una banda più alta per brevi spinte di alta concentrazione; può sembrare intensa.',
+      fr: 'Une bande plus élevée pour une concentration intense et courte ; peut paraître intense.',
+      de: 'Ein höheres Band für kurze, hochkonzentrierte Phasen; kann sich intensiv anfühlen.',
+      id: 'Pita yang lebih tinggi untuk dorongan fokus tinggi singkat; bisa terasa intens.'
     }
   }
 ];
@@ -791,7 +1113,10 @@ export const binauralBands: Array<{
 export const evidenceCards: EvidenceCard[] = [
   { 
     key: 'noise-colors', 
-    title: { ja: 'ノイズ色の違い', en: 'Differences between noise colors', 'zh-Hans': '噪音颜色的区别', es: 'Diferencias entre colores de ruido', ko: '노이즈 색상의 차이' }, 
+    title: { 
+      ja: 'ノイズ色の違い', en: 'Differences between noise colors', 'zh-Hans': '噪音颜色的区别', es: 'Diferencias entre colores de ruido', ko: '노이즈 색상의 차이',
+      hi: 'शोर के रंगों के बीच अंतर', bn: 'শব্দের রঙের মধ্যে পার্থক্য', pt: 'Diferenças entre as cores do ruído', ru: 'Различия между цветами шума', yue: '噪音顏色嘅區別', vi: 'Sự khác biệt giữa các màu tiếng ồn', mr: 'आवाजाच्या रंगांमधील फरक', te: 'శబ్దం రంగుల మధ్య తేడాలు', tr: 'Gürültü renkleri arasındaki farklar', pa: 'ਸ਼ੋਰ ਦੇ ਰੰਗਾਂ ਵਿੱਚ ਅੰਤਰ', ta: 'ஒலி வண்ணங்களுக்கு இடையிலான வேறுபாடுகள்', jv: 'Bedane warna swara', it: 'Differenze tra i colori del rumore', fr: 'Différences entre les couleurs de bruit', de: 'Unterschiede zwischen Rauschfarben', id: 'Perbedaan antara warna kebisingan'
+    }, 
     summary: { 
       ja: '白・ピンク・ブラウン・ブルー・ヴァイオレットは、周波数ごとの強さが違う音です。効果を断定せず、まずは音の性質として扱います。', 
       en: 'White, pink, brown, blue, and violet noise differ by frequency weighting. The app treats them as sound-shape tools.',
@@ -799,7 +1124,21 @@ export const evidenceCards: EvidenceCard[] = [
       es: 'Los ruidos difieren según la ponderación de frecuencia. Se tratan como herramientas de sonido.',
       ko: '각 노이즈는 주파수 가중치에 따라 다릅니다. 이 앱은 이를 의학적 치료가 아닌 소리 도구로 취급합니다.',
       fr: 'Les bruits diffèrent selon la pondération de fréquence. Traités comme des outils sonores.',
-      de: 'Rauschen unterscheidet sich durch Frequenzgewichtung.'
+      de: 'Rauschen unterscheidet sich durch Frequenzgewichtung. Die App behandelt sie als Sound-Tools.',
+      hi: 'सफेद, गुलाबी, भूरा, नीला और बैंगनी शोर आवृत्ति भार के आधार पर भिन्न होते हैं। ऐप उन्हें ध्वनि-आकार उपकरण के रूप में मानता है।',
+      bn: 'সাদা, গোলাপী, বাদামী, নীল এবং বেগুনী শব্দ ফ্রিকোয়েন্সি ওয়েটিং দ্বারা পৃথক হয়। অ্যাপটি তাদের শব্দ-আকৃতি সরঞ্জাম হিসাবে বিবেচনা করে।',
+      pt: 'Ruído branco, rosa, castanho, azul e violeta diferem pela ponderação de frequência. O aplicativo trata-os como ferramentas de forma sonora.',
+      ru: 'Белый, розовый, коричневый, синий и фиолетовый шум различаются по частотному весу. Приложение рассматривает их как инструменты формирования звука.',
+      yue: '唔同顏色嘅噪音具有唔同嘅頻率權重。呢個應用程式將其視為聲音塑造工具。',
+      vi: 'Tiếng ồn trắng, hồng, nâu, xanh và tím khác nhau về trọng số tần số. Ứng dụng coi chúng là công cụ tạo hình âm thanh.',
+      mr: 'पांढरा, गुलाबी, तपकिरी, निळा आणि जांभळा आवाज वारंवारतेनुसार भिन्न असतो. अॅप त्यांना ध्वनी-आकार साधने म्हणून मानते.',
+      te: 'తెలుపు, గులాబీ, గోధుమ, నీలం మరియు వైలెట్ శబ్దాలు ఫ్రీక్వెన్సీ వెయిటింగ్ ద్వారా భిన్నంగా ఉంటాయి. యాప్ వాటిని సౌండ్-షేప్ టూల్స్‌గా పరిగణిస్తుంది.',
+      tr: 'Beyaz, pembe, kahverengi, mavi ve mor gürültü frekans ağırlığına göre farklılık gösterir. Uygulama bunları ses şekillendirme araçları olarak ele alır.',
+      pa: 'ਚਿੱਟਾ, ਗੁਲਾਬੀ, ਭੂਰਾ, ਨੀਲਾ ਅਤੇ ਬੈਂਗਣੀ ਸ਼ੋਰ ਫ੍ਰੀਕੁਐਂਸੀ ਵੇਟਿੰਗ ਦੁਆਰਾ ਵੱਖਰੇ ਹੁੰਦੇ ਹਨ। ਐਪ ਉਹਨਾਂ ਨੂੰ ਧੁਨੀ-ਆਕਾਰ ਦੇ ਸਾਧਨਾਂ ਵਜੋਂ ਮੰਨਦਾ ਹੈ।',
+      ta: 'வெள்ளை, இளஞ்சிவப்பு, பழுப்பு, நீலம் மற்றும் ஊதா ஒலிகள் அதிர்வெண் எடையால் வேறுபடுகின்றன. பயன்பாடு அவற்றை ஒலி-வடிவக் கருவிகளாகக் கருதுகிறது.',
+      jv: 'Swara putih, abang enom, coklat, biru, lan ungu beda-beda miturut bobot frekuensi. App nganggep iki minangka piranti bentuk swara.',
+      it: 'Il rumore bianco, rosa, marrone, blu e violetto differiscono per la ponderazione della frequenza. L\'app li tratta come strumenti di modellazione del suono.',
+      id: 'Kebisingan putih, merah muda, cokelat, biru, dan ungu berbeda berdasarkan pembobotan frekuensi. Aplikasi memperlakukannya sebagai alat pembentuk suara.'
     }, 
     strength: 'Strong', 
     caveat: { 
@@ -809,13 +1148,30 @@ export const evidenceCards: EvidenceCard[] = [
       es: 'Las diferencias espectrales son claras, pero la experiencia del usuario varía.',
       ko: '음향적 차이는 명확하지만, 체감은 개인마다 다릅니다.',
       fr: 'Les différences spectrales sont claires, mais l expérience varie.',
-      de: 'Spektrale Unterschiede sind klar, aber die Erfahrung variiert.'
+      de: 'Spektrale Unterschiede sind klar, aber die Erfahrung variiert.',
+      hi: 'वर्णक्रमीय अंतर स्पष्ट हैं, लेकिन उपयोगकर्ता का अनुभव बहुत भिन्न होता है।',
+      bn: 'বর্ণালী পার্থক্য স্পষ্ট, তবে ব্যবহারকারীর অভিজ্ঞতা অনেক পরিবর্তিত হয়।',
+      pt: 'As diferenças espectrais são claras, mas a experiência do usuário varia muito.',
+      ru: 'Спектральные различия ясны, но пользовательский опыт сильно варьируется.',
+      yue: '頻譜差異明顯，但用戶體驗因人而異。',
+      vi: 'Sự khác biệt về quang phổ là rõ ràng, nhưng trải nghiệm người dùng rất khác nhau.',
+      mr: 'वर्णक्रमीय फरक स्पष्ट आहेत, परंतु वापरकर्त्याचा अनुभव खूप बदलतो.',
+      te: 'స్పెక్ట్రల్ తేడాలు స్పష్టంగా ఉన్నాయి, కానీ వినియోగదారు అనుభవం చాలా మారుతూ ఉంటుంది.',
+      tr: 'Spektral farklılıklar nettir, ancak kullanıcı deneyimi çok değişir.',
+      pa: 'ਸਪੈਕਟ੍ਰਲ ਅੰਤਰ ਸਪਸ਼ਟ ਹਨ, ਪਰ ਉਪਭੋਗਤਾ ਦਾ ਅਨੁਭਵ ਬਹੁਤ ਵੱਖਰਾ ਹੁੰਦਾ ਹੈ।',
+      ta: 'நிறமாலை வேறுபாடுகள் தெளிவாக உள்ளன, ஆனால் பயனர் அனுபவம் நிறைய மாறுபடும்.',
+      jv: 'Bedane spektral cetha, nanging pengalaman pangguna beda-beda banget.',
+      it: 'Le differenze spettrali sono chiare, ma l\'esperienza dell\'utente varia molto.',
+      id: 'Perbedaan spektral sudah jelas, tetapi pengalaman pengguna sangat bervariasi.'
     }, 
     links: [{ label: 'Pink noise and auditory stimulation review', url: 'https://pubmed.ncbi.nlm.nih.gov/34964434/' }, { label: 'Pink noise and NREM sleep review', url: 'https://pubmed.ncbi.nlm.nih.gov/32765139/' }] 
   },
   { 
     key: 'binaural-beats', 
-    title: { ja: 'バイノーラルビート', en: 'Binaural beats', 'zh-Hans': '双耳节拍', es: 'Pulsos binaurales', ko: '바이노럴 비트' }, 
+    title: { 
+      ja: 'バイノーラルビート', en: 'Binaural beats', 'zh-Hans': '双耳节拍', es: 'Pulsos binaurales', ko: '바이노럴 비트',
+      hi: 'बाइनोरल बीट्स', bn: 'বাইনরাল বিটস', pt: 'Batidas binaurais', ru: 'Бинауральные ритмы', yue: '雙耳節拍', vi: 'Nhịp binaural', mr: 'बाइनॉरॅरल बीट्स', te: 'బైనరల్ బీట్స్', tr: 'Binaural vuruşlar', pa: 'ਬਾਇਨੋਰਲ ਬੀਟਸ', ta: 'பைனரல் பீட்ஸ்', jv: 'Ketukan binaural', it: 'Battiti binaurali', fr: 'Battements binauraux', de: 'Binaurale Beats', id: 'Ketukan binaural'
+    }, 
     summary: { 
       ja: '左右の耳に少し違う周波数を出して、差分のうなりを知覚させます。研究はありますが、結果は一貫していません。', 
       en: 'Two nearby tones are sent separately to each ear so the listener perceives a beat. Results are inconsistent.',
@@ -823,7 +1179,21 @@ export const evidenceCards: EvidenceCard[] = [
       es: 'Se envían tonos cercanos a cada oído para percibir un pulso. Los resultados son inconsistentes.',
       ko: '양쪽 귀에 서로 다른 주파수를 보내 맥박을 느끼게 합니다. 연구 결과는 일관되지 않습니다.',
       fr: 'Deux tons proches sont envoyés à chaque oreille pour percevoir un battement.',
-      de: 'Zwei Töne werden separat an jedes Ohr gesendet.'
+      de: 'Zwei Töne werden separat an jedes Ohr gesendet, sodass der Hörer einen Beat wahrnimmt.',
+      hi: 'दो नजदीकी स्वर प्रत्येक कान में अलग-अलग भेजे जाते हैं ताकि सुनने वाला एक बीट महसूस करे। परिणाम असंगत हैं।',
+      bn: 'দুটি কাছাকাছি সুর প্রতিটি কানে আলাদাভাবে পাঠানো হয় যাতে শ্রোতা একটি বিট অনুভব করেন। ফলাফলগুলি অসামঞ্জস্যপূর্ণ।',
+      pt: 'Dois tons próximos são enviados separadamente para cada ouvido para que o ouvinte perceba uma batida. Os resultados são inconsistentes.',
+      ru: 'Два близких тона подаются отдельно в каждое ухо, чтобы слушатель воспринимал ритм. Результаты противоречивы.',
+      yue: '向每隻耳仔發送略有唔同嘅頻率，等用戶感知到節拍。研究結果唔一致。',
+      vi: 'Hai tông màu gần nhau được gửi riêng biệt đến mỗi tai để người nghe cảm nhận được nhịp điệu. Kết quả không nhất quán.',
+      mr: 'दोन जवळचे टोन प्रत्येक कानात स्वतंत्रपणे पाठवले जातात जेणेकरून श्रोत्याला बीट जाणवेल. परिणाम विसंगत आहेत.',
+      te: 'శ్రోత ఒక బీట్‌ను గ్రహించేలా రెండు సమీప టోన్‌లు ప్రతి చెవికి విడివిడిగా పంపబడతాయి. ఫలితాలు అస్థిరంగా ఉన్నాయి.',
+      tr: 'Dinleyicinin bir vuruş algılaması için her kulağa ayrı ayrı iki yakın ton gönderilir. Sonuçlar tutarsızdır.',
+      pa: 'ਦੋ ਨੇੜਲੇ ਟੋਨ ਹਰੇਕ ਕੰਨ ਵਿੱਚ ਵੱਖਰੇ ਤੌਰ \'ਤੇ ਭੇਜੇ ਜਾਂਦੇ ਹਨ ਤਾਂ ਜੋ ਸੁਣਨ ਵਾਲਾ ਇੱਕ ਬੀਟ ਮਹਿਸੂਸ ਕਰੇ। ਨਤੀਜੇ ਅਸੰਗਤ ਹਨ।',
+      ta: 'கேட்பவர் ஒரு துடிப்பை உணரும் வகையில் இரண்டு அருகிலுள்ள ஒலிகள் ஒவ்வொரு காதுக்கும் தனித்தனியாக அனுப்பப்படுகின்றன. முடிவுகள் சீரற்றவை.',
+      jv: 'Rong nada sing cedhak dikirim kanthi kapisah menyang saben kuping supaya pamiyarsa ngrasakake ketukan. Hasile ora konsisten.',
+      it: 'Due toni vicini vengono inviati separatamente a ciascun orecchio in modo che l\'ascoltatore percepisca un battito. I risultati sono incoerenti.',
+      id: 'Dua nada yang berdekatan dikirim secara terpisah ke setiap telinga sehingga pendengar merasakan ketukan. Hasilnya tidak konsisten.'
     }, 
     strength: 'Mixed', 
     caveat: { 
@@ -833,7 +1203,21 @@ export const evidenceCards: EvidenceCard[] = [
       es: 'No se hacen afirmaciones sobre el sueño o la ansiedad. Los efectos se describen con cautela.',
       ko: '수면 개선이나 불안 완화 등을 단정하지 않습니다. 효과는 신중하게 설명됩니다.',
       fr: 'Aucune affirmation sur le sommeil ou l anxiété. Les effets sont décrits avec prudence.',
-      de: 'Keine Behauptungen über Schlaf oder Angst.'
+      de: 'Keine Behauptungen über Schlaf oder Angst. Effekte werden vorsichtig beschrieben.',
+      hi: 'नींद, चिंता या ADHD के बारे में कोई दावा नहीं किया गया है। प्रभावों का वर्णन सावधानीपूर्वक किया गया है।',
+      bn: 'ঘুম, উদ্বেগ বা ADHD সম্পর্কে কোনো দাবি করা হয়নি। প্রভাবগুলি সাবধানতার সাথে বর্ণনা করা হয়েছে।',
+      pt: 'Nenhuma alegação é feita sobre sono, ansiedade ou TDAH. Os efeitos são descritos com cautela.',
+      ru: 'Никаких заявлений о сне, тревоге или СДВГ не делается. Эффекты описываются осторожно.',
+      yue: '唔確定睡眠改善、減輕焦慮等效果。結論保持謹慎。',
+      vi: 'Không có tuyên bố nào được đưa ra về giấc ngủ, lo lắng hoặc ADHD. Các hiệu ứng được mô tả một cách thận trọng.',
+      mr: 'झोप, चिंता किंवा ADHD बद्दल कोणतेही दावे केले जात नाहीत. प्रभावांचे वर्णन सावधगिरीने केले आहे.',
+      te: 'నిద్ర, ఆందోళన లేదా ADHD గురించి ఎటువంటి క్లెయిమ్‌లు చేయబడలేదు. ప్రభావాలు జాగ్రత్తగా వివరించబడ్డాయి.',
+      tr: 'Uyku, kaygı veya DEHB hakkında hiçbir iddiada bulunulmamaktadır. Etkiler temkinli bir şekilde tanımlanmıştır.',
+      pa: 'ਨੀਂਦ, ਚਿੰਤਾ ਜਾਂ ADHD ਬਾਰੇ ਕੋਈ ਦਾਅਵਾ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ। ਪ੍ਰਭਾਵਾਂ ਦਾ ਵਰਣਨ ਸਾਵਧਾਨੀ ਨਾਲ ਕੀਤਾ ਗਿਆ ਹੈ।',
+      ta: 'தூக்கம், கவலை அல்லது ADHD பற்றி எந்த உரிமைகோரல்களும் செய்யப்படவில்லை. விளைவுகள் எச்சரிக்கையுடன் விவரிக்கப்பட்டுள்ளன.',
+      jv: 'Ora ana klaim babagan turu, kuatir, utawa ADHD. Efek diterangake kanthi teliti.',
+      it: 'Non si effettuano affermazioni su sonno, ansia o ADHD. Gli effetti sono descritti con cautela.',
+      id: 'Tidak ada klaim yang dibuat tentang tidur, kecemasan, atau ADHD. Efek dijelaskan dengan hati-hati.'
     }, 
     links: [{ label: 'Systematic review on binaural beats and brain oscillatory activity', url: 'https://pubmed.ncbi.nlm.nih.gov/37205669/' }, { label: 'Systematic review and meta-review on binaural beats', url: 'https://pubmed.ncbi.nlm.nih.gov/38458383/' }] 
   }
@@ -846,7 +1230,21 @@ const platformNotes: LocalizedList = {
   es: ['iOS tiene límites más estrictos, la reproducción depende del comportamiento del OS.', 'Android suele manejar bien PWA, pero la optimización de batería puede interrumpir.', 'Escritorio es lo más estable, aunque cerrar la pestaña detendrá la reproducción.'],
   ko: ['iOS는 브라우저 제한이 엄격하여 백그라운드 재생은 OS 상태에 따라 달라집니다.', 'Android는 PWA와 Media Session이 잘 작동하지만, 절전 설정으로 인해 중단될 수 있습니다.', '데스크톱은 가장 안정적이지만, 탭을 닫으면 중단됩니다.'],
   fr: ['iOS a des limites plus strictes, la lecture dépend du comportement de l OS.', 'Android gère généralement bien les PWA, mais l optimisation peut interrompre.', 'Le bureau est le plus stable, mais fermer l onglet arrêtera la lecture.'],
-  de: ['iOS hat strengere Grenzen, die Wiedergabe hängt vom OS ab.', 'Android funktioniert meist gut, aber die Akkuoptimierung kann unterbrechen.', 'Desktop ist am stabilsten, aber das Schließen des Tabs stoppt alles.']
+  de: ['iOS hat strengere Grenzen, die Wiedergabe hängt vom OS ab.', 'Android funktioniert meist gut, aber die Akkuoptimierung kann unterbrechen.', 'Desktop ist am stabilsten, aber das Schließen des Tabs stoppt alles.'],
+  hi: ['iOS में कड़े ब्राउज़र सीमाएं हैं, इसलिए बैकग्राउंड प्लेबैक OS व्यवहार पर निर्भर करता है।', 'Android आमतौर पर PWA और मीडिया सेशन को अच्छी तरह से संभालता है, लेकिन बैटरी अनुकूलन बाधित कर सकता है।', 'डेस्कटॉप सबसे स्थिर है, हालांकि टैब बंद करने से प्लेबैक रुक जाएगा।'],
+  bn: ['iOS-এর কঠোর ব্রাউজার সীমা রয়েছে, তাই ব্যাকগ্রাউন্ড প্লেব্যাক OS আচরণের উপর নির্ভর করে।', 'Android সাধারণত PWA এবং মিডিয়া সেশন ভালভাবে পরিচালনা করে, তবে ব্যাটারি অপ্টিমাইজেশন বাধা দিতে পারে।', 'ডেস্কটপ সবচেয়ে স্থিতিশীল, যদিও ট্যাব বন্ধ করলে প্লেব্যাক বন্ধ হয়ে যাবে।'],
+  pt: ['O iOS tem limites de navegador mais rígidos, portanto a reprodução em segundo plano depende do comportamento do SO.', 'O Android costuma lidar bem com PWA e Sessão de Mídia, mas a otimização da bateria pode interromper.', 'O desktop é o mais estável, embora fechar a guia interrompa a reprodução.'],
+  ru: ['В iOS действуют более строгие ограничения браузера, поэтому фоновое воспроизведение зависит от поведения ОС.', 'Android обычно хорошо справляется с PWA и Media Session, но оптимизация батареи может прерывать работу.', 'Настольный компьютер наиболее стабилен, хотя закрытие вкладки приведет к остановке воспроизведения.'],
+  yue: ['iOS 瀏覽器限制較多，背景播放取決於系統狀態。', 'Android 的 PWA 同媒體會話運行較順暢，但慳電設置可能會中斷。', '桌面版最穩定，但關閉標籤頁會停止。'],
+  vi: ['iOS có các giới hạn trình duyệt nghiêm ngặt hơn, vì vậy việc phát trong nền phụ thuộc vào hành vi của hệ điều hành.', 'Android thường xử lý tốt PWA và Media Session, nhưng việc tối ưu hóa pin có thể gây gián đoạn.', 'Máy tính để bàn ổn định nhất, mặc dù việc đóng tab sẽ dừng phát lại.'],
+  mr: ['iOS मध्ये कडक ब्राउझर मर्यादा आहेत, त्यामुळे बॅकग्राउंड प्लेबॅक OS वर्तनावर अवलंबून असतो.', 'Android सहसा PWA आणि मीडिया सेशन चांगल्या प्रकारे हाताळते, परंतु बॅटरी ऑप्टिमायझेशन व्यत्यय आणू शकते.', 'डेस्कटॉप सर्वात स्थिर आहे, जरी टॅब बंद केल्याने प्लेबॅक थांबेल.'],
+  te: ['iOS కఠినమైన బ్రౌజర్ పరిమితులను కలిగి ఉంది, కాబట్టి బ్యాక్‌గ్రౌండ్ ప్లేబ్యాక్ OS ప్రవర్తనపై ఆధారపడి ఉంటుంది.', 'Android సాధారణంగా PWA మరియు మీడియా సెషన్‌ను బాగా నిర్వహిస్తుంది, కానీ బ్యాటరీ ఆప్టిమైజేషన్ అంతరాయం కలిగించవచ్చు.', 'డెస్క్‌టాప్ అత్యంత స్థిరమైనది, అయితే ట్యాబ్‌ను మూసివేయడం ప్లేబ్యాక్‌ను ఆపివేస్తుంది.'],
+  tr: ['iOS daha katı tarayıcı sınırlarına sahiptir, bu nedenle arka planda oynatma işletim sistemi davranışına bağlıdır.', 'Android genellikle PWA ve Medya Oturumunu iyi yönetir, ancak pil optimizasyonu kesintiye uğratabilir.', 'Sekmeyi kapatmak oynatmayı durduracak olsa da en kararlı olanı masaüstüdür.'],
+  pa: ['iOS ਵਿੱਚ ਸਖ਼ਤ ਬ੍ਰਾਊਜ਼ਰ ਸੀਮਾਵਾਂ ਹਨ, ਇਸ ਲਈ ਬੈਕਗ੍ਰਾਊਂਡ ਪਲੇਬੈਕ OS ਵਿਹਾਰ \'ਤੇ ਨਿਰਭਰ ਕਰਦਾ ਹੈ।', 'Android ਆਮ ਤੌਰ \'ਤੇ PWA ਅਤੇ ਮੀਡੀਆ ਸੈਸ਼ਨ ਨੂੰ ਚੰਗੀ ਤਰ੍ਹਾਂ ਸੰਭालਦਾ ਹੈ, ਪਰ ਬੈਟਰੀ ਅਨੁਕੂਲਨ ਵਿਘਨ ਪਾ ਸਕਦਾ ਹੈ।', 'ਡੈਸਕਟਾਪ ਸਭ ਤੋਂ ਸਥਿਰ ਹੈ, ਹਾਲਾਂਕਿ ਟੈਬ ਨੂੰ ਬੰਦ ਕਰਨ ਨਾਲ ਪਲੇਬੈਕ ਰੁਕ ਜਾਵੇਗਾ।'],
+  ta: ['iOS கடுமையான உலாவி வரம்புகளைக் கொண்டுள்ளது, எனவே பின்னணி இயக்கம் OS நடத்தையைப் பொறுத்தது.', 'Android பொதுவாக PWA மற்றும் மீடியா அமர்வை நன்றாகக் கையாள்கிறது, ஆனால் பேட்டரி மேம்படுத்தல் குறுக்கிடலாம்.', 'டெஸ்க்டாப் மிகவும் நிலையானது, இருப்பினும் தாவலை மூடினால் பிளேபேக் நின்றுவிடும்.'],
+  jv: ['iOS duwe watesan browser sing luwih ketat, dadi puter ing mburi gumantung karo prilaku OS.', 'Android biasane nangani PWA lan Sesi Media kanthi becik, nanging optimisasi baterei bisa ngganggu.', 'Desktop sing paling stabil, sanajan nutup tab bakal mandhegake puter maneh.'],
+  it: ['iOS ha limiti del browser più severi, quindi la riproduzione in background dipende dal comportamento del sistema operativo.', 'Android di solito gestisce bene PWA e Media Session, ma l\'ottimizzazione della batteria può interrompere.', 'Il desktop è il più stabile, anche se la chiusura della scheda interromperà la riproduzione.'],
+  id: ['iOS memiliki batasan browser yang lebih ketat, jadi pemutaran latar belakang bergantung pada perilaku OS.', 'Android biasanya menangani PWA dan Media Session dengan baik, tetapi pengoptimalan baterai dapat mengganggu.', 'Desktop adalah yang paling stabil, meskipun menutup tab akan menghentikan pemutaran.']
 };
 
 export function getPlatformNotes(locale: Locale): string[] {

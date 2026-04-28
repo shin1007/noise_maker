@@ -438,24 +438,24 @@ export function App() {
               <div className="install-guide-content card" onClick={(e) => e.stopPropagation()}>
                 <div className="guide-header">
                   <h2 className="guide-title">{strings.addHome}</h2>
-                  <button className="close-guide" onClick={() => setInstallGuideOpen(false)} aria-label="Close">×</button>
+                  <button className="close-guide" onClick={() => setInstallGuideOpen(false)} aria-label={strings.close}>×</button>
                 </div>
                 
                 <div className="guide-body">
                   <div className="guide-section">
                     <h3>iOS (Safari)</h3>
                     <ol>
-                      <li>{locale === 'ja' ? 'ブラウザ下の「共有」ボタン（角丸四角から矢印が出ているアイコン）をタップします。' : 'Tap the "Share" button at the bottom of Safari.'}</li>
-                      <li>{locale === 'ja' ? 'メニューをスクロールし、「ホーム画面に追加」を選択します。' : 'Scroll down and tap "Add to Home Screen".'}</li>
-                      <li>{locale === 'ja' ? '右上の「追加」をタップすれば完了です。' : 'Tap "Add" in the top right corner.'}</li>
+                      <li>{strings.iosStep1}</li>
+                      <li>{strings.iosStep2}</li>
+                      <li>{strings.iosStep3}</li>
                     </ol>
                   </div>
                   
                   <div className="guide-section">
                     <h3>Android (Chrome)</h3>
                     <ol>
-                      <li>{locale === 'ja' ? 'ブラウザ右上の「3つの点」アイコンをタップします。' : 'Tap the three dots menu icon in the top right.'}</li>
-                      <li>{locale === 'ja' ? '「アプリをインストール」または「ホーム画面に追加」を選択します。' : 'Tap "Install app" or "Add to Home Screen".'}</li>
+                      <li>{strings.androidStep1}</li>
+                      <li>{strings.androidStep2}</li>
                     </ol>
                   </div>
 
@@ -470,7 +470,7 @@ export function App() {
                 </div>
                 
                 <button className="primary-button full-width" onClick={() => setInstallGuideOpen(false)}>
-                  {locale === 'ja' ? '閉じる' : 'Got it'}
+                  {strings.gotIt}
                 </button>
               </div>
             </div>
