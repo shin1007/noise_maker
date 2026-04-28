@@ -46,6 +46,24 @@ export function App() {
   const engineRef = useRef<NoiseEngine | null>(null);
   const timerRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlaying && engineRef.current) {
+        // Resume engine if it was throttled by the OS
+        void engineRef.current.start({
+          noiseType,
+          volume,
+          binauralEnabled,
+          baseFrequency,
+          differenceFrequency
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
+
   const startPlayback = useCallback(async () => {
     const engine = engineRef.current ?? new NoiseEngine();
     engineRef.current = engine;

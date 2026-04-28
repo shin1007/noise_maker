@@ -71,6 +71,9 @@ const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
 }
 registerProcessor('noise-processor', NoiseProcessor);`;
 
+// 1 second of silence as a base64 WAV
+const SILENCE_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+
 export class NoiseEngine {
   private context: AudioContext | null = null;
   private worklet: AudioWorkletNode | null = null;
@@ -93,14 +96,17 @@ export class NoiseEngine {
         throw new Error('AudioContext is not available');
       }
 
-      this.context = new AudioContextImpl();
+      this.context = new AudioContextImpl({
+        latencyHint: 'playback'
+      });
+      
       this.context.onstatechange = () => {
         console.log(`AudioContext state changed to: ${this.context?.state}`);
         if (this.context?.state === 'suspended' && this.currentSettings) {
-          // If it's suspended while we think it should be playing, try to resume
           void this.context.resume();
         }
       };
+      
       await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
       this.buildGraph();
     }
@@ -110,9 +116,9 @@ export class NoiseEngine {
     }
 
     if (this.silenceElement) {
-      this.silenceElement.play().catch(() => {
-        // Play might fail if not triggered by user interaction,
-        // but start() is usually called from a click handler.
+      // Re-trigger play on every start/resume to ensure iOS session is active
+      this.silenceElement.play().catch((err) => {
+        console.warn('Failed to play silence anchor:', err);
       });
     }
 
@@ -149,7 +155,7 @@ export class NoiseEngine {
 
     if (this.silenceElement) {
       this.silenceElement.pause();
-      this.silenceElement.srcObject = null;
+      this.silenceElement.src = '';
       this.silenceElement.remove();
       this.silenceElement = null;
     }
@@ -191,15 +197,12 @@ export class NoiseEngine {
     this.rightToneGain.connect(this.merger, 0, 1);
     this.merger.connect(this.context.destination);
 
-    // Create a dummy audio element to keep the session alive on iOS.
-    // By connecting a MediaStreamDestination to an HTMLAudioElement,
-    // iOS treats the AudioContext as a primary media session.
-    const destination = this.context.createMediaStreamDestination();
-    this.merger.connect(destination);
-
+    // Create a physical audio anchor. 
+    // iOS is much more likely to keep a session alive if there's a real audio file looping.
     this.silenceElement = new Audio();
-    this.silenceElement.srcObject = destination.stream;
-    this.silenceElement.muted = true; // Prevent double volume, iOS still respects this for background session
+    this.silenceElement.src = SILENCE_WAV;
+    this.silenceElement.loop = true;
+    this.silenceElement.muted = true;
     this.silenceElement.setAttribute('playsinline', '');
     this.silenceElement.style.display = 'none';
     document.body.appendChild(this.silenceElement);
