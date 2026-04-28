@@ -287,12 +287,23 @@ export function App() {
     binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
     binauralBands[1];
 
+  useEffect(() => {
+    const colors: Record<NoiseType, string> = {
+      white: '#ffffff',
+      pink: '#ff94c1',
+      brown: '#a97554',
+      blue: '#5da5ff',
+      violet: '#c683ff'
+    };
+    document.body.style.setProperty('--accent-color', colors[noiseType]);
+  }, [noiseType]);
+
   return (
     <main className="app-shell">
       <section className="hero card">
         <div>
           <div className="hero-meta-row">
-            <p className="eyebrow">PWA · Vercel-ready</p>
+            <p className="eyebrow">PWA · Global</p>
             <div className="locale-select-wrap">
               <select className="locale-select" value={locale} onChange={(event) => handleLocaleChange(event.target.value as Locale)} aria-label="Language">
                 {supportedLocales.map((supportedLocale) => (
@@ -307,13 +318,13 @@ export function App() {
             <div className="title-inline">
               <h1 className="hero-title">{strings.appName}</h1>
               <button
-                className="play-icon-button"
+                className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
                 type="button"
                 onClick={() => void togglePlayback()}
                 aria-label={isPlaying ? strings.stop : strings.play}
                 title={isPlaying ? strings.stop : strings.play}
               >
-                {isPlaying ? '■' : '▶'}
+                <span className="icon">{isPlaying ? '■' : '▶'}</span>
               </button>
             </div>
             <div className="install-action">
@@ -386,7 +397,7 @@ export function App() {
           </div>
         ) : null}
 
-        <div className="noise-grid hero-noise-grid" role="tablist" aria-label="Noise types">
+        <div className={`noise-grid hero-noise-grid ${isPlaying ? 'is-playing' : ''}`} role="tablist" aria-label="Noise types">
           {noiseTypes.map((noiseTypeOption) => (
             <button
               key={noiseTypeOption.key}
@@ -395,90 +406,111 @@ export function App() {
               onClick={() => updateSetting('noiseType', noiseTypeOption.key)}
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
+              title={resolveLocalizedText(noiseTypeOption.short, locale)}
             >
               <strong>{resolveLocalizedText(noiseTypeOption.label, locale)}</strong>
-              <span>{resolveLocalizedText(noiseTypeOption.short, locale)}</span>
             </button>
           ))}
         </div>
 
-        <div className="hero-quick-controls">
-          <div className="control-group">
-            <label>
-              <span>{strings.volumeLabel}: {volume}%</span>
-              <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
-            </label>
+        {isPlaying && (
+          <div className="playback-visualizer" aria-hidden="true">
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
           </div>
+        )}
 
-          <div className="timer-row">
-            <label className="timer-slider-wrap">
-              <span>
-                {strings.timerLabel}: <strong>{timerMinutes}{strings.minute}</strong>
-              </span>
-              <input
-                className="timer-slider"
-                type="range"
-                min="5"
-                max="60"
-                step="5"
-                value={timerMinutes}
-                onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
-              />
-            </label>
+        <div className="hero-quick-controls">
+          <div className="control-row">
+            <div className="control-group">
+              <label>
+                <span className="label-text">{strings.volumeLabel}</span>
+                <div className="input-wrap">
+                  <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
+                  <span className="value-display">{volume}%</span>
+                </div>
+              </label>
+            </div>
+
+            <div className="control-group">
+              <label>
+                <span className="label-text">{strings.timerLabel}</span>
+                <div className="input-wrap">
+                  <input
+                    type="range"
+                    min="5"
+                    max="60"
+                    step="5"
+                    value={timerMinutes}
+                    onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
+                  />
+                  <span className="value-display">{timerMinutes}{strings.minute}</span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="card controls-card">
-        <div className="toggle-row">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={binauralEnabled}
-              onChange={(event) => {
-                const isEnabled = event.target.checked;
-                updateSetting('binauralEnabled', isEnabled);
-                if (!isEnabled) {
-                  setIsBinauralHelpOpen(false);
-                }
+        <details className="binaural-details" open={binauralEnabled}>
+          <summary className="toggle-row">
+            <label className="switch" onClick={(e) => e.stopPropagation()}>
+              <input
+                type="checkbox"
+                checked={binauralEnabled}
+                onChange={(event) => {
+                  const isEnabled = event.target.checked;
+                  updateSetting('binauralEnabled', isEnabled);
+                  if (!isEnabled) {
+                    setIsBinauralHelpOpen(false);
+                  }
+                }}
+              />
+              <span className="binaural-label">{strings.binauralOn}</span>
+            </label>
+            <button
+              type="button"
+              className="help-button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsBinauralHelpOpen((current) => !current);
               }}
-            />
-            <span>{strings.binauralOn}</span>
-          </label>
-          <button
-            type="button"
-            className="help-button"
-            onClick={() => setIsBinauralHelpOpen((current) => !current)}
-            aria-expanded={isBinauralHelpOpen}
-            aria-label={strings.binauralHelp}
-          >
-            ?
-          </button>
-        </div>
+              aria-expanded={isBinauralHelpOpen}
+              aria-label={strings.binauralHelp}
+            >
+              ?
+            </button>
+          </summary>
 
-        {isBinauralHelpOpen ? (
-          <div className="binaural-help-panel help-links-panel">
-            <p>
-              {strings.binauralDesc}
-            </p>
-            <ul className="paper-list compact">
-              {binauralEvidence.links.map((link) => (
-                <li key={link.url}>
-                  <a href={link.url} target="_blank" rel="noreferrer">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+          <div className="binaural-content">
+            {isBinauralHelpOpen ? (
+              <div className="binaural-help-panel help-links-panel">
+                <p>
+                  {strings.binauralDesc}
+                </p>
+                <ul className="paper-list compact">
+                  {binauralEvidence.links.map((link) => (
+                    <li key={link.url}>
+                      <a href={link.url} target="_blank" rel="noreferrer">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
-        {binauralEnabled ? (
-          <>
             <div className="frequency-grid">
               <label>
-                <span>{strings.baseFreq}: {Math.round(baseFrequency)}Hz</span>
-                <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => updateSetting('baseFrequency', Number(event.target.value) || defaultState.baseFrequency)} />
+                <span className="label-text">{strings.baseFreq}</span>
+                <div className="input-wrap">
+                  <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => updateSetting('baseFrequency', Number(event.target.value) || defaultState.baseFrequency)} />
+                  <span className="value-display">{Math.round(baseFrequency)}Hz</span>
+                </div>
               </label>
             </div>
 
@@ -488,23 +520,23 @@ export function App() {
               </p>
               <ul className="binaural-band-list">
                 {binauralBands.map((band) => (
-                  <li key={band.key} className={band.key === activeBinauralBand.key ? 'active' : ''}>
+                  <li key={band.key}>
                     <button
                       type="button"
-                      className={band.key === activeBinauralBand.key ? 'band-button active' : 'band-button'}
+                      className={`band-chip ${band.key === activeBinauralBand.key ? 'active' : ''}`}
                       onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key] ?? differenceFrequency)}
                       aria-pressed={band.key === activeBinauralBand.key}
                     >
-                      <strong>{resolveLocalizedText(band.label, locale)} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
-                      <span>{resolveLocalizedText(band.effect, locale)}</span>
+                      <span className="band-name">{resolveLocalizedText(band.label, locale).split(' ')[0]}</span>
+                      <span className="band-hz">{binauralTargetByKey[band.key] ?? '-'}Hz</span>
                     </button>
                   </li>
                 ))}
               </ul>
+              <p className="band-effect-text">{resolveLocalizedText(activeBinauralBand.effect, locale)}</p>
             </div>
-          </>
-        ) : null}
-
+          </div>
+        </details>
       </section>
 
       <footer className="footer-note">
