@@ -71,6 +71,9 @@ const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
 }
 registerProcessor('noise-processor', NoiseProcessor);`;
 
+// 1x1 pixel silent MP4 video
+const SILENT_VIDEO = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21hdmMxcAAAAAAgbW9vdgAAAGxtdmhkAAAAAM7pI7HO6SOxAAACWAAAAnEAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAcbWRhdAAAAAAAAAAYAHByaW1lIGZsdXNoZWQAAAAAAAAnYXZjY0ABAAz/4AArZGF0YTptZDRhOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7AAAAAAt0cmFrawAAAFx0a2hkAAAAAs7pI7HO6SOxAAAAAQAAAAAAAAnEAAAAAAAAAAAAAAAAAQAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAABAG1kaWEAAAAgbWRoZAAAAADO6SOxzukjsQAAAlgAAAJxAFh9AAAAMWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABQ21pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxtZDAAAAAAAAAAAAAAAAAAAACUc3RibAAAAGRzdHNkAAAAAAAAAAEAAABUYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAABABIAEgAAAlgAAAJxAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAACVzdHRzAAAAAAAAAAEAAAABAAACcQAAABRzdHNzAAAAAAAAAAEAAAABAAAAHHN0c2MAAAAAAAAAAQAAAAEAAAABAAAAAQAAABxzdHN6AAAAAAAAAAAAAAABAAABLAAAABRzdGNvAAAAAAAAAAEAAAAwAAAAYXVkZf8AAAAsYXVkaW8vYWFjIAAAAAAAAABhYWMgYXVkaW8gZmlsZQAAAAAAAAAAACR1dWlkAAAAAABYWFhYWFhYWFhYWFhYWFhYWFhYWFhYAAAAAAA=';
+
 export class NoiseEngine {
   private context: AudioContext | null = null;
   private worklet: AudioWorkletNode | null = null;
@@ -82,8 +85,8 @@ export class NoiseEngine {
   private leftOscillator: OscillatorNode | null = null;
   private rightOscillator: OscillatorNode | null = null;
   private currentSettings: AudioSettings | null = null;
-  private silenceElement: HTMLAudioElement | null = null;
-  private heartbeatId: number | null = null;
+  private anchorElement: HTMLVideoElement | null = null;
+  private worker: Worker | null = null;
 
   async start(settings: AudioSettings): Promise<void> {
     this.currentSettings = settings;
@@ -98,33 +101,19 @@ export class NoiseEngine {
         latencyHint: 'playback'
       });
       
-      this.context.onstatechange = () => {
-        if (this.context?.state === 'suspended' && this.currentSettings) {
-          void this.context.resume();
-        }
-      };
-      
       await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
       this.buildGraph();
+      this.setupWorker();
     }
 
     if (this.context.state === 'suspended') {
       await this.context.resume();
     }
 
-    if (this.silenceElement) {
-      this.silenceElement.play().catch((err) => {
-        console.warn('Playback failed:', err);
+    if (this.anchorElement) {
+      this.anchorElement.play().catch((err) => {
+        console.warn('Anchor playback failed:', err);
       });
-    }
-
-    // iOS keep-alive heartbeat
-    if (!this.heartbeatId) {
-      this.heartbeatId = window.setInterval(() => {
-        if (this.context?.state === 'suspended' && this.currentSettings) {
-          void this.context.resume();
-        }
-      }, 1000);
     }
 
     this.update(settings);
@@ -156,18 +145,18 @@ export class NoiseEngine {
   }
 
   async stop(): Promise<void> {
-    if (this.heartbeatId) {
-      clearInterval(this.heartbeatId);
-      this.heartbeatId = null;
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
     }
 
     this.stopTones();
 
-    if (this.silenceElement) {
-      this.silenceElement.pause();
-      this.silenceElement.srcObject = null;
-      this.silenceElement.remove();
-      this.silenceElement = null;
+    if (this.anchorElement) {
+      this.anchorElement.pause();
+      this.anchorElement.src = '';
+      this.anchorElement.remove();
+      this.anchorElement = null;
     }
 
     if (this.worklet) {
@@ -205,23 +194,47 @@ export class NoiseEngine {
     this.rightMix.connect(this.merger, 0, 1);
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
-    
-    // Connect to actual destination
     this.merger.connect(this.context.destination);
 
-    // Create a "Bridge" to HTMLAudio for iOS backgrounding.
-    // Important: muted MUST be false for iOS to treat this as an active media session,
-    // so we set volume to a near-zero but non-zero value.
-    const destination = this.context.createMediaStreamDestination();
-    this.merger.connect(destination);
+    // Create a video anchor instead of audio. 
+    // iOS gives much higher process priority to video playback.
+    this.anchorElement = document.createElement('video');
+    this.anchorElement.setAttribute('playsinline', '');
+    this.anchorElement.setAttribute('loop', '');
+    this.anchorElement.src = SILENT_VIDEO;
+    this.anchorElement.muted = false; 
+    this.anchorElement.volume = 0.001; 
+    this.anchorElement.style.position = 'fixed';
+    this.anchorElement.style.top = '0';
+    this.anchorElement.style.width = '1px';
+    this.anchorElement.style.height = '1px';
+    this.anchorElement.style.opacity = '0.01';
+    this.anchorElement.style.pointerEvents = 'none';
+    document.body.appendChild(this.anchorElement);
+  }
 
-    this.silenceElement = new Audio();
-    this.silenceElement.srcObject = destination.stream;
-    this.silenceElement.muted = false; 
-    this.silenceElement.volume = 0.001; 
-    this.silenceElement.setAttribute('playsinline', '');
-    this.silenceElement.style.display = 'none';
-    document.body.appendChild(this.silenceElement);
+  private setupWorker(): void {
+    const workerCode = `
+      let timer = null;
+      self.onmessage = (e) => {
+        if (e.data === 'start') {
+          if (!timer) {
+            timer = setInterval(() => self.postMessage('tick'), 200);
+          }
+        } else if (e.data === 'stop') {
+          clearInterval(timer);
+          timer = null;
+        }
+      };
+    `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    this.worker = new Worker(URL.createObjectURL(blob));
+    this.worker.onmessage = () => {
+      if (this.context?.state === 'suspended' && this.currentSettings) {
+        void this.context.resume();
+      }
+    };
+    this.worker.postMessage('start');
   }
 
   private ensureTones(settings: AudioSettings): void {
