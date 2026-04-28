@@ -400,15 +400,6 @@ export function App() {
               <button className="text-button" type="button" onClick={() => void triggerInstall()}>
                 {strings.install}
               </button>
-              <button
-                type="button"
-                className="help-button-small"
-                onClick={() => setInstallGuideOpen((current) => !current)}
-                aria-expanded={installGuideOpen}
-                aria-label={strings.installInfo}
-              >
-                ?
-              </button>
             </div>
             <div className="locale-select-wrap">
               <select className="locale-select" value={locale} onChange={(event) => handleLocaleChange(event.target.value as Locale)} aria-label="Language">
