@@ -310,7 +310,7 @@ export function App() {
                 className="help-button"
                 onClick={() => setIsInstallHelpOpen((current) => !current)}
                 aria-expanded={isInstallHelpOpen}
-                aria-label={locale === 'ja' ? 'インストール情報を表示' : 'Show installation info'}
+                aria-label={strings.installInfo}
               >
                 ?
               </button>
@@ -319,12 +319,12 @@ export function App() {
             {isInstallHelpOpen ? (
               <div className="help-links-panel">
                 <div>
-                  <p className="help-panel-label">{locale === 'ja' ? 'ホーム画面に追加' : 'Add to home screen'}</p>
+                  <p className="help-panel-label">{strings.addHome}</p>
                   <p>{strings.installHint}</p>
                 </div>
 
                 <div>
-                  <p className="help-panel-label">{locale === 'ja' ? 'バックグラウンドでの動作について' : 'About background playback'}</p>
+                  <p className="help-panel-label">{strings.aboutBackground}</p>
                   <ul className="platform-list compact">
                     {getPlatformNotes(locale).map((note) => (
                       <li key={note}>{note}</li>
@@ -339,18 +339,18 @@ export function App() {
 
         {remainingSeconds !== null ? (
           <div className="status-row">
-            <span className="status-pill subtle">{formatRemaining(locale, remainingSeconds)}</span>
+            <span className="status-pill subtle">{formatRemaining(locale, remainingSeconds, strings)}</span>
           </div>
         ) : null}
 
         <div className="noise-head">
-          <strong>{locale === 'ja' ? 'ノイズタイプ' : 'Noise type'}</strong>
+          <strong>{strings.noiseType}</strong>
           <button
             type="button"
             className="help-button"
             onClick={() => setIsNoiseHelpOpen((current) => !current)}
             aria-expanded={isNoiseHelpOpen}
-            aria-label={locale === 'ja' ? 'ノイズの論文リンクを表示' : 'Show noise papers'}
+            aria-label={strings.noisePapers}
           >
             ?
           </button>
@@ -358,7 +358,7 @@ export function App() {
 
         {isNoiseHelpOpen ? (
           <div className="help-links-panel">
-            <p>{locale === 'ja' ? 'ノイズに関する参考論文' : 'References for noise studies'}</p>
+            <p>{strings.noiseReferences}</p>
             <ul className="paper-list compact">
               {noiseEvidence.links.map((link) => (
                 <li key={link.url}>
@@ -398,7 +398,7 @@ export function App() {
           <div className="timer-row">
             <label className="timer-slider-wrap">
               <span>
-                {strings.timerLabel}: <strong>{timerMinutes}m</strong>
+                {strings.timerLabel}: <strong>{timerMinutes}{strings.minute}</strong>
               </span>
               <input
                 className="timer-slider"
@@ -428,14 +428,14 @@ export function App() {
                 }
               }}
             />
-            <span>{locale === 'ja' ? 'バイノーラルビート ON' : 'Binaural beats on'}</span>
+            <span>{strings.binauralOn}</span>
           </label>
           <button
             type="button"
             className="help-button"
             onClick={() => setIsBinauralHelpOpen((current) => !current)}
             aria-expanded={isBinauralHelpOpen}
-            aria-label={locale === 'ja' ? 'バイノーラルビートの説明を表示' : 'Show binaural beat help'}
+            aria-label={strings.binauralHelp}
           >
             ?
           </button>
@@ -444,9 +444,7 @@ export function App() {
         {isBinauralHelpOpen ? (
           <div className="binaural-help-panel help-links-panel">
             <p>
-              {locale === 'ja'
-                ? '左右の耳に少し異なる周波数を流し、差分周波数を体感しやすくする機能です。'
-                : 'This sends slightly different tones to each ear so the beat difference can be perceived more clearly.'}
+              {strings.binauralDesc}
             </p>
             <ul className="paper-list compact">
               {binauralEvidence.links.map((link) => (
@@ -464,14 +462,14 @@ export function App() {
           <>
             <div className="frequency-grid">
               <label>
-                <span>{locale === 'ja' ? 'ベース周波数' : 'Base frequency'}: {Math.round(baseFrequency)}Hz</span>
+                <span>{strings.baseFreq}: {Math.round(baseFrequency)}Hz</span>
                 <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => setBaseFrequency(Number(event.target.value) || defaultState.baseFrequency)} />
               </label>
             </div>
 
             <div className="binaural-guide" aria-live="polite">
               <p className="binaural-current">
-                {locale === 'ja' ? '現在の差分周波数の目安' : 'Current beat band'}: <strong>{resolveLocalizedText(activeBinauralBand.label, locale)}</strong>
+                {strings.currentBand}: <strong>{resolveLocalizedText(activeBinauralBand.label, locale)}</strong>
               </p>
               <ul className="binaural-band-list">
                 {binauralBands.map((band) => (
@@ -495,16 +493,21 @@ export function App() {
       </section>
 
       <footer className="footer-note">
-        <p>{locale === 'ja' ? '医療効果を保証するものではありません。用途に合わせて慎重に使ってください。' : 'No medical claims are made. Use it cautiously and fit it to your context.'}</p>
+        <p>{strings.footerNote}</p>
       </footer>
     </main>
   );
 }
 
-function formatRemaining(locale: Locale, totalSeconds: number): string {
+function formatRemaining(locale: Locale, totalSeconds: number, strings: any): string {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return locale === 'ja' ? `${minutes}分${String(seconds).padStart(2, '0')}秒` : `${minutes}:${String(seconds).padStart(2, '0')}`;
+  
+  if (locale === 'ja' || locale === 'zh-Hans' || locale === 'yue' || locale === 'ko') {
+    return `${minutes}${strings.minute}${String(seconds).padStart(2, '0')}${strings.second}`;
+  }
+  
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
 interface BeforeInstallPromptEvent extends Event {

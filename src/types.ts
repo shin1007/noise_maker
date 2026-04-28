@@ -61,4 +61,18 @@ export interface Copy {
   volumeLabel: string;
   timerLabel: string;
   timerOff: string;
+  installInfo: string;
+  addHome: string;
+  aboutBackground: string;
+  noiseType: string;
+  noisePapers: string;
+  noiseReferences: string;
+  binauralOn: string;
+  binauralHelp: string;
+  binauralDesc: string;
+  baseFreq: string;
+  currentBand: string;
+  footerNote: string;
+  minute: string;
+  second: string;
 }
