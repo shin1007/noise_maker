@@ -82,22 +82,24 @@ export function App() {
     localStorage.setItem('noise_maker_locale', locale);
   }, [locale]);
 
-  const startPlayback = useCallback(async () => {
+  const startPlayback = useCallback(async (overrideSettings?: UserSettings) => {
     const engine = engineRef.current ?? new NoiseEngine();
     engineRef.current = engine;
 
+    const currentToUse = overrideSettings || settings;
+
     await engine.start(
       clampSettings({
-        noiseType,
-        volume,
-        binauralEnabled,
-        baseFrequency,
-        differenceFrequency
+        noiseType: currentToUse.noiseType,
+        volume: currentToUse.volume,
+        binauralEnabled: currentToUse.binauralEnabled,
+        baseFrequency: currentToUse.baseFrequency,
+        differenceFrequency: currentToUse.differenceFrequency
       })
     );
 
     setIsPlaying(true);
-  }, [baseFrequency, binauralEnabled, differenceFrequency, noiseType, volume]);
+  }, [settings]);
 
   const stopPlayback = useCallback(async () => {
     if (timerRef.current) {
@@ -119,6 +121,15 @@ export function App() {
 
     await startPlayback();
   }, [isPlaying, startPlayback, stopPlayback]);
+
+  const handleNoiseSelect = useCallback((type: NoiseType) => {
+    const nextSettings = { ...settings, noiseType: type };
+    updateSetting('noiseType', type);
+    
+    if (!isPlaying) {
+      void startPlayback(nextSettings);
+    }
+  }, [isPlaying, settings, startPlayback, updateSetting]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -463,7 +474,7 @@ export function App() {
               key={noiseTypeOption.key}
               type="button"
               className={`noise-chip noise-${noiseTypeOption.key} ${noiseType === noiseTypeOption.key ? 'selected' : ''}`}
-              onClick={() => updateSetting('noiseType', noiseTypeOption.key)}
+              onClick={() => handleNoiseSelect(noiseTypeOption.key)}
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
             >

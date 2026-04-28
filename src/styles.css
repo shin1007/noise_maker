@@ -46,7 +46,7 @@ body { overflow-x: hidden; }
 
 /* Typography */
 .eyebrow { 
-  margin: 0 0 12px; 
+  margin: 0 0 4px; 
   text-transform: uppercase; 
   letter-spacing: 0.2em; 
   font-size: 0.7rem; 
@@ -63,44 +63,51 @@ body { overflow-x: hidden; }
   margin: 0;
   color: var(--accent-color);
   transition: color 0.5s ease;
+  line-height: 1.1;
 }
 
 .title-with-symbol {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
+  align-items: center;
+  gap: 16px;
+  min-height: 3.5rem; /* Ensure consistent height for full-height effect */
 }
 
 .wave-symbol {
-  font-size: 1.8rem;
-  font-weight: 400;
+  font-size: 3.2rem; /* Significantly larger */
+  font-weight: 800; /* Match title weight */
   color: var(--accent-color);
-  opacity: 0.9;
-  font-family: serif; /* More classic look for Greek symbols */
-  min-width: 1.2em;
+  opacity: 0.6;
+  font-family: inherit; /* Use same font as title */
+  min-width: 1em;
   text-align: center;
-  transition: color 0.5s ease;
+  transition: all 0.5s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .play-icon-button.is-playing + .title-group .wave-symbol,
 .is-playing .wave-symbol {
-  animation: symbol-pulse 4s infinite ease-in-out;
+  opacity: 1;
+  animation: symbol-pulse 3s infinite ease-in-out;
 }
 
 @keyframes symbol-pulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.95); }
-  50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 15px var(--accent-color); }
+  0%, 100% { transform: scale(1); text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3); }
+  50% { transform: scale(1.1); text-shadow: 0 0 25px rgba(var(--accent-rgb), 0.8); }
 }
 
-.hero-header { display: flex; flex-direction: column; gap: 8px; }
+.hero-header { display: flex; flex-direction: column; gap: 4px; }
 .title-section.compact { display: flex; flex-direction: column; gap: 8px; }
-.title-group { display: flex; flex-direction: column; gap: 4px; }
+.title-group { display: flex; flex-direction: column; gap: 2px; }
 .title-inline { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 
-.lead { font-size: 1rem; color: var(--text-dim); line-height: 1.4; margin: 0; }
+.lead { font-size: 0.95rem; color: var(--text-dim); line-height: 1.4; margin: 4px 0 0; }
 
 /* Header & Controls */
-.hero-meta-row.compact { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.hero-meta-row.compact { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .locale-select { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 6px 12px; font-size: 0.85rem; }
 
 /* Play Button */
@@ -128,7 +135,7 @@ body { overflow-x: hidden; }
   justify-content: space-between;
   align-items: center;
   margin: 12px 0;
-  padding: 10px 0;
+  padding: 8px 0;
   border-top: 1px solid var(--border-glow);
   border-bottom: 1px solid var(--border-glow);
 }
@@ -142,11 +149,6 @@ body { overflow-x: hidden; }
   font-weight: 600;
   color: var(--accent-color);
   transition: all 0.5s ease;
-}
-.config-pill { animation: breathing 3s ease-in-out infinite; }
-@keyframes breathing {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(0.98); }
 }
 
 .install-action-simple { display: flex; align-items: center; gap: 4px; }
@@ -167,11 +169,11 @@ body { overflow-x: hidden; }
 .noise-chip.selected span { color: rgba(0, 0, 0, 0.7); }
 
 /* Sliders */
-.hero-quick-controls { margin-top: 24px; }
-.control-stack { display: grid; gap: 24px; }
-.control-group label { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.hero-quick-controls { margin-top: 20px; }
+.control-stack { display: grid; gap: 20px; }
+.control-group label { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 .label-row { display: flex; justify-content: space-between; align-items: baseline; }
-.label-text { font-size: 0.9rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.label-text { font-size: 0.85rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 .value-display { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: var(--accent-color); transition: color 0.5s ease; }
 
 input[type="range"] {
