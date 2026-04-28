@@ -301,7 +301,7 @@ export function App() {
   return (
     <main className="app-shell">
       <section className="hero card">
-        <div>
+        <div className="hero-header">
           <div className="hero-meta-row">
             <p className="eyebrow">PWA · Global</p>
             <div className="locale-select-wrap">
@@ -314,19 +314,24 @@ export function App() {
               </select>
             </div>
           </div>
-          <div className="hero-actions">
-            <div className="title-inline">
-              <h1 className="hero-title">{strings.appName}</h1>
-              <button
-                className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
-                type="button"
-                onClick={() => void togglePlayback()}
-                aria-label={isPlaying ? strings.stop : strings.play}
-                title={isPlaying ? strings.stop : strings.play}
-              >
-                <span className="icon">{isPlaying ? '■' : '▶'}</span>
-              </button>
+
+          <div className="title-section">
+            <div className="title-group">
+              <div className="title-inline">
+                <h1 className="hero-title">{strings.appName}</h1>
+                <button
+                  className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
+                  type="button"
+                  onClick={() => void togglePlayback()}
+                  aria-label={isPlaying ? strings.stop : strings.play}
+                  title={isPlaying ? strings.stop : strings.play}
+                >
+                  <span className="icon">{isPlaying ? '■' : '▶'}</span>
+                </button>
+              </div>
+              <p className="lead">{strings.appTagline}</p>
             </div>
+
             <div className="install-action">
               <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
                 {strings.install}
@@ -334,33 +339,57 @@ export function App() {
               <button
                 type="button"
                 className="help-button"
-                onClick={() => setIsInstallHelpOpen((current) => !current)}
-                aria-expanded={isInstallHelpOpen}
+                onClick={() => setInstallGuideOpen((current) => !current)}
+                aria-expanded={installGuideOpen}
                 aria-label={strings.installInfo}
               >
                 ?
               </button>
             </div>
-
-            {isInstallHelpOpen ? (
-              <div className="help-links-panel">
-                <div>
-                  <p className="help-panel-label">{strings.addHome}</p>
-                  <p>{strings.installHint}</p>
-                </div>
-
-                <div>
-                  <p className="help-panel-label">{strings.aboutBackground}</p>
-                  <ul className="platform-list compact">
-                    {getPlatformNotes(locale).map((note) => (
-                      <li key={note}>{note}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ) : null}
           </div>
-          <p className="lead">{strings.appTagline}</p>
+
+          {installGuideOpen ? (
+            <div className="install-guide-overlay" onClick={() => setInstallGuideOpen(false)}>
+              <div className="install-guide-content card" onClick={(e) => e.stopPropagation()}>
+                <div className="guide-header">
+                  <h2 className="guide-title">{strings.addHome}</h2>
+                  <button className="close-guide" onClick={() => setInstallGuideOpen(false)} aria-label="Close">×</button>
+                </div>
+                
+                <div className="guide-body">
+                  <div className="guide-section">
+                    <h3>iOS (Safari)</h3>
+                    <ol>
+                      <li>{locale === 'ja' ? 'ブラウザ下の「共有」ボタン（角丸四角から矢印が出ているアイコン）をタップします。' : 'Tap the "Share" button at the bottom of Safari.'}</li>
+                      <li>{locale === 'ja' ? 'メニューをスクロールし、「ホーム画面に追加」を選択します。' : 'Scroll down and tap "Add to Home Screen".'}</li>
+                      <li>{locale === 'ja' ? '右上の「追加」をタップすれば完了です。' : 'Tap "Add" in the top right corner.'}</li>
+                    </ol>
+                  </div>
+                  
+                  <div className="guide-section">
+                    <h3>Android (Chrome)</h3>
+                    <ol>
+                      <li>{locale === 'ja' ? 'ブラウザ右上の「3つの点」アイコンをタップします。' : 'Tap the three dots menu icon in the top right.'}</li>
+                      <li>{locale === 'ja' ? '「アプリをインストール」または「ホーム画面に追加」を選択します。' : 'Tap "Install app" or "Add to Home Screen".'}</li>
+                    </ol>
+                  </div>
+
+                  <div className="guide-section platform-notes-section">
+                    <h3>{strings.aboutBackground}</h3>
+                    <ul className="platform-list compact">
+                      {getPlatformNotes(locale).map((note) => (
+                        <li key={note}>{note}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                
+                <button className="primary-button full-width" onClick={() => setInstallGuideOpen(false)}>
+                  {locale === 'ja' ? '閉じる' : 'Got it'}
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {remainingSeconds !== null ? (
