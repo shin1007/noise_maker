@@ -74,6 +74,9 @@ registerProcessor('noise-processor', NoiseProcessor);`;
 // 1x1 pixel silent MP4 video
 const SILENT_VIDEO = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21hdmMxcAAAAAAgbW9vdgAAAGxtdmhkAAAAAM7pI7HO6SOxAAACWAAAAnEAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAcbWRhdAAAAAAAAAAYAHByaW1lIGZsdXNoZWQAAAAAAAAnYXZjY0ABAAz/4AArZGF0YTptZDRhOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7AAAAAAt0cmFrawAAAFx0a2hkAAAAAs7pI7HO6SOxAAAAAQAAAAAAAAnEAAAAAAAAAAAAAAAAAQAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAABAG1kaWEAAAAgbWRoZAAAAADO6SOxzukjsQAAAlgAAAJxAFh9AAAAMWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABQ21pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxtZDAAAAAAAAAAAAAAAAAAAACUc3RibAAAAGRzdHNkAAAAAAAAAAEAAABUYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAABABIAEgAAAlgAAAJxAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAACVzdHRzAAAAAAAAAAEAAAABAAACcQAAABRzdHNzAAAAAAAAAAEAAAABAAAAHHN0c2MAAAAAAAAAAQAAAAEAAAABAAAAAQAAABxzdHN6AAAAAAAAAAAAAAABAAABLAAAABRzdGNvAAAAAAAAAAEAAAAwAAAAYXVkZf8AAAAsYXVkaW8vYWFjIAAAAAAAAABhYWMgYXVkaW8gZmlsZQAAAAAAAAAAACR1dWlkAAAAAABYWFhYWFhYWFhYWFhYWFhYWFhYWFhYAAAAAAA=';
 
+// 1 second of silence as a base64 WAV
+const SILENCE_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+
 export class NoiseEngine {
   private context: AudioContext | null = null;
   private worklet: AudioWorkletNode | null = null;
@@ -85,7 +88,7 @@ export class NoiseEngine {
   private leftOscillator: OscillatorNode | null = null;
   private rightOscillator: OscillatorNode | null = null;
   private currentSettings: AudioSettings | null = null;
-  private anchorElement: HTMLVideoElement | null = null;
+  private silenceElement: HTMLAudioElement | null = null;
   private worker: Worker | null = null;
 
   async start(settings: AudioSettings): Promise<void> {
@@ -101,6 +104,12 @@ export class NoiseEngine {
         latencyHint: 'playback'
       });
       
+      this.context.onstatechange = () => {
+        if (this.context?.state === 'suspended' && this.currentSettings) {
+          void this.context.resume();
+        }
+      };
+      
       await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
       this.buildGraph();
       this.setupWorker();
@@ -110,8 +119,8 @@ export class NoiseEngine {
       await this.context.resume();
     }
 
-    if (this.anchorElement) {
-      this.anchorElement.play().catch((err) => {
+    if (this.silenceElement) {
+      this.silenceElement.play().catch((err) => {
         console.warn('Anchor playback failed:', err);
       });
     }
@@ -152,11 +161,11 @@ export class NoiseEngine {
 
     this.stopTones();
 
-    if (this.anchorElement) {
-      this.anchorElement.pause();
-      this.anchorElement.src = '';
-      this.anchorElement.remove();
-      this.anchorElement = null;
+    if (this.silenceElement) {
+      this.silenceElement.pause();
+      this.silenceElement.src = '';
+      this.silenceElement.remove();
+      this.silenceElement = null;
     }
 
     if (this.worklet) {
@@ -196,21 +205,15 @@ export class NoiseEngine {
     this.rightToneGain.connect(this.merger, 0, 1);
     this.merger.connect(this.context.destination);
 
-    // Create a video anchor instead of audio. 
-    // iOS gives much higher process priority to video playback.
-    this.anchorElement = document.createElement('video');
-    this.anchorElement.setAttribute('playsinline', '');
-    this.anchorElement.setAttribute('loop', '');
-    this.anchorElement.src = SILENT_VIDEO;
-    this.anchorElement.muted = false; 
-    this.anchorElement.volume = 0.001; 
-    this.anchorElement.style.position = 'fixed';
-    this.anchorElement.style.top = '0';
-    this.anchorElement.style.width = '1px';
-    this.anchorElement.style.height = '1px';
-    this.anchorElement.style.opacity = '0.01';
-    this.anchorElement.style.pointerEvents = 'none';
-    document.body.appendChild(this.anchorElement);
+    // Physical audio anchor (WAV file)
+    this.silenceElement = new Audio();
+    this.silenceElement.src = SILENCE_WAV;
+    this.silenceElement.loop = true;
+    this.silenceElement.muted = false; // MUST be false for iOS background
+    this.silenceElement.volume = 0.001; // Low volume to avoid noise but keep session alive
+    this.silenceElement.setAttribute('playsinline', '');
+    this.silenceElement.style.display = 'none';
+    document.body.appendChild(this.silenceElement);
   }
 
   private setupWorker(): void {
@@ -219,7 +222,7 @@ export class NoiseEngine {
       self.onmessage = (e) => {
         if (e.data === 'start') {
           if (!timer) {
-            timer = setInterval(() => self.postMessage('tick'), 200);
+            timer = setInterval(() => self.postMessage('tick'), 250);
           }
         } else if (e.data === 'stop') {
           clearInterval(timer);
@@ -230,8 +233,23 @@ export class NoiseEngine {
     const blob = new Blob([workerCode], { type: 'application/javascript' });
     this.worker = new Worker(URL.createObjectURL(blob));
     this.worker.onmessage = () => {
-      if (this.context?.state === 'suspended' && this.currentSettings) {
+      if (!this.context || !this.currentSettings) return;
+      
+      if (this.context.state === 'suspended') {
         void this.context.resume();
+      }
+      
+      // Pull the audio thread by playing a tiny silent buffer
+      try {
+        const oscillator = this.context.createOscillator();
+        const gain = this.context.createGain();
+        gain.gain.value = 0.000001;
+        oscillator.connect(gain);
+        gain.connect(this.context.destination);
+        oscillator.start();
+        oscillator.stop(this.context.currentTime + 0.001);
+      } catch (e) {
+        // Ignore errors if context is closing
       }
     };
     this.worker.postMessage('start');
