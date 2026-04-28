@@ -126,9 +126,15 @@ export class NoiseEngine {
     }
 
     if (this.audioElement) {
-      // Critical for iOS: play must be called on a real audio element in a user gesture
-      // We play it as early as possible.
-      void this.audioElement.play().catch((err) => {
+      // Priming for Safari browser:
+      // First, play a real (though silent) file to "prime" the media session
+      this.audioElement.src = SILENCE_WAV;
+      this.audioElement.load();
+      await this.audioElement.play().catch(() => {});
+      
+      // If we are using srcObject (built in buildGraph), it should be set there.
+      // We just need to ensure it's playing the right thing.
+      await this.audioElement.play().catch((err) => {
         console.error('Audio element playback failed:', err);
       });
     }
