@@ -123,7 +123,12 @@ export function App() {
     document.documentElement.lang = locale;
     document.documentElement.dir = localeMetadata[locale].dir;
     document.title = strings.appName;
-  }, [locale, strings.appName]);
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', strings.appTagline);
+    }
+  }, [locale, strings.appName, strings.appTagline]);
 
   useEffect(() => {
     const beforeInstallPrompt = (event: Event) => {

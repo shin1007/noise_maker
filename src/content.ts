@@ -625,11 +625,71 @@ export const noiseTypes: Array<{
   label: LocalizedText;
   short: LocalizedText;
 }> = [
-  { key: 'white', label: { ja: 'ホワイト', en: 'White' }, short: { ja: '環境音を目立ちにくくして、作業や休憩の切り替えに使われることがあります。', en: 'Often used to mask background sounds and support task or rest transitions.' } },
-  { key: 'pink', label: { ja: 'ピンク', en: 'Pink' }, short: { ja: '就寝前に落ち着きやすいと感じる人がいます。睡眠への効果は研究でも個人差があります。', en: 'Some people find it easier to settle before sleep. Sleep effects vary across studies and individuals.' } },
-  { key: 'brown', label: { ja: 'ブラウン', en: 'Brown' }, short: { ja: '低めで包まれる感覚があり、リラックス目的で選ばれることがあります。', en: 'Its deeper tone can feel enveloping, so some listeners choose it for relaxation.' } },
-  { key: 'blue', label: { ja: 'ブルー', en: 'Blue' }, short: { ja: '気分を切り替えたい場面で、短時間の集中スイッチとして使う人もいます。', en: 'Sometimes used as a short focus reset when people want a quick mental shift.' } },
-  { key: 'violet', label: { ja: 'ヴァイオレット', en: 'Violet' }, short: { ja: '高めの刺激で注意を向けやすいと感じる人がいますが、長時間は疲れやすいことがあります。', en: 'Some listeners feel more alert with it, though long sessions can become fatiguing.' } }
+  { 
+    key: 'white', 
+    label: { ja: 'ホワイト', en: 'White', 'zh-Hans': '白噪音', es: 'Blanco', ko: '화이트', fr: 'Blanc', de: 'Weiß' }, 
+    short: { 
+      ja: '環境音を目立ちにくくして、作業や休憩の切り替えに使われることがあります。', 
+      en: 'Often used to mask background sounds and support task or rest transitions.',
+      'zh-Hans': '通常用于遮蔽背景噪音，支持工作或休息的切换。',
+      es: 'A menudo se usa para enmascarar sonidos de fondo y apoyar transiciones de tareas.',
+      ko: '주변 소음을 차단하고 작업이나 휴식의 전환을 돕는 데 사용됩니다.',
+      fr: 'Souvent utilisé pour masquer les bruits de fond et faciliter les transitions.',
+      de: 'Wird oft verwendet, um Hintergrundgeräusche zu maskieren.'
+    } 
+  },
+  { 
+    key: 'pink', 
+    label: { ja: 'ピンク', en: 'Pink', 'zh-Hans': '粉红噪音', es: 'Rosa', ko: '핑크', fr: 'Rose', de: 'Rosa' }, 
+    short: { 
+      ja: '就寝前に落ち着きやすいと感じる人がいます。睡眠への効果は研究でも個人差があります。', 
+      en: 'Some people find it easier to settle before sleep. Sleep effects vary across studies.',
+      'zh-Hans': '有些人觉得睡前更容易安静。睡眠效果在研究中因人而异。',
+      es: 'A algunas personas les resulta más fácil calmarse antes de dormir.',
+      ko: '취침 전에 마음을 진정시키는 데 도움이 될 수 있습니다. 수면 효과는 개인차가 있습니다.',
+      fr: 'Certaines personnes le trouvent apaisant avant de dormir.',
+      de: 'Manche finden es vor dem Schlafengehen beruhigend.'
+    } 
+  },
+  { 
+    key: 'brown', 
+    label: { ja: 'ブラウン', en: 'Brown', 'zh-Hans': '褐噪音', es: 'Marrón', ko: '브라운', fr: 'Brun', de: 'Braun' }, 
+    short: { 
+      ja: '低めで包まれる感覚があり、リラックス目的で選ばれることがあります。', 
+      en: 'Its deeper tone can feel enveloping, so some listeners choose it for relaxation.',
+      'zh-Hans': '低沉的包围感，常被用于放松目的。',
+      es: 'Su tono más profundo puede sentirse envolvente, ideal para la relajación.',
+      ko: '낮은 톤으로 감싸이는 느낌이 있어 휴식을 위해 선택되기도 합니다.',
+      fr: 'Son ton plus profond peut sembler enveloppant, idéal pour la relaxation.',
+      de: 'Sein tieferer Ton kann sich einhüllend anfühlen, ideal zur Entspannung.'
+    } 
+  },
+  { 
+    key: 'blue', 
+    label: { ja: 'ブルー', en: 'Blue', 'zh-Hans': '蓝噪音', es: 'Azul', ko: '블루', fr: 'Bleu', de: 'Blau' }, 
+    short: { 
+      ja: '気分を切り替えたい場面で、短時間の集中スイッチとして使う人もいます。', 
+      en: 'Sometimes used as a short focus reset when people want a quick mental shift.',
+      'zh-Hans': '在需要转换心情时，有人将其作为短时间集中的开关。',
+      es: 'A veces se usa como un breve reinicio de enfoque para un cambio mental rápido.',
+      ko: '기분 전환이 필요한 상황에서 단시간 집중을 위한 스위치로 사용되기도 합니다.',
+      fr: 'Parfois utilisé pour réinitialiser la concentration rapidement.',
+      de: 'Wird manchmal für einen kurzen Fokus-Reset verwendet.'
+    } 
+  },
+  { 
+    key: 'violet', 
+    label: { ja: 'ヴァイオレット', en: 'Violet', 'zh-Hans': '紫噪音', es: 'Violeta', ko: '바이올렛', fr: 'Violet', de: 'Violett' }, 
+    short: { 
+      ja: '高めの刺激で注意を向けやすいと感じる人がいますが、長時間は疲れやすいことがあります。', 
+      en: 'Some listeners feel more alert with it, though long sessions can be fatiguing.',
+      'zh-Hans': '高频率刺激让人更容易集中注意力，但长时间使用可能会疲劳。',
+      es: 'Algunos oyentes se sienten más alerta, aunque sesiones largas pueden fatigar.',
+      ko: '높은 자극으로 주의를 끌기 쉽지만, 장시간 사용 시 피로할 수 있습니다.',
+      fr: 'Certains auditeurs se sentent plus alertes, mais cela peut être fatiguant.',
+      de: 'Manche fühlen sich wacher, aber lange Sitzungen können ermüdend sein.'
+    } 
+  }
 ];
 
 export const binauralBands: Array<{
@@ -643,63 +703,138 @@ export const binauralBands: Array<{
     key: 'delta',
     min: 0.5,
     max: 4,
-    label: { ja: 'デルタ (0.5-4 Hz)', en: 'Delta (0.5-4 Hz)' },
+    label: { ja: 'デルタ (0.5-4 Hz)', en: 'Delta (0.5-4 Hz)', 'zh-Hans': 'Delta (0.5-4 Hz)', ko: '델타 (0.5-4 Hz)' },
     effect: {
       ja: '深い休息モードに寄せたいときの目安です。夜の静かな時間に合わせやすい帯域です。',
-      en: 'A common target when aiming for a deeper rest mood, especially in quiet night sessions.'
+      en: 'A common target when aiming for a deeper rest mood, especially in quiet night sessions.',
+      'zh-Hans': '想要进入深度休息模式时的参考，适合安静的夜晚。',
+      es: 'Un objetivo común para un estado de descanso profundo, especialmente de noche.',
+      ko: '깊은 휴식 모드를 원할 때의 기준입니다. 조용한 밤 시간에 적합합니다.',
+      fr: 'Idéal pour un repos profond, surtout lors de sessions nocturnes calmes.',
+      de: 'Ein häufiges Ziel für tiefe Ruhe, besonders in ruhigen Nachtsitzungen.'
     }
   },
   {
     key: 'theta',
     min: 4,
     max: 8,
-    label: { ja: 'シータ (4-8 Hz)', en: 'Theta (4-8 Hz)' },
+    label: { ja: 'シータ (4-8 Hz)', en: 'Theta (4-8 Hz)', 'zh-Hans': 'Theta (4-8 Hz)', ko: '시타 (4-8 Hz)' },
     effect: {
       ja: '落ち着きや内省の感覚と結びつけられることがあります。体感は人によって大きく変わります。',
-      en: 'Sometimes linked to calm or inward attention, with large person-to-person variation.'
+      en: 'Sometimes linked to calm or inward attention, with large person-to-person variation.',
+      'zh-Hans': '有时与平静或内省感相关。体感因人而异。',
+      es: 'A veces vinculado a la calma o atención interior, con gran variación personal.',
+      ko: '진정이나 내면의 성찰과 연결되기도 합니다. 체감은 사람에 따라 다릅니다.',
+      fr: 'Parfois lié au calme ou à l attention intérieure, varie selon les personnes.',
+      de: 'Manchmal mit Ruhe oder innerer Aufmerksamkeit verbunden.'
     }
   },
   {
     key: 'alpha',
     min: 8,
     max: 13,
-    label: { ja: 'アルファ (8-13 Hz)', en: 'Alpha (8-13 Hz)' },
+    label: { ja: 'アルファ (8-13 Hz)', en: 'Alpha (8-13 Hz)', 'zh-Hans': 'Alpha (8-13 Hz)', ko: '알파 (8-13 Hz)' },
     effect: {
       ja: 'リラックスしつつ作業したいときに選ばれやすい、バランス型の帯域です。',
-      en: 'A balanced range often chosen for relaxed but awake sessions.'
+      en: 'A balanced range often chosen for relaxed but awake sessions.',
+      'zh-Hans': '平衡型频带，常用于在放松的同时进行工作。',
+      es: 'Un rango equilibrado a menudo elegido para sesiones relajadas pero despiertas.',
+      ko: '휴식하면서 작업하고 싶을 때 선택하기 좋은 밸런스형 대역입니다.',
+      fr: 'Une plage équilibrée souvent choisie pour des sessions relaxantes mais éveillées.',
+      de: 'Ein ausgewogener Bereich für entspannte, aber wache Sitzungen.'
     }
   },
   {
     key: 'beta',
     min: 13,
     max: 30,
-    label: { ja: 'ベータ (13-30 Hz)', en: 'Beta (13-30 Hz)' },
+    label: { ja: 'ベータ (13-30 Hz)', en: 'Beta (13-30 Hz)', 'zh-Hans': 'Beta (13-30 Hz)', ko: '베타 (13-30 Hz)' },
     effect: {
       ja: '注意や課題集中に関連づけられる帯域です。人によっては刺激が強すぎる場合があります。',
-      en: 'Often associated with attention and task focus, though it may feel overstimulating for some.'
+      en: 'Often associated with attention and task focus, though it may feel overstimulating.',
+      'zh-Hans': '与注意力和任务集中相关的频带。对某些人来说可能过于刺激。',
+      es: 'Asociado con la atención y el enfoque, aunque puede resultar sobreestimulante.',
+      ko: '주의력이나 과제 집중과 관련된 대역입니다. 자극이 너무 강하게 느껴질 수 있습니다.',
+      fr: 'Associé à l attention et à la concentration, peut être surstimulant.',
+      de: 'Verbunden mit Aufmerksamkeit und Fokus, kann überstimulierend sein.'
     }
   },
   {
     key: 'gamma',
     min: 30,
     max: 40,
-    label: { ja: 'ガンマ (30-40 Hz)', en: 'Gamma (30-40 Hz)' },
+    label: { ja: 'ガンマ (30-40 Hz)', en: 'Gamma (30-40 Hz)', 'zh-Hans': 'Gamma (30-40 Hz)', ko: '감마 (30-40 Hz)' },
     effect: {
       ja: '切り替えや短時間の高集中に向けた高めの帯域です。刺激が強く感じる場合があります。',
-      en: 'A higher band often used for short, high-focus pushes; it can feel intense for some.'
+      en: 'A higher band often used for short, high-focus pushes; it can feel intense.',
+      'zh-Hans': '用于切换心情或短时间高度集中的高频带。可能会感到强烈刺激。',
+      es: 'Una banda superior para ráfagas de alta concentración; puede sentirse intensa.',
+      ko: '전환이나 단시간 고집중을 위한 높은 대역입니다. 자극이 강할 수 있습니다.',
+      fr: 'Une bande plus élevée pour une concentration intense et courte.',
+      de: 'Ein höheres Band für kurze, hochkonzentrierte Phasen.'
     }
   }
 ];
 
 export const evidenceCards: EvidenceCard[] = [
-  { key: 'noise-colors', title: { ja: 'ノイズ色の違い', en: 'Differences between noise colors' }, summary: { ja: '白・ピンク・ブラウン・ブルー・ヴァイオレットは、周波数ごとの強さが違う音です。効果を断定せず、まずは音の性質として扱います。', en: 'White, pink, brown, blue, and violet noise differ by frequency weighting. The app treats them as sound-shape tools, not medical treatments.' }, strength: 'Strong', caveat: { ja: '音響的な違いは明確ですが、使い方による体感は個人差があります。', en: 'The spectral differences are clear, but user experience varies a lot.' }, links: [{ label: 'Pink noise and auditory stimulation review', url: 'https://pubmed.ncbi.nlm.nih.gov/34964434/' }, { label: 'Pink noise and NREM sleep review', url: 'https://pubmed.ncbi.nlm.nih.gov/32765139/' }] },
-  { key: 'binaural-beats', title: { ja: 'バイノーラルビート', en: 'Binaural beats' }, summary: { ja: '左右の耳に少し違う周波数を出して、差分のうなりを知覚させます。研究はありますが、結果は一貫していません。', en: 'Two nearby tones are sent separately to each ear so the listener perceives a beat. Studies exist, but results are inconsistent.' }, strength: 'Mixed', caveat: { ja: '睡眠改善、不安軽減、ADHD 改善などを断定しません。可能性はあっても、結論は控えめに扱います。', en: 'No claims are made about sleep, anxiety, ADHD, or similar outcomes. Possible effects are described cautiously.' }, links: [{ label: 'Systematic review on binaural beats and brain oscillatory activity', url: 'https://pubmed.ncbi.nlm.nih.gov/37205669/' }, { label: 'Systematic review and meta-review on binaural beats', url: 'https://pubmed.ncbi.nlm.nih.gov/38458383/' }] },
-  { key: 'auditory-stimulation', title: { ja: '静かな音の使い方', en: 'Using quiet background sound' }, summary: { ja: 'ノイズは環境音を目立ちにくくする目的で使われることがありますが、効果は文脈と個人差に強く左右されます。', en: 'Noise can mask environmental sounds, but any benefit depends heavily on context and the person.' }, strength: 'Moderate', caveat: { ja: '「役立つことがある」程度の表現にとどめ、医療的な効果は言いません。', en: 'Use only cautious language such as “may help” and avoid medical claims.' }, links: [{ label: 'Systematic review: auditory stimulation and sleep', url: 'https://pubmed.ncbi.nlm.nih.gov/34964434/' }, { label: 'White noise and sleep-quality study example', url: 'https://pubmed.ncbi.nlm.nih.gov/34931413/' }] }
+  { 
+    key: 'noise-colors', 
+    title: { ja: 'ノイズ色の違い', en: 'Differences between noise colors', 'zh-Hans': '噪音颜色的区别', es: 'Diferencias entre colores de ruido', ko: '노이즈 색상의 차이' }, 
+    summary: { 
+      ja: '白・ピンク・ブラウン・ブルー・ヴァイオレットは、周波数ごとの強さが違う音です。効果を断定せず、まずは音の性質として扱います。', 
+      en: 'White, pink, brown, blue, and violet noise differ by frequency weighting. The app treats them as sound-shape tools.',
+      'zh-Hans': '不同颜色的噪音具有不同的频率权重。本应用将其视为声音塑造工具。',
+      es: 'Los ruidos difieren según la ponderación de frecuencia. Se tratan como herramientas de sonido.',
+      ko: '각 노이즈는 주파수 가중치에 따라 다릅니다. 이 앱은 이를 의학적 치료가 아닌 소리 도구로 취급합니다.',
+      fr: 'Les bruits diffèrent selon la pondération de fréquence. Traités comme des outils sonores.',
+      de: 'Rauschen unterscheidet sich durch Frequenzgewichtung.'
+    }, 
+    strength: 'Strong', 
+    caveat: { 
+      ja: '音響的な違いは明確ですが、使い方による体感は個人差があります。', 
+      en: 'The spectral differences are clear, but user experience varies a lot.',
+      'zh-Hans': '频谱差异明显，但用户体验因人而异。',
+      es: 'Las diferencias espectrales son claras, pero la experiencia del usuario varía.',
+      ko: '음향적 차이는 명확하지만, 체감은 개인마다 다릅니다.',
+      fr: 'Les différences spectrales sont claires, mais l expérience varie.',
+      de: 'Spektrale Unterschiede sind klar, aber die Erfahrung variiert.'
+    }, 
+    links: [{ label: 'Pink noise and auditory stimulation review', url: 'https://pubmed.ncbi.nlm.nih.gov/34964434/' }, { label: 'Pink noise and NREM sleep review', url: 'https://pubmed.ncbi.nlm.nih.gov/32765139/' }] 
+  },
+  { 
+    key: 'binaural-beats', 
+    title: { ja: 'バイノーラルビート', en: 'Binaural beats', 'zh-Hans': '双耳节拍', es: 'Pulsos binaurales', ko: '바이노럴 비트' }, 
+    summary: { 
+      ja: '左右の耳に少し違う周波数を出して、差分のうなりを知覚させます。研究はありますが、結果は一貫していません。', 
+      en: 'Two nearby tones are sent separately to each ear so the listener perceives a beat. Results are inconsistent.',
+      'zh-Hans': '向每只耳朵发送略有不同的频率，使用户感知到节拍。研究结果并不一致。',
+      es: 'Se envían tonos cercanos a cada oído para percibir un pulso. Los resultados son inconsistentes.',
+      ko: '양쪽 귀에 서로 다른 주파수를 보내 맥박을 느끼게 합니다. 연구 결과는 일관되지 않습니다.',
+      fr: 'Deux tons proches sont envoyés à chaque oreille pour percevoir un battement.',
+      de: 'Zwei Töne werden separat an jedes Ohr gesendet.'
+    }, 
+    strength: 'Mixed', 
+    caveat: { 
+      ja: '睡眠改善、不安軽減、ADHD 改善などを断定しません。可能性はあっても、結論は控えめに扱います。', 
+      en: 'No claims are made about sleep, anxiety, or ADHD. Effects are described cautiously.',
+      'zh-Hans': '不确定睡眠改善、减轻焦虑等效果。结论保持谨慎。',
+      es: 'No se hacen afirmaciones sobre el sueño o la ansiedad. Los efectos se describen con cautela.',
+      ko: '수면 개선이나 불안 완화 등을 단정하지 않습니다. 효과는 신중하게 설명됩니다.',
+      fr: 'Aucune affirmation sur le sommeil ou l anxiété. Les effets sont décrits avec prudence.',
+      de: 'Keine Behauptungen über Schlaf oder Angst.'
+    }, 
+    links: [{ label: 'Systematic review on binaural beats and brain oscillatory activity', url: 'https://pubmed.ncbi.nlm.nih.gov/37205669/' }, { label: 'Systematic review and meta-review on binaural beats', url: 'https://pubmed.ncbi.nlm.nih.gov/38458383/' }] 
+  }
 ];
 
 const platformNotes: LocalizedList = {
   ja: ['iOS はブラウザの制限が強く、バックグラウンド再生は OS の状態に左右されます。', 'Android は PWA と Media Session が比較的素直に動きますが、省電力設定で止まることがあります。', 'Desktop は最も安定しますが、タブを閉じると当然停止します。'],
-  en: ['iOS has stricter browser limits, so background playback still depends on OS behavior.', 'Android usually handles PWA and Media Session well, but battery optimization can still interrupt playback.', 'Desktop is the most stable, though closing the tab will stop playback as expected.']
+  en: ['iOS has stricter browser limits, so background playback depends on OS behavior.', 'Android usually handles PWA and Media Session well, but battery optimization can interrupt.', 'Desktop is the most stable, though closing the tab will stop playback.'],
+  'zh-Hans': ['iOS 浏览器限制较多，后台播放取决于系统状态。', 'Android 的 PWA 和媒体会话运行较顺畅，但省电设置可能会中断。', '桌面版最稳定，但关闭标签页会停止。'],
+  es: ['iOS tiene límites más estrictos, la reproducción depende del comportamiento del OS.', 'Android suele manejar bien PWA, pero la optimización de batería puede interrumpir.', 'Escritorio es lo más estable, aunque cerrar la pestaña detendrá la reproducción.'],
+  ko: ['iOS는 브라우저 제한이 엄격하여 백그라운드 재생은 OS 상태에 따라 달라집니다.', 'Android는 PWA와 Media Session이 잘 작동하지만, 절전 설정으로 인해 중단될 수 있습니다.', '데스크톱은 가장 안정적이지만, 탭을 닫으면 중단됩니다.'],
+  fr: ['iOS a des limites plus strictes, la lecture dépend du comportement de l OS.', 'Android gère généralement bien les PWA, mais l optimisation peut interrompre.', 'Le bureau est le plus stable, mais fermer l onglet arrêtera la lecture.'],
+  de: ['iOS hat strengere Grenzen, die Wiedergabe hängt vom OS ab.', 'Android funktioniert meist gut, aber die Akkuoptimierung kann unterbrechen.', 'Desktop ist am stabilsten, aber das Schließen des Tabs stoppt alles.']
 };
 
 export function getPlatformNotes(locale: Locale): string[] {
