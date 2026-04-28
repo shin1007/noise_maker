@@ -51,6 +51,38 @@ function clampTimerValue(value: number): number {
   return timerOptions.includes(value as (typeof timerOptions)[number]) ? value : timerOptions[0];
 }
 
+function generateMediaArtwork(color: string, symbol?: string): string {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return '/icon.svg';
+
+  // Background
+  ctx.fillStyle = '#080c14';
+  ctx.fillRect(0, 0, size, size);
+
+  // Decorative Circle
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, size * 0.4, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.15;
+  ctx.fill();
+
+  // Symbol
+  if (symbol) {
+    ctx.globalAlpha = 1.0;
+    ctx.fillStyle = color;
+    ctx.font = `800 ${size * 0.5}px "Avenir Next", "SF Pro Display", "Hiragino Sans", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(symbol, size / 2, size / 2);
+  }
+
+  return canvas.toDataURL('image/png');
+}
+
 export function App() {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale());
   const strings = copy[locale] ?? copy.en;
@@ -249,16 +281,32 @@ export function App() {
     );
   }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
 
+  const activeBinauralBand =
+    binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
+    binauralBands[1];
+
   useEffect(() => {
     if (!('mediaSession' in navigator)) {
       return;
     }
 
+    const noiseLabel = getNoiseLabel(locale, noiseType);
+    const bandReading = binauralEnabled ? resolveLocalizedText(activeBinauralBand.reading, locale) : '';
+    const displayTitle = binauralEnabled ? `${noiseLabel} + ${bandReading}` : noiseLabel;
+
+    const colors: Record<NoiseType, string> = {
+      white: '#ffffff',
+      pink: '#ff94c1',
+      brown: '#a97554',
+      blue: '#5da5ff',
+      violet: '#c683ff'
+    };
+
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: strings.appName,
-      artist: strings.appTagline,
-      album: getNoiseLabel(locale, noiseType),
-      artwork: [{ src: '/icon.svg', sizes: '512x512', type: 'image/svg+xml' }]
+      title: displayTitle,
+      artist: strings.appName,
+      album: strings.appTagline,
+      artwork: [{ src: generateMediaArtwork(colors[noiseType], binauralEnabled ? activeBinauralBand.symbol : ''), sizes: '512x512', type: 'image/png' }]
     });
 
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
@@ -273,7 +321,7 @@ export function App() {
     navigator.mediaSession.setActionHandler('stop', () => {
       void stopPlayback();
     });
-  }, [isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
+  }, [activeBinauralBand.reading, activeBinauralBand.symbol, binauralEnabled, isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
 
   async function triggerInstall() {
     if (!installPrompt) {
@@ -302,9 +350,6 @@ export function App() {
     beta: 18,
     gamma: 36
   };
-  const activeBinauralBand =
-    binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
-    binauralBands[1];
 
   useEffect(() => {
     const colors: Record<NoiseType, string> = {
@@ -324,14 +369,6 @@ export function App() {
     document.body.style.setProperty('--accent-color', colors[noiseType]);
     document.body.style.setProperty('--accent-rgb', rgbs[noiseType]);
   }, [noiseType]);
-
-  const binauralSymbols: Record<string, string> = {
-    delta: 'Δ',
-    theta: 'θ',
-    alpha: 'α',
-    beta: 'β',
-    gamma: 'γ'
-  };
 
   return (
     <main className="app-shell">
@@ -355,7 +392,7 @@ export function App() {
               <div className="title-inline">
                 <div className="title-with-symbol">
                   <h1 className="hero-title">{strings.appName}</h1>
-                  {binauralEnabled && <span className="wave-symbol" aria-hidden="true">{binauralSymbols[activeBinauralBand.key]}</span>}
+                  {binauralEnabled && <span className="wave-symbol" aria-hidden="true">{activeBinauralBand.symbol}</span>}
                 </div>
                 <button
                   className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
@@ -591,8 +628,13 @@ export function App() {
                       onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key] ?? differenceFrequency)}
                       aria-pressed={band.key === activeBinauralBand.key}
                     >
-                      <strong>{resolveLocalizedText(band.label, locale)} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
-                      <span>{resolveLocalizedText(band.effect, locale)}</span>
+                      <div className="band-button-content">
+                        <span className="band-symbol-small">{band.symbol}</span>
+                        <div className="band-text">
+                          <strong>{resolveLocalizedText(band.label, locale)} ({resolveLocalizedText(band.reading, locale)})</strong>
+                          <span>{resolveLocalizedText(band.effect, locale)}</span>
+                        </div>
+                      </div>
                     </button>
                   </li>
                 ))}

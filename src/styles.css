@@ -69,7 +69,7 @@ body { overflow-x: hidden; }
 .title-with-symbol {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   min-height: 3.5rem; /* Ensure consistent height for full-height effect */
 }
 
@@ -212,10 +212,30 @@ input[type="range"]::-webkit-slider-thumb {
   background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex; flex-direction: column; gap: 4px; color: var(--text-main); transition: all 0.3s ease;
 }
+.band-button-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.band-symbol-small {
+  font-size: 1.8rem;
+  font-weight: 800;
+  width: 1.2em;
+  text-align: center;
+  color: var(--accent-color);
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+.band-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .band-button strong { font-size: 1rem; }
 .band-button span { color: var(--text-dim); font-size: 0.85rem; line-height: 1.4; }
 .band-button.active { background: rgba(var(--accent-rgb), 0.15); border-color: var(--accent-color); }
 .band-button.active strong { color: var(--accent-color); }
+.band-button.active .band-symbol-small { opacity: 1; }
 
 /* Utilities */
 .help-button { width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); font-weight: 700; }

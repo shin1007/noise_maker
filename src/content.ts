@@ -696,14 +696,18 @@ export const binauralBands: Array<{
   key: string;
   min: number;
   max: number;
+  symbol: string;
   label: LocalizedText;
+  reading: LocalizedText;
   effect: LocalizedText;
 }> = [
   {
     key: 'delta',
     min: 0.5,
     max: 4,
-    label: { ja: 'デルタ (0.5-4 Hz)', en: 'Delta (0.5-4 Hz)', 'zh-Hans': 'Delta (0.5-4 Hz)', ko: '델타 (0.5-4 Hz)' },
+    symbol: 'Δ',
+    label: { ja: 'デルタ', en: 'Delta', 'zh-Hans': 'Delta', ko: '델타' },
+    reading: { ja: 'デルタ波', en: 'Delta wave', 'zh-Hans': 'Delta 波', ko: '델타파' },
     effect: {
       ja: '深い休息モードに寄せたいときの目安です。夜の静かな時間に合わせやすい帯域です。',
       en: 'A common target when aiming for a deeper rest mood, especially in quiet night sessions.',
@@ -718,7 +722,9 @@ export const binauralBands: Array<{
     key: 'theta',
     min: 4,
     max: 8,
-    label: { ja: 'シータ (4-8 Hz)', en: 'Theta (4-8 Hz)', 'zh-Hans': 'Theta (4-8 Hz)', ko: '시타 (4-8 Hz)' },
+    symbol: 'θ',
+    label: { ja: 'シータ', en: 'Theta', 'zh-Hans': 'Theta', ko: '시타' },
+    reading: { ja: 'シータ波', en: 'Theta wave', 'zh-Hans': 'Theta 波', ko: '시타파' },
     effect: {
       ja: '落ち着きや内省の感覚と結びつけられることがあります。体感は人によって大きく変わります。',
       en: 'Sometimes linked to calm or inward attention, with large person-to-person variation.',
@@ -733,7 +739,9 @@ export const binauralBands: Array<{
     key: 'alpha',
     min: 8,
     max: 13,
-    label: { ja: 'アルファ (8-13 Hz)', en: 'Alpha (8-13 Hz)', 'zh-Hans': 'Alpha (8-13 Hz)', ko: '알파 (8-13 Hz)' },
+    symbol: 'α',
+    label: { ja: 'アルファ', en: 'Alpha', 'zh-Hans': 'Alpha', ko: '알파' },
+    reading: { ja: 'アルファ波', en: 'Alpha wave', 'zh-Hans': 'Alpha 波', ko: '알파파' },
     effect: {
       ja: 'リラックスしつつ作業したいときに選ばれやすい、バランス型の帯域です。',
       en: 'A balanced range often chosen for relaxed but awake sessions.',
@@ -748,7 +756,9 @@ export const binauralBands: Array<{
     key: 'beta',
     min: 13,
     max: 30,
-    label: { ja: 'ベータ (13-30 Hz)', en: 'Beta (13-30 Hz)', 'zh-Hans': 'Beta (13-30 Hz)', ko: '베타 (13-30 Hz)' },
+    symbol: 'β',
+    label: { ja: 'ベータ', en: 'Beta', 'zh-Hans': 'Beta', ko: '베타' },
+    reading: { ja: 'ベータ波', en: 'Beta wave', 'zh-Hans': 'Beta 波', ko: '베타파' },
     effect: {
       ja: '注意や課題集中に関連づけられる帯域です。人によっては刺激が強すぎる場合があります。',
       en: 'Often associated with attention and task focus, though it may feel overstimulating.',
@@ -763,7 +773,9 @@ export const binauralBands: Array<{
     key: 'gamma',
     min: 30,
     max: 40,
-    label: { ja: 'ガンマ (30-40 Hz)', en: 'Gamma (30-40 Hz)', 'zh-Hans': 'Gamma (30-40 Hz)', ko: '감마 (30-40 Hz)' },
+    symbol: 'γ',
+    label: { ja: 'ガンマ', en: 'Gamma', 'zh-Hans': 'Gamma', ko: '감마' },
+    reading: { ja: 'ガンマ波', en: 'Gamma wave', 'zh-Hans': 'Gamma 波', ko: 'ガンマ파' },
     effect: {
       ja: '切り替えや短時間の高集中に向けた高めの帯域です。刺激が強く感じる場合があります。',
       en: 'A higher band often used for short, high-focus pushes; it can feel intense.',
