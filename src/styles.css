@@ -139,31 +139,23 @@ body { overflow-x: hidden; }
   50% { transform: scale(1.03); box-shadow: 0 0 50px rgba(var(--accent-rgb), 0.6); }
 }
 
-/* Status Action Row */
-.status-action-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 0;
-  padding: 8px 0;
-  border-top: 1px solid var(--border-glow);
-  border-bottom: 1px solid var(--border-glow);
-}
-.status-group { display: flex; gap: 8px; flex-wrap: wrap; }
+/* Install Action Inline */
+.install-action-simple { display: flex; align-items: center; gap: 4px; }
+.text-button { background: none; border: none; color: var(--accent-color); font-size: 0.8rem; font-weight: 700; padding: 4px 0; text-decoration: underline; text-underline-offset: 4px; opacity: 0.8; transition: color 0.5s ease; }
+.help-button-small { width: 18px; height: 18px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: none; color: var(--text-dim); font-size: 0.65rem; display: flex; align-items: center; justify-content: center; }
+
+/* Status Pill */
 .status-pill {
-  padding: 4px 10px;
+  padding: 2px 8px;
   background: rgba(var(--accent-rgb), 0.1);
   border: 1px solid rgba(var(--accent-rgb), 0.2);
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--accent-color);
   transition: all 0.5s ease;
+  font-family: monospace;
 }
-
-.install-action-simple { display: flex; align-items: center; gap: 4px; }
-.text-button { background: none; border: none; color: var(--accent-color); font-size: 0.85rem; font-weight: 700; padding: 4px 8px; text-decoration: underline; text-underline-offset: 4px; opacity: 0.8; transition: color 0.5s ease; }
-.help-button-small { width: 20px; height: 20px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: none; color: var(--text-dim); font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
 
 /* Noise Grid */
 .noise-head { 
@@ -189,7 +181,8 @@ body { overflow-x: hidden; }
 .hero-quick-controls { margin-top: 20px; }
 .control-stack { display: grid; gap: 20px; }
 .control-group label { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-.label-row { display: flex; justify-content: space-between; align-items: baseline; }
+.label-row { display: flex; justify-content: space-between; align-items: center; }
+.timer-values { display: flex; align-items: center; gap: 8px; }
 .label-text { font-size: 0.85rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 .value-display { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: var(--accent-color); transition: color 0.5s ease; }
 

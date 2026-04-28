@@ -375,7 +375,20 @@ export function App() {
       <section className="hero card">
         <div className="hero-header">
           <div className="hero-meta-row compact">
-            <p className="eyebrow">PWA · Global</p>
+            <div className="install-action-simple">
+              <button className="text-button" type="button" onClick={() => void triggerInstall()}>
+                {strings.install}
+              </button>
+              <button
+                type="button"
+                className="help-button-small"
+                onClick={() => setInstallGuideOpen((current) => !current)}
+                aria-expanded={installGuideOpen}
+                aria-label={strings.installInfo}
+              >
+                ?
+              </button>
+            </div>
             <div className="locale-select-wrap">
               <select className="locale-select" value={locale} onChange={(event) => handleLocaleChange(event.target.value as Locale)} aria-label="Language">
                 {supportedLocales.map((supportedLocale) => (
@@ -405,31 +418,6 @@ export function App() {
                 </button>
               </div>
               <p className="lead">{strings.appTagline}</p>
-            </div>
-          </div>
-
-          <div className="status-action-row">
-            <div className="status-group">
-              {remainingSeconds !== null && (
-                <span className="status-pill timer-pill">
-                  {formatRemaining(locale, remainingSeconds, strings)}
-                </span>
-              )}
-            </div>
-            
-            <div className="install-action-simple">
-              <button className="text-button" type="button" onClick={() => void triggerInstall()}>
-                {strings.install}
-              </button>
-              <button
-                type="button"
-                className="help-button-small"
-                onClick={() => setInstallGuideOpen((current) => !current)}
-                aria-expanded={installGuideOpen}
-                aria-label={strings.installInfo}
-              >
-                ?
-              </button>
             </div>
           </div>
 
@@ -493,7 +481,14 @@ export function App() {
               <label>
                 <div className="label-row">
                   <span className="label-text">{strings.timerLabel}</span>
-                  <span className="value-display">{timerMinutes}{strings.minute}</span>
+                  <div className="timer-values">
+                    {remainingSeconds !== null && (
+                      <span className="status-pill timer-pill">
+                        {formatRemaining(locale, remainingSeconds, strings)}
+                      </span>
+                    )}
+                    <span className="value-display">{timerMinutes}{strings.minute}</span>
+                  </div>
                 </div>
                 <input
                   type="range"
