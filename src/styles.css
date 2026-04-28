@@ -108,7 +108,17 @@ body { overflow-x: hidden; }
 
 /* Header & Controls */
 .hero-meta-row.compact { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.locale-select { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 6px 12px; font-size: 0.85rem; }
+.locale-select { 
+  background: #080c14; 
+  color: white; 
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  border-radius: 12px; 
+  padding: 6px 12px; 
+  font-size: 0.85rem; 
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
 
 /* Play Button */
 .play-icon-button {
@@ -156,7 +166,14 @@ body { overflow-x: hidden; }
 .help-button-small { width: 20px; height: 20px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: none; color: var(--text-dim); font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
 
 /* Noise Grid */
-.noise-head { margin-top: 10px; margin-bottom: 12px; font-size: 0.9rem; }
+.noise-head { 
+  margin-top: 24px; 
+  margin-bottom: 12px; 
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .noise-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 12px 0; }
 .noise-chip {
   text-align: left; padding: 16px; border-radius: 22px;

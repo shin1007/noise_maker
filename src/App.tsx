@@ -477,6 +477,37 @@ export function App() {
           ) : null}
         </div>
 
+        <div className="hero-quick-controls">
+          <div className="control-stack">
+            <div className="control-group">
+              <label>
+                <div className="label-row">
+                  <span className="label-text">{strings.volumeLabel}</span>
+                  <span className="value-display">{volume}%</span>
+                </div>
+                <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
+              </label>
+            </div>
+
+            <div className="control-group">
+              <label>
+                <div className="label-row">
+                  <span className="label-text">{strings.timerLabel}</span>
+                  <span className="value-display">{timerMinutes}{strings.minute}</span>
+                </div>
+                <input
+                  type="range"
+                  min="5"
+                  max="60"
+                  step="5"
+                  value={timerMinutes}
+                  onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
         <div className="noise-head">
           <strong>{strings.noiseType}</strong>
           <button
@@ -519,37 +550,6 @@ export function App() {
               <span>{resolveLocalizedText(noiseTypeOption.short, locale)}</span>
             </button>
           ))}
-        </div>
-
-        <div className="hero-quick-controls">
-          <div className="control-stack">
-            <div className="control-group">
-              <label>
-                <div className="label-row">
-                  <span className="label-text">{strings.volumeLabel}</span>
-                  <span className="value-display">{volume}%</span>
-                </div>
-                <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
-              </label>
-            </div>
-
-            <div className="control-group">
-              <label>
-                <div className="label-row">
-                  <span className="label-text">{strings.timerLabel}</span>
-                  <span className="value-display">{timerMinutes}{strings.minute}</span>
-                </div>
-                <input
-                  type="range"
-                  min="5"
-                  max="60"
-                  step="5"
-                  value={timerMinutes}
-                  onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
-                />
-              </label>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -201,8 +201,10 @@ export class NoiseEngine {
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
     
-    // INSTEAD of connecting to this.context.destination, 
-    // we connect to a MediaStreamDestination.
+    // Connect to physical destination for stable playback on Desktop/PC
+    this.merger.connect(this.context.destination);
+
+    // ALSO connect to a MediaStreamDestination for iOS background support.
     const destination = this.context.createMediaStreamDestination();
     this.merger.connect(destination);
 
