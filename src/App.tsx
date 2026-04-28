@@ -314,6 +314,14 @@ export function App() {
     document.body.style.setProperty('--accent-rgb', rgbs[noiseType]);
   }, [noiseType]);
 
+  const binauralSymbols: Record<string, string> = {
+    delta: 'Δ',
+    theta: 'θ',
+    alpha: 'α',
+    beta: 'β',
+    gamma: 'γ'
+  };
+
   return (
     <main className="app-shell">
       <section className="hero card">
@@ -334,7 +342,10 @@ export function App() {
           <div className="title-section compact">
             <div className="title-group">
               <div className="title-inline">
-                <h1 className="hero-title">{strings.appName}</h1>
+                <div className="title-with-symbol">
+                  <h1 className="hero-title">{strings.appName}</h1>
+                  {binauralEnabled && <span className="wave-symbol" aria-hidden="true">{binauralSymbols[activeBinauralBand.key]}</span>}
+                </div>
                 <button
                   className={`play-icon-button ${isPlaying ? 'is-playing' : ''}`}
                   type="button"
@@ -354,12 +365,6 @@ export function App() {
               {remainingSeconds !== null && (
                 <span className="status-pill timer-pill">
                   {formatRemaining(locale, remainingSeconds, strings)}
-                </span>
-              )}
-              {isPlaying && (
-                <span className="status-pill config-pill">
-                  {getNoiseLabel(locale, noiseType)}
-                  {binauralEnabled && ` + ${resolveLocalizedText(activeBinauralBand.label, locale).split(' ')[0]}`}
                 </span>
               )}
             </div>

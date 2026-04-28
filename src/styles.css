@@ -65,6 +65,33 @@ body { overflow-x: hidden; }
   transition: color 0.5s ease;
 }
 
+.title-with-symbol {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.wave-symbol {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--accent-color);
+  opacity: 0.9;
+  font-family: serif; /* More classic look for Greek symbols */
+  min-width: 1.2em;
+  text-align: center;
+  transition: color 0.5s ease;
+}
+
+.play-icon-button.is-playing + .title-group .wave-symbol,
+.is-playing .wave-symbol {
+  animation: symbol-pulse 4s infinite ease-in-out;
+}
+
+@keyframes symbol-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 15px var(--accent-color); }
+}
+
 .hero-header { display: flex; flex-direction: column; gap: 8px; }
 .title-section.compact { display: flex; flex-direction: column; gap: 8px; }
 .title-group { display: flex; flex-direction: column; gap: 4px; }
