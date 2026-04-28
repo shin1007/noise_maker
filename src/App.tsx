@@ -443,9 +443,9 @@ export function App() {
               onClick={() => updateSetting('noiseType', noiseTypeOption.key)}
               role="tab"
               aria-selected={noiseType === noiseTypeOption.key}
-              title={resolveLocalizedText(noiseTypeOption.short, locale)}
             >
               <strong>{resolveLocalizedText(noiseTypeOption.label, locale)}</strong>
+              <span>{resolveLocalizedText(noiseTypeOption.short, locale)}</span>
             </button>
           ))}
         </div>
@@ -460,31 +460,31 @@ export function App() {
         )}
 
         <div className="hero-quick-controls">
-          <div className="control-row">
+          <div className="control-stack">
             <div className="control-group">
               <label>
-                <span className="label-text">{strings.volumeLabel}</span>
-                <div className="input-wrap">
-                  <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
+                <div className="label-row">
+                  <span className="label-text">{strings.volumeLabel}</span>
                   <span className="value-display">{volume}%</span>
                 </div>
+                <input type="range" min="0" max="100" value={volume} onChange={(event) => updateSetting('volume', Number(event.target.value))} />
               </label>
             </div>
 
             <div className="control-group">
               <label>
-                <span className="label-text">{strings.timerLabel}</span>
-                <div className="input-wrap">
-                  <input
-                    type="range"
-                    min="5"
-                    max="60"
-                    step="5"
-                    value={timerMinutes}
-                    onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
-                  />
+                <div className="label-row">
+                  <span className="label-text">{strings.timerLabel}</span>
                   <span className="value-display">{timerMinutes}{strings.minute}</span>
                 </div>
+                <input
+                  type="range"
+                  min="5"
+                  max="60"
+                  step="5"
+                  value={timerMinutes}
+                  onChange={(event) => updateSetting('timerMinutes', clampTimerValue(Number(event.target.value)))}
+                />
               </label>
             </div>
           </div>
@@ -542,13 +542,15 @@ export function App() {
             ) : null}
 
             <div className="frequency-grid">
-              <label>
-                <span className="label-text">{strings.baseFreq}</span>
-                <div className="input-wrap">
+              <div className="control-group">
+                <label>
+                  <div className="label-row">
+                    <span className="label-text">{strings.baseFreq}</span>
+                    <span className="value-display">{Math.round(baseFrequency)}Hz</span>
+                  </div>
                   <input type="range" min="40" max="1000" step="1" value={baseFrequency} onChange={(event) => updateSetting('baseFrequency', Number(event.target.value) || defaultState.baseFrequency)} />
-                  <span className="value-display">{Math.round(baseFrequency)}Hz</span>
-                </div>
-              </label>
+                </label>
+              </div>
             </div>
 
             <div className="binaural-guide" aria-live="polite">
@@ -560,17 +562,16 @@ export function App() {
                   <li key={band.key}>
                     <button
                       type="button"
-                      className={`band-chip ${band.key === activeBinauralBand.key ? 'active' : ''}`}
+                      className={`band-button ${band.key === activeBinauralBand.key ? 'active' : ''}`}
                       onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key] ?? differenceFrequency)}
                       aria-pressed={band.key === activeBinauralBand.key}
                     >
-                      <span className="band-name">{resolveLocalizedText(band.label, locale).split(' ')[0]}</span>
-                      <span className="band-hz">{binauralTargetByKey[band.key] ?? '-'}Hz</span>
+                      <strong>{resolveLocalizedText(band.label, locale)} ({binauralTargetByKey[band.key] ?? '-'}Hz)</strong>
+                      <span>{resolveLocalizedText(band.effect, locale)}</span>
                     </button>
                   </li>
                 ))}
               </ul>
-              <p className="band-effect-text">{resolveLocalizedText(activeBinauralBand.effect, locale)}</p>
             </div>
           </div>
         </details>
