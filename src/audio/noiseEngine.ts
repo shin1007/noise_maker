@@ -112,6 +112,11 @@ export class NoiseEngine {
         latencyHint: 'playback'
       });
       
+      // On iOS, we must resume the context immediately in the user gesture
+      if (this.context.state === 'suspended') {
+        void this.context.resume();
+      }
+
       await this.context.audioWorklet.addModule(getWorkletUrl());
       this.buildGraph();
     }
@@ -122,7 +127,8 @@ export class NoiseEngine {
 
     if (this.audioElement) {
       // Critical for iOS: play must be called on a real audio element in a user gesture
-      await this.audioElement.play().catch((err) => {
+      // We play it as early as possible.
+      void this.audioElement.play().catch((err) => {
         console.error('Audio element playback failed:', err);
       });
     }
@@ -135,6 +141,11 @@ export class NoiseEngine {
 
     if (!this.context || !this.worklet || !this.leftMix || !this.rightMix || !this.leftToneGain || !this.rightToneGain) {
       return;
+    }
+
+    // Ensure context is running when updating (helps with iOS resuming)
+    if (this.context.state === 'suspended') {
+      void this.context.resume();
     }
 
     this.worklet.port.postMessage({ type: settings.noiseType });
