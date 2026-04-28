@@ -16,11 +16,11 @@ interface UserSettings {
 }
 
 const defaultState: UserSettings = {
-  noiseType: 'pink' as NoiseType,
+  noiseType: 'brown' as NoiseType,
   volume: 55,
-  binauralEnabled: false,
+  binauralEnabled: true,
   baseFrequency: 220,
-  differenceFrequency: 6,
+  differenceFrequency: 10,
   timerMinutes: 30
 };
 

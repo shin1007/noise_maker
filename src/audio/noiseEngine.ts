@@ -201,21 +201,24 @@ export class NoiseEngine {
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
     
-    // Connect to physical destination for stable playback on Desktop/PC
-    this.merger.connect(this.context.destination);
+    // Check if we are on iOS/Safari which requires the <audio> element hack for background playback
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    // ALSO connect to a MediaStreamDestination for iOS background support.
-    const destination = this.context.createMediaStreamDestination();
-    this.merger.connect(destination);
+    if (isIOS) {
+      // iOS specific: Use MediaStreamDestination + <audio> element to keep playback alive in background
+      const destination = this.context.createMediaStreamDestination();
+      this.merger.connect(destination);
 
-    // And then we use a standard <audio> element to play that stream.
-    // iOS treats this as a first-class media playback session.
-    this.audioElement = new Audio();
-    this.audioElement.srcObject = destination.stream;
-    this.audioElement.muted = false;
-    this.audioElement.setAttribute('playsinline', '');
-    this.audioElement.style.display = 'none';
-    document.body.appendChild(this.audioElement);
+      this.audioElement = new Audio();
+      this.audioElement.srcObject = destination.stream;
+      this.audioElement.muted = false;
+      this.audioElement.setAttribute('playsinline', '');
+      this.audioElement.style.display = 'none';
+      document.body.appendChild(this.audioElement);
+    } else {
+      // PC/Android: Connect directly to destination for maximum stability and lowest latency
+      this.merger.connect(this.context.destination);
+    }
   }
 
   private ensureTones(settings: AudioSettings): void {
