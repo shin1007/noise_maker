@@ -303,14 +303,22 @@ export function App() {
       blue: '#5da5ff',
       violet: '#c683ff'
     };
+    const rgbs: Record<NoiseType, string> = {
+      white: '255, 255, 255',
+      pink: '255, 148, 193',
+      brown: '169, 117, 84',
+      blue: '93, 165, 255',
+      violet: '198, 131, 255'
+    };
     document.body.style.setProperty('--accent-color', colors[noiseType]);
+    document.body.style.setProperty('--accent-rgb', rgbs[noiseType]);
   }, [noiseType]);
 
   return (
     <main className="app-shell">
       <section className="hero card">
         <div className="hero-header">
-          <div className="hero-meta-row">
+          <div className="hero-meta-row compact">
             <p className="eyebrow">PWA · Global</p>
             <div className="locale-select-wrap">
               <select className="locale-select" value={locale} onChange={(event) => handleLocaleChange(event.target.value as Locale)} aria-label="Language">
@@ -323,7 +331,7 @@ export function App() {
             </div>
           </div>
 
-          <div className="title-section">
+          <div className="title-section compact">
             <div className="title-group">
               <div className="title-inline">
                 <h1 className="hero-title">{strings.appName}</h1>
@@ -339,14 +347,30 @@ export function App() {
               </div>
               <p className="lead">{strings.appTagline}</p>
             </div>
+          </div>
 
-            <div className="install-action">
-              <button className="secondary-button" type="button" onClick={() => void triggerInstall()}>
+          <div className="status-action-row">
+            <div className="status-group">
+              {remainingSeconds !== null && (
+                <span className="status-pill timer-pill">
+                  {formatRemaining(locale, remainingSeconds, strings)}
+                </span>
+              )}
+              {isPlaying && (
+                <span className="status-pill config-pill">
+                  {getNoiseLabel(locale, noiseType)}
+                  {binauralEnabled && ` + ${resolveLocalizedText(activeBinauralBand.label, locale).split(' ')[0]}`}
+                </span>
+              )}
+            </div>
+            
+            <div className="install-action-simple">
+              <button className="text-button" type="button" onClick={() => void triggerInstall()}>
                 {strings.install}
               </button>
               <button
                 type="button"
-                className="help-button"
+                className="help-button-small"
                 onClick={() => setInstallGuideOpen((current) => !current)}
                 aria-expanded={installGuideOpen}
                 aria-label={strings.installInfo}
@@ -400,12 +424,6 @@ export function App() {
           ) : null}
         </div>
 
-        {remainingSeconds !== null ? (
-          <div className="status-row">
-            <span className="status-pill subtle">{formatRemaining(locale, remainingSeconds, strings)}</span>
-          </div>
-        ) : null}
-
         <div className="noise-head">
           <strong>{strings.noiseType}</strong>
           <button
@@ -449,15 +467,6 @@ export function App() {
             </button>
           ))}
         </div>
-
-        {isPlaying && (
-          <div className="playback-visualizer" aria-hidden="true">
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-          </div>
-        )}
 
         <div className="hero-quick-controls">
           <div className="control-stack">
