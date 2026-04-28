@@ -69,7 +69,7 @@ body { overflow-x: hidden; }
 .title-with-symbol {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   min-height: 3.5rem; /* Ensure consistent height for full-height effect */
 }
 
@@ -84,8 +84,8 @@ body { overflow-x: hidden; }
   transition: all 0.5s ease;
   line-height: 1;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
 }
 
 .play-icon-button.is-playing + .title-group .wave-symbol,
@@ -214,14 +214,15 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .band-button-content {
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 16px;
 }
 .band-symbol-small {
-  font-size: 1.8rem;
+  font-size: 3.8rem;
   font-weight: 800;
   width: 1.2em;
   text-align: center;
+  vertical-align: middle;
   color: var(--accent-color);
   opacity: 0.8;
   flex-shrink: 0;
