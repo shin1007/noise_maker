@@ -103,6 +103,23 @@ export function App() {
   }, [isPlaying, startPlayback, stopPlayback]);
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlaying && engineRef.current) {
+        engineRef.current.update({
+          noiseType,
+          volume,
+          binauralEnabled,
+          baseFrequency,
+          differenceFrequency
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [baseFrequency, binauralEnabled, differenceFrequency, isPlaying, noiseType, volume]);
+
+  useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = localeMetadata[locale].dir;
     document.title = strings.appName;
@@ -207,12 +224,12 @@ export function App() {
       title: strings.appName,
       artist: strings.appTagline,
       album: getNoiseLabel(locale, noiseType),
-      artwork: [
-        { src: '/icon.svg', sizes: '512x512', type: 'image/svg+xml' }
-      ]
+      artwork: [{ src: '/icon.svg', sizes: '512x512', type: 'image/svg+xml' }]
     });
 
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    
+    // Core MediaSession handlers
     navigator.mediaSession.setActionHandler('play', () => {
       void startPlayback();
     });

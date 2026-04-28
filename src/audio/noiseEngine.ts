@@ -88,8 +88,7 @@ export class NoiseEngine {
   private leftOscillator: OscillatorNode | null = null;
   private rightOscillator: OscillatorNode | null = null;
   private currentSettings: AudioSettings | null = null;
-  private silenceElement: HTMLAudioElement | null = null;
-  private worker: Worker | null = null;
+  private audioElement: HTMLAudioElement | null = null;
 
   async start(settings: AudioSettings): Promise<void> {
     this.currentSettings = settings;
@@ -104,24 +103,18 @@ export class NoiseEngine {
         latencyHint: 'playback'
       });
       
-      this.context.onstatechange = () => {
-        if (this.context?.state === 'suspended' && this.currentSettings) {
-          void this.context.resume();
-        }
-      };
-      
       await this.context.audioWorklet.addModule(URL.createObjectURL(new Blob([workletSource], { type: 'text/javascript' })));
       this.buildGraph();
-      this.setupWorker();
     }
 
     if (this.context.state === 'suspended') {
       await this.context.resume();
     }
 
-    if (this.silenceElement) {
-      this.silenceElement.play().catch((err) => {
-        console.warn('Anchor playback failed:', err);
+    if (this.audioElement) {
+      // Critical for iOS: play must be called on a real audio element in a user gesture
+      await this.audioElement.play().catch((err) => {
+        console.error('Audio element playback failed:', err);
       });
     }
 
@@ -141,10 +134,10 @@ export class NoiseEngine {
     const noiseLevel = settings.binauralEnabled ? level * 0.86 : level;
     const toneLevel = settings.binauralEnabled ? level * 0.12 : 0;
 
-    this.leftMix.gain.value = noiseLevel;
-    this.rightMix.gain.value = noiseLevel;
-    this.leftToneGain.gain.value = toneLevel;
-    this.rightToneGain.gain.value = toneLevel;
+    this.leftMix.gain.setTargetAtTime(noiseLevel, this.context.currentTime, 0.05);
+    this.rightMix.gain.setTargetAtTime(noiseLevel, this.context.currentTime, 0.05);
+    this.leftToneGain.gain.setTargetAtTime(toneLevel, this.context.currentTime, 0.05);
+    this.rightToneGain.gain.setTargetAtTime(toneLevel, this.context.currentTime, 0.05);
 
     if (settings.binauralEnabled) {
       this.ensureTones(settings);
@@ -154,18 +147,13 @@ export class NoiseEngine {
   }
 
   async stop(): Promise<void> {
-    if (this.worker) {
-      this.worker.terminate();
-      this.worker = null;
-    }
-
     this.stopTones();
 
-    if (this.silenceElement) {
-      this.silenceElement.pause();
-      this.silenceElement.src = '';
-      this.silenceElement.remove();
-      this.silenceElement = null;
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement.srcObject = null;
+      this.audioElement.remove();
+      this.audioElement = null;
     }
 
     if (this.worklet) {
@@ -203,56 +191,20 @@ export class NoiseEngine {
     this.rightMix.connect(this.merger, 0, 1);
     this.leftToneGain.connect(this.merger, 0, 0);
     this.rightToneGain.connect(this.merger, 0, 1);
-    this.merger.connect(this.context.destination);
+    
+    // INSTEAD of connecting to this.context.destination, 
+    // we connect to a MediaStreamDestination.
+    const destination = this.context.createMediaStreamDestination();
+    this.merger.connect(destination);
 
-    // Physical audio anchor (WAV file)
-    this.silenceElement = new Audio();
-    this.silenceElement.src = SILENCE_WAV;
-    this.silenceElement.loop = true;
-    this.silenceElement.muted = false; // MUST be false for iOS background
-    this.silenceElement.volume = 0.001; // Low volume to avoid noise but keep session alive
-    this.silenceElement.setAttribute('playsinline', '');
-    this.silenceElement.style.display = 'none';
-    document.body.appendChild(this.silenceElement);
-  }
-
-  private setupWorker(): void {
-    const workerCode = `
-      let timer = null;
-      self.onmessage = (e) => {
-        if (e.data === 'start') {
-          if (!timer) {
-            timer = setInterval(() => self.postMessage('tick'), 250);
-          }
-        } else if (e.data === 'stop') {
-          clearInterval(timer);
-          timer = null;
-        }
-      };
-    `;
-    const blob = new Blob([workerCode], { type: 'application/javascript' });
-    this.worker = new Worker(URL.createObjectURL(blob));
-    this.worker.onmessage = () => {
-      if (!this.context || !this.currentSettings) return;
-      
-      if (this.context.state === 'suspended') {
-        void this.context.resume();
-      }
-      
-      // Pull the audio thread by playing a tiny silent buffer
-      try {
-        const oscillator = this.context.createOscillator();
-        const gain = this.context.createGain();
-        gain.gain.value = 0.000001;
-        oscillator.connect(gain);
-        gain.connect(this.context.destination);
-        oscillator.start();
-        oscillator.stop(this.context.currentTime + 0.001);
-      } catch (e) {
-        // Ignore errors if context is closing
-      }
-    };
-    this.worker.postMessage('start');
+    // And then we use a standard <audio> element to play that stream.
+    // iOS treats this as a first-class media playback session.
+    this.audioElement = new Audio();
+    this.audioElement.srcObject = destination.stream;
+    this.audioElement.muted = false;
+    this.audioElement.setAttribute('playsinline', '');
+    this.audioElement.style.display = 'none';
+    document.body.appendChild(this.audioElement);
   }
 
   private ensureTones(settings: AudioSettings): void {
