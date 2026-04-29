@@ -56,6 +56,9 @@ const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
       state.previousWhite = white;
       return violet * 0.35;
     }
+    if (this.type === 'off') {
+      return 0;
+    }
     return white * 0.28;
   }
   process(inputs, outputs) {

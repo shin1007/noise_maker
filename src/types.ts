@@ -20,7 +20,7 @@ export type Locale =
   | 'fr'
   | 'de'
   | 'id';
-export type NoiseType = 'white' | 'pink' | 'brown' | 'blue' | 'violet';
+export type NoiseType = 'white' | 'pink' | 'brown' | 'blue' | 'violet' | 'off';
 export type AudioMode = 'earphone' | 'speaker';
 export type EvidenceStrength = 'Strong' | 'Moderate' | 'Limited' | 'Mixed';
 
@@ -46,6 +46,15 @@ export interface EvidenceCard {
   strength: EvidenceStrength;
   caveat: LocalizedText;
   links: EvidenceLink[];
+}
+
+export interface Preset {
+  key: string;
+  label: LocalizedText;
+  description: LocalizedText;
+  noiseType: NoiseType;
+  beatBand: string;
+  baseFrequency: number;
 }
 
 export interface Copy {
@@ -87,4 +96,7 @@ export interface Copy {
   close: string;
   presetsTitle: string;
   resetPreset: string;
+  settingsTitle: string;
+  advancedSettings: string;
+  noiseOff: string;
 }
