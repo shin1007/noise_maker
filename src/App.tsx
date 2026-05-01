@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { binauralBands, copy, evidenceCards, getNoiseLabel, getPlatformNotes, noiseTypes, presets, resolveLocalizedText, timerOptions } from './content';
 import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supportedLocales } from './i18n';
-import { clampSettings, NoiseEngine } from './audio/noiseEngine';
+import { clampSettings, NoiseEngine, resolveBeatFrequencies } from './audio/noiseEngine';
 import type { AudioMode, Locale, NoiseType, Preset } from './types';
 
 const STORAGE_KEY = 'noise_maker_settings';
@@ -231,6 +231,13 @@ export function App() {
     binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
     binauralBands[1];
 
+  const activeBeatFrequencies = resolveBeatFrequencies(clampSettings(settings));
+  const beatFrequencySummary = beatEnabled
+    ? beatMode === 'earphone'
+      ? `${formatFrequency(activeBeatFrequencies.leftFrequency)} / ${formatFrequency(activeBeatFrequencies.rightFrequency)}`
+      : `${formatFrequency(activeBeatFrequencies.carrierFrequency)} / ${formatFrequency(activeBeatFrequencies.modulatorFrequency)}`
+    : '';
+
   useEffect(() => {
     if (!('mediaSession' in navigator)) return;
     const noiseLabel = getNoiseLabel(locale, noiseType);
@@ -396,6 +403,11 @@ export function App() {
                   <button className={`mode-button ${beatMode === 'earphone' ? 'active' : ''}`} onClick={() => updateSetting('beatMode', 'earphone')}>{strings.earphoneMode}</button>
                   <button className={`mode-button ${beatMode === 'speaker' ? 'active' : ''}`} onClick={() => updateSetting('beatMode', 'speaker')}>{strings.speakerMode}</button>
                 </div>
+                {beatEnabled && (
+                  <p className="status-pill beat-frequency-pill">
+                    {strings.currentBand}: {beatFrequencySummary}
+                  </p>
+                )}
                 <div className="control-group">
                   <label>
                     <div className="label-row">
@@ -414,7 +426,7 @@ export function App() {
                   {binauralBands.map((band) => (
                     <li key={band.key}>
                       <button className={`band-button ${band.key === activeBinauralBand.key ? 'active' : ''}`} onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key])}>
-                        {resolveLocalizedText(band.label, locale)} ({resolveLocalizedText(band.reading, locale)})
+                        {resolveLocalizedText(band.label, locale)} ({formatFrequency(binauralTargetByKey[band.key])})
                       </button>
                     </li>
                   ))}
@@ -454,4 +466,8 @@ function formatRemaining(locale: Locale, totalSeconds: number, strings: any): st
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+function formatFrequency(value: number): string {
+  return Number.isInteger(value) ? `${value}Hz` : `${value.toFixed(1)}Hz`;
 }

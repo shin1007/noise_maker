@@ -9,6 +9,35 @@ export interface AudioSettings {
   differenceFrequency: number;
 }
 
+export interface BeatFrequencies {
+  leftFrequency: number;
+  rightFrequency: number;
+  carrierFrequency: number;
+  modulatorFrequency: number;
+}
+
+export function resolveBeatFrequencies(settings: AudioSettings): BeatFrequencies {
+  const carrierFrequency = Math.max(40, Math.min(1000, settings.baseFrequency));
+  const modulatorFrequency = Math.max(0, Math.min(40, settings.differenceFrequency));
+
+  if (settings.beatMode === 'earphone') {
+    const halfDifference = modulatorFrequency / 2;
+    return {
+      leftFrequency: Math.max(20, carrierFrequency - halfDifference),
+      rightFrequency: Math.max(20, carrierFrequency + halfDifference),
+      carrierFrequency,
+      modulatorFrequency
+    };
+  }
+
+  return {
+    leftFrequency: carrierFrequency,
+    rightFrequency: carrierFrequency,
+    carrierFrequency,
+    modulatorFrequency
+  };
+}
+
 const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
@@ -270,9 +299,7 @@ export class NoiseEngine {
       return;
     }
 
-    const isEarphone = settings.beatMode === 'earphone';
-    const leftFrequency = isEarphone ? Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2) : settings.baseFrequency;
-    const rightFrequency = isEarphone ? Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2) : settings.baseFrequency;
+    const frequencies = resolveBeatFrequencies(settings);
 
     if (!this.leftOscillator) {
       this.leftOscillator = this.context.createOscillator();
@@ -288,8 +315,8 @@ export class NoiseEngine {
       this.rightOscillator.start();
     }
 
-    this.leftOscillator.frequency.setTargetAtTime(leftFrequency, this.context.currentTime, 0.01);
-    this.rightOscillator.frequency.setTargetAtTime(rightFrequency, this.context.currentTime, 0.01);
+    this.leftOscillator.frequency.setTargetAtTime(frequencies.leftFrequency, this.context.currentTime, 0.01);
+    this.rightOscillator.frequency.setTargetAtTime(frequencies.rightFrequency, this.context.currentTime, 0.01);
 
     if (settings.beatMode === 'speaker') {
       // Isochronic tone logic: Modulate gain with a square wave
@@ -318,7 +345,7 @@ export class NoiseEngine {
 
         this.modulator.start();
       }
-      this.modulator.frequency.setTargetAtTime(settings.differenceFrequency, this.context.currentTime, 0.01);
+      this.modulator.frequency.setTargetAtTime(frequencies.modulatorFrequency, this.context.currentTime, 0.01);
     } else {
       // Remove isochronic modulation if exists
       if (this.modulator) {
