@@ -4,8 +4,8 @@ import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supporte
 import { clampSettings, NoiseEngine, resolveBeatFrequencies } from './audio/noiseEngine';
 import type { AudioMode, Locale, NoiseType, Preset } from './types';
 
-const STORAGE_KEY = 'noise_maker_settings';
-const PRESET_STORAGE_KEY = 'noise_maker_saved_presets';
+const STORAGE_KEY = 'noise_generator_settings';
+const PRESET_STORAGE_KEY = 'noise_generator_saved_presets';
 
 const solfeggioFrequencies = [174, 285, 396, 417, 440, 528, 639, 741, 852, 963]; // Added 440 for Preset 1
 
@@ -106,7 +106,7 @@ function normalizePresetData(data: SavedPresetData): SavedPresetData {
 }
 
 function resolveLocale(): Locale {
-  const savedLocale = localStorage.getItem('noise_maker_locale') as Locale;
+  const savedLocale = localStorage.getItem('noise_generator_locale') as Locale;
   if (savedLocale && supportedLocales.includes(savedLocale)) {
     return savedLocale;
   }
@@ -209,7 +209,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('noise_maker_locale', locale);
+    localStorage.setItem('noise_generator_locale', locale);
   }, [locale]);
 
   const startPlayback = useCallback(async (overrideSettings?: UserSettings) => {

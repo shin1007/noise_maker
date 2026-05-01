@@ -2,7 +2,7 @@ import type { Copy, EvidenceCard, Locale, LocalizedList, LocalizedText, NoiseTyp
 
 export const copy: Record<Locale, Copy> = {
   ja: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'シンプルに、静かに、聞きたい音だけ。',
     install: 'ホーム画面に追加',
     installHint: 'ホーム画面に追加すると、起動が速くなります。',
@@ -45,7 +45,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'オフ'
   },
   en: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Simple noise and beats, tuned for phones.',
     install: 'Add to Home Screen',
     installHint: 'Adding to the home screen makes launch faster.',
@@ -88,7 +88,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   'zh-Hans': {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: '简洁、安静，只播放你想听的声音。',
     install: '添加到主屏幕',
     installHint: '添加到主屏幕后，启动会更快。',
@@ -131,7 +131,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   es: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Simple, tranquilo, solo el sonido que quieres.',
     install: 'Agregar a pantalla de inicio',
     installHint: 'Agregarla a la pantalla de inicio acelera el inicio.',
@@ -174,7 +174,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   hi: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'सरल, शांत, बस वही ध्वनि जो आप सुनना चाहें।',
     install: 'होम स्क्रीन पर जोड़ें',
     installHint: 'होम स्क्रीन पर जोड़ने से ऐप जल्दी खुलता है।',
@@ -217,7 +217,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   bn: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'সহজ, শান্ত, শুধু আপনার পছন্দের শব্দ।',
     install: 'হোম স্ক্রিনে যোগ করুন',
     installHint: 'হোম স্ক্রিনে যোগ করলে দ্রুত চালু হবে।',
@@ -260,7 +260,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   pt: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Simples e calmo, apenas o som que voce quer ouvir.',
     install: 'Adicionar a tela inicial',
     installHint: 'Adicionar a tela inicial deixa a abertura mais rapida.',
@@ -303,7 +303,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   ru: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Просто, спокойно, только нужный вам звук.',
     install: 'Добавить на главный экран',
     installHint: 'Добавление на главный экран ускоряет запуск.',
@@ -346,7 +346,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   yue: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: '簡單、寧靜，只播你想聽嘅聲音。',
     install: '加入主畫面',
     installHint: '加入主畫面之後，啟動會更快。',
@@ -389,7 +389,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   vi: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Don gian, yen tinh, chi phat am thanh ban muon nghe.',
     install: 'Them vao man hinh chinh',
     installHint: 'Them vao man hinh chinh giup mo nhanh hon.',
@@ -432,7 +432,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   mr: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'सोपे, शांत, फक्त तुम्हाला हवे तेच आवाज.',
     install: 'ホーム画面に加',
     installHint: 'ホーム画面に加えると、起動が速くなります。',
@@ -475,7 +475,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   te: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'సరళంగా, ప్రశాంతంగా, మీకు కావలసిన శబ్దమే.',
     install: 'హోమ్ స్క్రీన్‌కు చేర్చు',
     installHint: 'హోమ్ స్క్రీన్‌కు చేర్చితే యాప్ త్వరగా తెరుచుకుంటుంది.',
@@ -518,7 +518,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   tr: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Basit, sakin, sadece duymak istedigin ses.',
     install: 'Ana ekrana ekle',
     installHint: 'Ana ekrana eklemek daha hizli acilis saglar.',
@@ -561,7 +561,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   ko: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: '간단하고 조용하게, 원하는 소리만.',
     install: '홈 화면에 추가',
     installHint: '홈 화면に추가하면 더 빠르게 실행됩니다.',
@@ -604,7 +604,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   pa: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'ਸੌਖਾ, ਸ਼ਾਂਤ, ਸਿਰਫ ਉਹੀ ਆਵਾਜ਼ ਜੋ ਤੁਸੀਂ ਸੁਣਨਾ ਚਾਹੋ।',
     install: 'ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜੋ',
     installHint: 'ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਜੋੜਨ ਨਾਲ ਐਪ ਜਲਦੀ ਖੁਲਦਾ ਹੈ।',
@@ -647,7 +647,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   ta: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'எளிதாக, அமைதியாக, உங்களுக்கு வேண்டிய ஒலி மட்டும்.',
     install: 'முதற்பக்கத்தில் சேர்க்க',
     installHint: 'முதற்பக்கத்தில் சேர்த்தால் விரைவாக திறக்கும்.',
@@ -690,7 +690,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   jv: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Prasaja lan anteng, mung swara sing arep kok rungokke.',
     install: 'Tambahna menyang layar ngarep',
     installHint: 'Yen ditambah menyang layar ngarep, mbukak app luwih cepet.',
@@ -733,7 +733,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   it: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Semplice e tranquillo, solo il suono che vuoi ascoltare.',
     install: 'Aggiungi alla schermata Home',
     installHint: 'Aggiungendola alla Home, si avvia piu rapidamente.',
@@ -776,7 +776,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   fr: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Simple et calme, uniquement le son que vous voulez.',
     install: 'Ajouter a l ecran d accueil',
     installHint: 'L ajout a l ecran d accueil accelere le lancement.',
@@ -819,7 +819,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   de: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Einfach und ruhig, nur der Klang, den du horen willst.',
     install: 'Zum Startbildschirm hinzufugen',
     installHint: 'Mit Startbildschirm startet die App schneller.',
@@ -862,7 +862,7 @@ export const copy: Record<Locale, Copy> = {
     noiseOff: 'Off'
   },
   id: {
-    appName: 'Noise Maker',
+    appName: 'Noise Generator',
     appTagline: 'Sederhana dan tenang, hanya suara yang ingin kamu dengar.',
     install: 'Tambahkan ke layar utama',
     installHint: 'Menambahkan ke layar utama membuat aplikasi lebih cepat dibuka.',

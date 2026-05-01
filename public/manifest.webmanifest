@@ -1,6 +1,6 @@
 {
-  "name": "Noise Maker",
-  "short_name": "Noise Maker",
+  "name": "Noise Generator",
+  "short_name": "Noise Generator",
   "description": "Colored noise and binaural beats for mobile-first listening.",
   "start_url": "/",
   "scope": "/",

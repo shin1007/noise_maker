@@ -1,8 +1,8 @@
-# Noise Maker
+# Noise Generator
 
 シンプルな colored noise と binaural beats の PWA です。Vercel 配備を前提に、依存を増やしすぎない最小構成で実装しています。
 
-公開URL（想定）: https://noise-maker-pwa.vercel.app/
+公開URL（想定）: https://noise-generator-pwa.vercel.app/
 
 ## 目的
 
@@ -110,7 +110,7 @@ npm run build
 
 ### Product Hunt 施策
 
-- 30-60 秒のデモ動画を準備
+- 30-60 秒 de デモ動画を準備
 - "誰のどの課題をどう短時間で解決するか" を1文で説明
 - 初日のコメント返信体制を整える
 
