@@ -41,7 +41,7 @@ export function resolveBeatFrequencies(settings: AudioSettings): BeatFrequencies
 const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
-    this.type = 'white';
+    this.type = 'off';
     this.state = { pinkB0: 0, pinkB1: 0, pinkB2: 0, pinkB3: 0, pinkB4: 0, pinkB5: 0, pinkB6: 0, brown: 0, previousWhite: 0, previousWhite2: 0, seed: 0x12345678 };
     this.port.onmessage = (event) => { if (event.data && typeof event.data.type === 'string') { this.type = event.data.type; } };
   }
@@ -105,11 +105,6 @@ const workletSource = `class NoiseProcessor extends AudioWorkletProcessor {
 registerProcessor('noise-processor', NoiseProcessor);`;
 
 // 1x1 pixel silent MP4 video
-const SILENT_VIDEO = 'data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21hdmMxcAAAAAAgbW9vdgAAAGxtdmhkAAAAAM7pI7HO6SOxAAACWAAAAnEAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAcbWRhdAAAAAAAAAAYAHByaW1lIGZsdXNoZWQAAAAAAAAnYXZjY0ABAAz/4AArZGF0YTptZDRhOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7AAAAAAt0cmFrawAAAFx0a2hkAAAAAs7pI7HO6SOxAAAAAQAAAAAAAAnEAAAAAAAAAAAAAAAAAQAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAABAG1kaWEAAAAgbWRoZAAAAADO6SOxzukjsQAAAlgAAAJxAFh9AAAAMWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABQ21pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxtZDAAAAAAAAAAAAAAAAAAAACUc3RibAAAAGRzdHNkAAAAAAAAAAEAAABUYXZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAABABIAEgAAAlgAAAJxAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAACVzdHRzAAAAAAAAAAEAAAABAAACcQAAABRzdHNzAAAAAAAAAAEAAAABAAAAHHN0c2MAAAAAAAAAAQAAAAEAAAABAAAAAQAAABxzdHN6AAAAAAAAAAAAAAABAAABLAAAABRzdGNvAAAAAAAAAAEAAAAwAAAAYXVkZf8AAAAsYXVkaW8vYWFjIAAAAAAAAABhYWMgYXVkaW8gZmlsZQAAAAAAAAAAACR1dWlkAAAAAABYWFhYWFhYWFhYWFhYWFhYWFhYWFhYAAAAAAA=';
-
-// 1 second of silence as a base64 WAV
-const SILENCE_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
-
 let cachedWorkletUrl: string | null = null;
 
 function getWorkletUrl(): string {
@@ -175,11 +170,9 @@ export class NoiseEngine {
     }
 
     if (this.audioElement) {
-      // Priming for Safari browser:
-      this.audioElement.src = SILENCE_WAV;
-      this.audioElement.load();
-      await this.audioElement.play().catch(() => {});
-      
+      // Priming for Safari:
+      // We don't overwrite srcObject with SILENCE_WAV here as it causes a gap.
+      // Instead, we just ensure it plays.
       await this.audioElement.play().catch((err) => {
         console.error('Audio element playback failed:', err);
       });
@@ -209,7 +202,7 @@ export class NoiseEngine {
     const fadeTime = this.isFirstUpdate ? 1.5 : 0.05;
     if (this.isFirstUpdate) {
       this.masterGain.gain.setValueAtTime(0, this.context.currentTime);
-      this.masterGain.gain.exponentialRampToValueAtTime(1, this.context.currentTime + fadeTime);
+      this.masterGain.gain.linearRampToValueAtTime(1, this.context.currentTime + fadeTime);
       this.isFirstUpdate = false;
     }
 
@@ -267,10 +260,15 @@ export class NoiseEngine {
     this.worklet = new AudioWorkletNode(this.context, 'noise-processor', { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2] });
     this.merger = this.context.createChannelMerger(2);
     this.leftMix = this.context.createGain();
+    this.leftMix.gain.value = 0;
     this.rightMix = this.context.createGain();
+    this.rightMix.gain.value = 0;
     this.leftToneGain = this.context.createGain();
+    this.leftToneGain.gain.value = 0;
     this.rightToneGain = this.context.createGain();
+    this.rightToneGain.gain.value = 0;
     this.masterGain = this.context.createGain();
+    this.masterGain.gain.value = 0;
 
     this.worklet.connect(this.leftMix);
     this.worklet.connect(this.rightMix);
