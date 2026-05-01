@@ -1152,8 +1152,8 @@ export const presets: Preset[] = [
     key: 'focus',
     label: { ja: '1. 深い集中 (Focus)', en: '1. Deep Focus' },
     description: { 
-      ja: 'プログラミングや執筆など、雑念を消して没入したい時に。ブラウンノイズとベータ波で思考を活性化させます。', 
-      en: 'For coding or writing. Brown noise and Beta waves to mask distractions and activate thinking.' 
+      ja: 'プログラミングや執筆など、雑念を消して没入したい時に。', 
+      en: 'For coding or writing.' 
     },
     noiseType: 'brown',
     beatBand: 'beta',
@@ -1163,8 +1163,8 @@ export const presets: Preset[] = [
     key: 'creative',
     label: { ja: '2. 創造的思考 (Creative)', en: '2. Creative Flow' },
     description: { 
-      ja: '企画、設計、読書など、リラックスしつつ意識を広げたい時に。ピンクノイズとアルファ波で脳をフラットに保ちます。', 
-      en: 'For planning or reading. Pink noise and Alpha waves for a relaxed yet expansive mindset.' 
+      ja: '企画、設計、読書など、リラックスしつつ意識を広げたい時に。', 
+      en: 'For planning or reading.' 
     },
     noiseType: 'pink',
     beatBand: 'alpha',
@@ -1174,8 +1174,8 @@ export const presets: Preset[] = [
     key: 'study',
     label: { ja: '3. 短期集中 (Study)', en: '3. Quick Study' },
     description: { 
-      ja: '試験前の詰め込みなど、短時間で情報を処理したい時に。ホワイトノイズとガンマ波で高い覚醒状態を作ります。', 
-      en: 'For pre-exam pushes. White noise and Gamma waves to boost processing speed and alertness.' 
+      ja: '試験前の詰め込みなど、短時間で情報を処理したい時に。', 
+      en: 'For pre-exam pushes.' 
     },
     noiseType: 'white',
     beatBand: 'gamma',
@@ -1185,8 +1185,8 @@ export const presets: Preset[] = [
     key: 'meditation',
     label: { ja: '4. 瞑想・休息 (Meditate)', en: '4. Meditation' },
     description: { 
-      ja: '休憩時間や、心を落ち着かせたい時に。ノイズをオフにし、396Hzのベースとシータ波で深い瞑想へ誘導します。', 
-      en: 'To calm the mind. Noise off, 396Hz base and Theta waves to support deep reflection and stability.' 
+      ja: '休憩時間や、心を落ち着かせたい時に。', 
+      en: 'To calm the mind. Noise off.' 
     },
     noiseType: 'off',
     beatBand: 'theta',
@@ -1196,8 +1196,8 @@ export const presets: Preset[] = [
     key: 'sleep',
     label: { ja: '5. 入眠 (Sleep)', en: '5. Deep Sleep' },
     description: { 
-      ja: '寝付きが悪い時や、眠りが浅い時に。ブラウンノイズとデルタ波の低い周波数で脳を休息モードへ切り替えます。', 
-      en: 'For restless nights. Brown noise and Delta waves to shift the brain and body into rest mode.' 
+      ja: '寝付きが悪い時や、眠りが浅い時に。', 
+      en: 'For restless nights.' 
     },
     noiseType: 'brown',
     beatBand: 'delta',

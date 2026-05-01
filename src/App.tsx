@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { binauralBands, copy, evidenceCards, getNoiseLabel, getPlatformNotes, noiseTypes, presets, resolveLocalizedText, timerOptions } from './content';
+import { binauralBands, copy, getNoiseLabel, getPlatformNotes, noiseTypes, presets, resolveLocalizedText, timerOptions } from './content';
 import { localeMetadata, normalizeLocale, resolveLocaleFromBrowserLang, supportedLocales } from './i18n';
 import { clampSettings, NoiseEngine, resolveBeatFrequencies } from './audio/noiseEngine';
 import type { AudioMode, Locale, NoiseType, Preset } from './types';
@@ -11,6 +11,24 @@ const solfeggioFrequencies = [174, 285, 396, 417, 440, 528, 639, 741, 852, 963];
 
 function findNearestSolfeggio(freq: number): number {
   return solfeggioFrequencies.reduce((prev, curr) => Math.abs(curr - freq) < Math.abs(prev - freq) ? curr : prev);
+}
+
+function coerceSolfeggioFrequency(rawValue: string): number | null {
+  const parsed = Number(rawValue);
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+  return findNearestSolfeggio(parsed);
+}
+
+function stepSolfeggioFrequency(current: number, direction: -1 | 1): number {
+  const nearest = findNearestSolfeggio(current);
+  const index = solfeggioFrequencies.indexOf(nearest);
+  if (index < 0) {
+    return nearest;
+  }
+  const nextIndex = Math.max(0, Math.min(solfeggioFrequencies.length - 1, index + direction));
+  return solfeggioFrequencies[nextIndex];
 }
 
 interface UserSettings {
@@ -170,9 +188,6 @@ export function App() {
   const [editingPresetDraft, setEditingPresetDraft] = useState<SavedPresetData | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isNoiseHelpOpen, setIsNoiseHelpOpen] = useState(false);
-  const [isBeatHelpOpen, setIsBeatHelpOpen] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -219,7 +234,11 @@ export function App() {
   }, [isPlaying, startPlayback, stopPlayback]);
 
   const applyPreset = useCallback((preset: Preset) => {
-    const nextSettings = (presetDrafts[preset.key] ?? getPresetDefaults(preset, settings, locale)).settings;
+    const presetSettings = (presetDrafts[preset.key] ?? getPresetDefaults(preset, settings, locale)).settings;
+    const nextSettings = {
+      ...presetSettings,
+      beatMode: settings.beatMode
+    };
     setSettings(nextSettings);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
     setActivePreset(preset.key);
@@ -262,7 +281,7 @@ export function App() {
       if (!current) {
         return current;
       }
-      return normalizePresetData(updater(current));
+      return updater(current);
     });
   }, []);
 
@@ -271,22 +290,39 @@ export function App() {
       return;
     }
 
-    const nextPreset = normalizePresetData(editingPresetDraft);
+    const nextPreset = normalizePresetData({
+      ...editingPresetDraft,
+      settings: {
+        ...editingPresetDraft.settings,
+        beatMode: settings.beatMode
+      }
+    });
     const nextDrafts = { ...presetDrafts, [editingPresetKey]: nextPreset };
     setPresetDrafts(nextDrafts);
     localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(nextDrafts));
     setActivePreset(editingPresetKey);
 
     if (applyAfterSave) {
-      setSettings(nextPreset.settings);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPreset.settings));
+      const settingsToApply = {
+        ...nextPreset.settings,
+        beatMode: settings.beatMode
+      };
+      setSettings(settingsToApply);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settingsToApply));
       if (!isPlaying) {
-        void startPlayback(nextPreset.settings);
+        void startPlayback(settingsToApply);
       }
     }
 
     closePresetEditor();
-  }, [closePresetEditor, editingPresetDraft, editingPresetKey, isPlaying, presetDrafts, startPlayback]);
+  }, [closePresetEditor, editingPresetDraft, editingPresetKey, isPlaying, presetDrafts, settings.beatMode, startPlayback]);
+
+  const resetQuickPresets = useCallback(() => {
+    setPresetDrafts({});
+    localStorage.removeItem(PRESET_STORAGE_KEY);
+    setActivePreset(null);
+    closePresetEditor();
+  }, [closePresetEditor]);
 
   useEffect(() => {
     if (isPlaying && engineRef.current) {
@@ -335,13 +371,6 @@ export function App() {
   const activeBinauralBand =
     binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ??
     binauralBands[1];
-
-  const activeBeatFrequencies = resolveBeatFrequencies(clampSettings(settings));
-  const beatFrequencySummary = beatEnabled
-    ? beatMode === 'earphone'
-      ? `${formatFrequency(activeBeatFrequencies.leftFrequency)} / ${formatFrequency(activeBeatFrequencies.rightFrequency)}`
-      : `${formatFrequency(activeBeatFrequencies.carrierFrequency)} / ${formatFrequency(activeBeatFrequencies.modulatorFrequency)}`
-    : '';
 
   useEffect(() => {
     if (!('mediaSession' in navigator)) return;
@@ -398,12 +427,9 @@ export function App() {
     setInstallPrompt(null);
   }
 
-  const noiseEvidence = evidenceCards.find((card) => card.key === 'noise-colors') ?? evidenceCards[0];
-  const binauralEvidence = evidenceCards.find((card) => card.key === 'binaural-beats') ?? evidenceCards[0];
-
   useEffect(() => {
-    const colors: Record<NoiseType, string> = { white: '#ffffff', pink: '#ff94c1', brown: '#a97554', blue: '#5da5ff', violet: '#c683ff', off: '#444444' };
-    const rgbs: Record<NoiseType, string> = { white: '255, 255, 255', pink: '255, 148, 193', brown: '169, 117, 84', blue: '93, 165, 255', violet: '198, 131, 255', off: '68, 68, 68' };
+    const colors: Record<NoiseType, string> = { white: '#9ca7b8', pink: '#ff94c1', brown: '#a97554', blue: '#5da5ff', violet: '#c683ff', off: '#444444' };
+    const rgbs: Record<NoiseType, string> = { white: '156, 167, 184', pink: '255, 148, 193', brown: '169, 117, 84', blue: '93, 165, 255', violet: '198, 131, 255', off: '68, 68, 68' };
     document.body.style.setProperty('--accent-color', colors[noiseType]);
     document.body.style.setProperty('--accent-rgb', rgbs[noiseType]);
   }, [noiseType]);
@@ -417,7 +443,6 @@ export function App() {
               <button className="text-button" type="button" onClick={() => void triggerInstall()}>{strings.install}</button>
             </div>
             <div className="top-right-actions">
-              <button className="icon-button settings-gear" onClick={() => setIsSettingsOpen(true)} aria-label={strings.settingsTitle}>⚙️</button>
               <div className="locale-select-wrap">
                 <select className="locale-select" value={locale} onChange={(e) => setLocale(e.target.value as Locale)}>
                   {supportedLocales.map((l) => <option key={l} value={l}>{localeMetadata[l].nativeName}</option>)}
@@ -476,35 +501,80 @@ export function App() {
           </div>
         </div>
 
+        <div className="quick-mode-selector">
+          <div className="mode-toggle-group">
+            <button
+              type="button"
+              className={`mode-button ${beatMode === 'earphone' ? 'active' : ''}`}
+              onClick={() => updateSetting('beatMode', 'earphone')}
+            >
+              {strings.earphoneMode}
+            </button>
+            <button
+              type="button"
+              className={`mode-button ${beatMode === 'speaker' ? 'active' : ''}`}
+              onClick={() => updateSetting('beatMode', 'speaker')}
+            >
+              {strings.speakerMode}
+            </button>
+          </div>
+        </div>
+
         <div className="presets-section">
           <h2 className="section-title">{strings.presetsTitle}</h2>
           <div className="preset-list">
             {presets.map((preset) => (
-              <div key={preset.key} className={`preset-card ${activePreset === preset.key ? 'active' : ''}`}>
+              <div
+                key={preset.key}
+                className={`preset-card ${activePreset === preset.key ? 'active' : ''}`}
+                onClick={() => applyPreset(preset)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    applyPreset(preset);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
                 {(() => {
                   const presetDraft = getPresetDraft(preset);
                   return (
                     <>
                       <div className="preset-card-head">
-                        <strong>{presetDraft.name}</strong>
-                        <span className="preset-setting-summary">{buildPresetSummary(presetDraft.settings, locale)}</span>
+                        <div className="preset-card-title-row">
+                          <strong>{presetDraft.name}</strong>
+                          <button
+                            type="button"
+                            className="preset-edit-button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              applyPreset(preset);
+                              openPresetEditor(preset);
+                            }}
+                          >
+                            {locale === 'ja' ? '編集' : 'Edit'}
+                          </button>
+                        </div>
+                        <span className="preset-setting-summary">{buildPresetSummary(presetDraft.settings, locale, beatMode)}</span>
                       </div>
                       <p className="preset-description-readonly">{presetDraft.description}</p>
-                      <div className="preset-card-actions">
-                        <button type="button" className="preset-edit-button" onClick={() => openPresetEditor(preset)}>{locale === 'ja' ? '編集' : 'Edit'}</button>
-                        <button type="button" className="preset-apply-button" onClick={() => applyPreset(preset)}>{locale === 'ja' ? '適用' : 'Apply'}</button>
-                      </div>
                     </>
                   );
                 })()}
               </div>
             ))}
           </div>
+          <div className="preset-reset-wrap">
+            <button type="button" className="preset-reset-button" onClick={resetQuickPresets}>
+              {locale === 'ja' ? 'クイックプリセットを初期状態にする' : strings.resetPreset}
+            </button>
+          </div>
         </div>
       </section>
 
       {editingPresetKey && editingPresetDraft && (
-        <div className="modal-overlay" onClick={closePresetEditor}>
+        <div className="modal-overlay">
           <div className="modal-content card preset-editor-modal" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">
               <h2>{locale === 'ja' ? 'プリセット編集' : 'Preset editor'}</h2>
@@ -609,17 +679,6 @@ export function App() {
 
                 {editingPresetDraft.settings.beatEnabled && (
                   <>
-                    <div className="mode-toggle-group">
-                      <button type="button" className={`mode-button ${editingPresetDraft.settings.beatMode === 'earphone' ? 'active' : ''}`} onClick={() => updateEditingPresetDraft((current) => ({
-                        ...current,
-                        settings: { ...current.settings, beatMode: 'earphone' }
-                      }))}>{strings.earphoneMode}</button>
-                      <button type="button" className={`mode-button ${editingPresetDraft.settings.beatMode === 'speaker' ? 'active' : ''}`} onClick={() => updateEditingPresetDraft((current) => ({
-                        ...current,
-                        settings: { ...current.settings, beatMode: 'speaker' }
-                      }))}>{strings.speakerMode}</button>
-                    </div>
-
                     <div className="control-group preset-control-group">
                       <label>
                         <div className="label-row">
@@ -627,12 +686,12 @@ export function App() {
                           <div className="value-with-stepper">
                             <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
                               ...current,
-                              settings: { ...current.settings, baseFrequency: findNearestSolfeggio(current.settings.baseFrequency - 1) }
+                              settings: { ...current.settings, baseFrequency: stepSolfeggioFrequency(current.settings.baseFrequency, -1) }
                             }))}>-</button>
                             <span className="value-display">{editingPresetDraft.settings.baseFrequency}Hz</span>
                             <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
                               ...current,
-                              settings: { ...current.settings, baseFrequency: findNearestSolfeggio(current.settings.baseFrequency + 1) }
+                              settings: { ...current.settings, baseFrequency: stepSolfeggioFrequency(current.settings.baseFrequency, 1) }
                             }))}>+</button>
                           </div>
                         </div>
@@ -642,10 +701,16 @@ export function App() {
                           max="963"
                           step="1"
                           value={editingPresetDraft.settings.baseFrequency}
-                          onInput={(event) => updateEditingPresetDraft((current) => ({
-                            ...current,
-                            settings: { ...current.settings, baseFrequency: findNearestSolfeggio(Number(event.currentTarget.value)) }
-                          }))}
+                          onChange={(event) => {
+                            const nextBaseFrequency = coerceSolfeggioFrequency(event.currentTarget.value);
+                            if (nextBaseFrequency === null) {
+                              return;
+                            }
+                            updateEditingPresetDraft((current) => ({
+                              ...current,
+                              settings: { ...current.settings, baseFrequency: nextBaseFrequency }
+                            }));
+                          }}
                         />
                       </label>
                     </div>
@@ -674,94 +739,9 @@ export function App() {
               </div>
 
               <div className="preset-card-actions">
-                <button type="button" className="preset-save-button" onClick={() => saveEditingPreset(false)}>{locale === 'ja' ? '保存' : 'Save'}</button>
-                <button type="button" className="preset-apply-button" onClick={() => saveEditingPreset(true)}>{locale === 'ja' ? '保存して適用' : 'Save and Apply'}</button>
+                <button type="button" className="preset-apply-button" onClick={() => saveEditingPreset(true)}>{locale === 'ja' ? '適用して保存' : 'Apply and Save'}</button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {isSettingsOpen && (
-        <div className="modal-overlay" onClick={() => setIsSettingsOpen(false)}>
-          <div className="modal-content card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{strings.settingsTitle}</h2>
-              <button className="close-modal" onClick={() => setIsSettingsOpen(false)}>×</button>
-            </div>
-            <div className="modal-body">
-              <div className="control-section">
-                <div className="noise-head">
-                  <strong>{strings.noiseType}</strong>
-                  <button className="help-button" onClick={() => setIsNoiseHelpOpen(!isNoiseHelpOpen)}>?</button>
-                </div>
-                {isNoiseHelpOpen && (
-                  <div className="help-links-panel">
-                    <ul className="paper-list compact">
-                      {noiseEvidence.links.map((link) => <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>)}
-                    </ul>
-                  </div>
-                )}
-                <div className="noise-grid">
-                  {noiseTypes.map((t) => (
-                    <button key={t.key} className={`noise-chip noise-${t.key} ${noiseType === t.key ? 'selected' : ''}`} onClick={() => updateSetting('noiseType', t.key)}>
-                      <strong>{resolveLocalizedText(t.label, locale)}</strong>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="control-section">
-                <div className="toggle-row">
-                  <label className="switch">
-                    <input type="checkbox" checked={beatEnabled} onChange={(e) => updateSetting('beatEnabled', e.target.checked)} />
-                    <span className="binaural-label">{strings.beatOn}</span>
-                  </label>
-                  <button className="help-button" onClick={() => setIsBeatHelpOpen(!isBeatHelpOpen)}>?</button>
-                </div>
-                {isBeatHelpOpen && (
-                  <div className="help-links-panel">
-                    <p>{strings.beatDesc}</p>
-                    <ul className="paper-list compact">
-                      {binauralEvidence.links.map((link) => <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>)}
-                    </ul>
-                  </div>
-                )}
-                <div className="mode-toggle-group">
-                  <button className={`mode-button ${beatMode === 'earphone' ? 'active' : ''}`} onClick={() => updateSetting('beatMode', 'earphone')}>{strings.earphoneMode}</button>
-                  <button className={`mode-button ${beatMode === 'speaker' ? 'active' : ''}`} onClick={() => updateSetting('beatMode', 'speaker')}>{strings.speakerMode}</button>
-                </div>
-                {beatEnabled && (
-                  <p className="status-pill beat-frequency-pill">
-                    {strings.currentBand}: {beatFrequencySummary}
-                  </p>
-                )}
-                <div className="control-group">
-                  <label>
-                    <div className="label-row">
-                      <span className="label-text">{strings.baseFreq}</span>
-                      <div className="value-with-stepper">
-                        <button className="step-button" onClick={() => updateSetting('baseFrequency', findNearestSolfeggio(baseFrequency - 1))}>-</button>
-                        <span className="value-display">{baseFrequency}Hz</span>
-                        <button className="step-button" onClick={() => updateSetting('baseFrequency', findNearestSolfeggio(baseFrequency + 1))}>+</button>
-                      </div>
-                    </div>
-                    <input type="range" min="174" max="963" step="1" value={baseFrequency} 
-                      onInput={(e) => updateSetting('baseFrequency', findNearestSolfeggio(Number(e.currentTarget.value)))} />
-                  </label>
-                </div>
-                <ul className="binaural-band-list compact-grid">
-                  {binauralBands.map((band) => (
-                    <li key={band.key}>
-                      <button className={`band-button ${band.key === activeBinauralBand.key ? 'active' : ''}`} onClick={() => updateSetting('differenceFrequency', binauralTargetByKey[band.key])}>
-                        {resolveLocalizedText(band.label, locale)} ({formatFrequency(binauralTargetByKey[band.key])})
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <button className="primary-button full-width" onClick={() => setIsSettingsOpen(false)}>{strings.gotIt}</button>
           </div>
         </div>
       )}
@@ -801,22 +781,18 @@ function formatBinauralBandLabel(settings: UserSettings, locale: Locale): string
   return locale === 'ja' ? `${bandName}波` : `${bandName} wave`;
 }
 
-function buildPresetSummary(settings: UserSettings, locale: Locale): string {
+function buildPresetSummary(settings: UserSettings, locale: Locale, currentBeatMode: AudioMode): string {
   const noiseLabel = settings.noiseType === 'off'
     ? (locale === 'ja' ? 'ノイズなし' : 'Noise off')
     : getNoiseLabel(locale, settings.noiseType);
-  const modeLabel = settings.beatEnabled
-    ? settings.beatMode === 'earphone'
-      ? (locale === 'ja' ? 'イヤホン' : 'Earphone')
-      : (locale === 'ja' ? 'スピーカー' : 'Speaker')
-    : (locale === 'ja' ? 'ビートなし' : 'No beat');
-  const beatPart = settings.beatEnabled
-    ? settings.beatMode === 'earphone'
-      ? `${formatBinauralBandLabel(settings, locale)} ${formatFrequency(Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2))} / ${formatFrequency(Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2))}`
-      : `${formatBinauralBandLabel(settings, locale)} ${formatFrequency(settings.baseFrequency)} / ${formatFrequency(settings.differenceFrequency)}`
-    : formatFrequency(settings.baseFrequency);
+  if (!settings.beatEnabled) {
+    return `${noiseLabel} · ${formatFrequency(settings.baseFrequency)}`;
+  }
 
-  return `${noiseLabel} · ${modeLabel} · ${beatPart}`;
+  const bandLabel = formatBinauralBandLabel(settings, locale);
+  const beatPart = `${formatFrequency(settings.baseFrequency)} (${bandLabel}, ${formatFrequency(settings.differenceFrequency)})`;
+
+  return `${noiseLabel} · ${beatPart}`;
 }
 
 interface BeforeInstallPromptEvent extends Event {

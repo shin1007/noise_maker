@@ -179,6 +179,7 @@ body { overflow-x: hidden; }
 
 /* Sliders */
 .hero-quick-controls { margin-top: 20px; }
+.quick-mode-selector { margin-top: 20px; }
 .control-stack { display: grid; gap: 20px; }
 .control-group label { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 .label-row { display: flex; justify-content: space-between; align-items: center; }
@@ -442,6 +443,29 @@ input[type="range"]::-webkit-slider-thumb {
   gap: 12px;
 }
 
+.preset-reset-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preset-reset-button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.preset-reset-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .preset-card {
   display: flex;
   flex-direction: column;
@@ -450,6 +474,7 @@ input[type="range"]::-webkit-slider-thumb {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 16px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
@@ -467,6 +492,13 @@ input[type="range"]::-webkit-slider-thumb {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.preset-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .preset-card-head strong {

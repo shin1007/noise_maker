@@ -136,6 +136,17 @@ export class NoiseEngine {
   private audioElement: HTMLAudioElement | null = null;
   private isFirstUpdate: boolean = true;
 
+  private safelyStopSource(source: AudioScheduledSourceNode | null): void {
+    if (!source) {
+      return;
+    }
+    try {
+      source.stop();
+    } catch {
+      // Ignore invalid state errors from already-stopped nodes.
+    }
+  }
+
   async start(settings: AudioSettings): Promise<void> {
     this.currentSettings = settings;
     this.isFirstUpdate = true;
@@ -349,7 +360,7 @@ export class NoiseEngine {
     } else {
       // Remove isochronic modulation if exists
       if (this.modulator) {
-        this.modulator.stop();
+        this.safelyStopSource(this.modulator);
         this.modulator.disconnect();
         this.modulatorGain?.disconnect();
         this.modulator = null;
@@ -365,15 +376,15 @@ export class NoiseEngine {
   }
 
   private stopTones(): void {
-    this.leftOscillator?.stop();
-    this.rightOscillator?.stop();
+    this.safelyStopSource(this.leftOscillator);
+    this.safelyStopSource(this.rightOscillator);
     this.leftOscillator?.disconnect();
     this.rightOscillator?.disconnect();
     this.leftOscillator = null;
     this.rightOscillator = null;
 
     if (this.modulator) {
-      this.modulator.stop();
+      this.safelyStopSource(this.modulator);
       this.modulator.disconnect();
       this.modulatorGain?.disconnect();
       this.modulator = null;
