@@ -454,7 +454,7 @@ export function App() {
                     <button className="step-button" type="button" onClick={() => updateSetting('volume', Math.min(100, volume + 1))}>+</button>
                   </div>
                 </div>
-                <input type="range" min="0" max="100" value={volume} onChange={(e) => updateSetting('volume', Number(e.target.value))} />
+                <input type="range" min="0" max="100" value={volume} onInput={(e) => updateSetting('volume', Number(e.currentTarget.value))} />
               </label>
             </div>
             <div className="control-group">
@@ -470,7 +470,7 @@ export function App() {
                     </div>
                   </div>
                 </div>
-                <input type="range" min="5" max="60" step="5" value={timerMinutes} onChange={(e) => updateSetting('timerMinutes', clampTimerValue(Number(e.target.value)))} />
+                <input type="range" min="5" max="60" step="5" value={timerMinutes} onInput={(e) => updateSetting('timerMinutes', clampTimerValue(Number(e.currentTarget.value)))} />
               </label>
             </div>
           </div>
@@ -531,9 +531,9 @@ export function App() {
                   min="0"
                   max="100"
                   value={editingPresetDraft.settings.volume}
-                  onChange={(event) => updateEditingPresetDraft((current) => ({
+                  onInput={(event) => updateEditingPresetDraft((current) => ({
                     ...current,
-                    settings: { ...current.settings, volume: Number(event.target.value) }
+                    settings: { ...current.settings, volume: Number(event.currentTarget.value) }
                   }))}
                 />
                 <input
@@ -642,9 +642,9 @@ export function App() {
                           max="963"
                           step="1"
                           value={editingPresetDraft.settings.baseFrequency}
-                          onChange={(event) => updateEditingPresetDraft((current) => ({
+                          onInput={(event) => updateEditingPresetDraft((current) => ({
                             ...current,
-                            settings: { ...current.settings, baseFrequency: findNearestSolfeggio(Number(event.target.value)) }
+                            settings: { ...current.settings, baseFrequency: findNearestSolfeggio(Number(event.currentTarget.value)) }
                           }))}
                         />
                       </label>
@@ -747,7 +747,7 @@ export function App() {
                       </div>
                     </div>
                     <input type="range" min="174" max="963" step="1" value={baseFrequency} 
-                      onChange={(e) => updateSetting('baseFrequency', findNearestSolfeggio(Number(e.target.value)))} />
+                      onInput={(e) => updateSetting('baseFrequency', findNearestSolfeggio(Number(e.currentTarget.value)))} />
                   </label>
                 </div>
                 <ul className="binaural-band-list compact-grid">
