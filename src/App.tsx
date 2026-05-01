@@ -380,7 +380,11 @@ export function App() {
     const colors: Record<NoiseType, string> = { white: '#ffffff', pink: '#ff94c1', brown: '#a97554', blue: '#5da5ff', violet: '#c683ff', off: '#444444' };
     navigator.mediaSession.metadata = new MediaMetadata({
       title: displayTitle, artist: strings.appName, album: strings.appTagline,
-      artwork: [{ src: generateMediaArtwork(colors[noiseType], beatEnabled ? activeBinauralBand.symbol : ''), sizes: '256x256', type: 'image/jpeg' }]
+      artwork: [
+        { src: '/icon.svg', sizes: '512x512', type: 'image/svg+xml' },
+        { src: generateMediaArtwork(colors[noiseType], beatEnabled ? activeBinauralBand.symbol : '', false), sizes: '256x256', type: 'image/jpeg' },
+        { src: generateMediaArtwork(colors[noiseType], beatEnabled ? activeBinauralBand.symbol : '', true), sizes: '512x256', type: 'image/jpeg' }
+      ]
     });
     navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
     navigator.mediaSession.setActionHandler('play', () => { void startPlayback(); });
@@ -796,6 +800,14 @@ function buildPresetSummary(settings: UserSettings, locale: Locale, currentBeatM
 }
 
 interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+function formatFrequency(value: number): string {
+  return Number.isInteger(value) ? `${value}Hz` : `${value.toFixed(1)}Hz`;
+}
+ace BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 }
