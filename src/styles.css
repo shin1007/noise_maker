@@ -443,12 +443,13 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .preset-card {
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 16px;
-  cursor: pointer;
   transition: all 0.3s ease;
 }
 
@@ -462,18 +463,127 @@ input[type="range"]::-webkit-slider-thumb {
   border-color: var(--accent-color);
 }
 
-.preset-info strong {
+.preset-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-card-head strong {
   display: block;
   font-size: 1.1rem;
-  margin-bottom: 4px;
   color: var(--accent-color);
 }
 
-.preset-info p {
+.preset-setting-summary {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.preset-description-readonly {
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-dim);
-  line-height: 1.4;
+  line-height: 1.45;
+}
+
+.preset-edit-button,
+.preset-apply-button,
+.preset-save-button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  background: rgba(var(--accent-rgb), 0.08);
+  color: var(--accent-color);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.preset-edit-button:hover,
+.preset-apply-button:hover,
+.preset-save-button:hover {
+  transform: translateY(-1px);
+  background: rgba(var(--accent-rgb), 0.14);
+  border-color: var(--accent-color);
+}
+
+.preset-edit-button:focus-visible,
+.preset-apply-button:focus-visible,
+.preset-save-button:focus-visible,
+.preset-name-input:focus-visible,
+.preset-description-input:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.preset-editor-modal {
+  max-width: 560px;
+}
+
+.preset-editor-body {
+  gap: 24px;
+}
+
+.preset-editor-body input[type="range"] {
+  width: 100%;
+}
+
+.preset-name-input {
+  width: 100%;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-color);
+  padding: 10px 12px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.preset-description-input {
+  width: 100%;
+  resize: vertical;
+  min-height: 78px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+  line-height: 1.45;
+}
+
+.preset-control-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preset-control-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.preset-noise-grid {
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+}
+
+.preset-control-group {
+  margin-top: 0;
+}
+
+.preset-band-list {
+  margin-top: -2px;
+}
+
+.preset-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Compact grid for bands in settings */

@@ -5,6 +5,7 @@ import { clampSettings, NoiseEngine, resolveBeatFrequencies } from './audio/nois
 import type { AudioMode, Locale, NoiseType, Preset } from './types';
 
 const STORAGE_KEY = 'noise_maker_settings';
+const PRESET_STORAGE_KEY = 'noise_maker_saved_presets';
 
 const solfeggioFrequencies = [174, 285, 396, 417, 440, 528, 639, 741, 852, 963]; // Added 440 for Preset 1
 
@@ -39,6 +40,51 @@ function loadSettings(): UserSettings {
   } catch {
     return defaultState;
   }
+}
+
+interface SavedPresetData {
+  settings: UserSettings;
+  name: string;
+  description: string;
+}
+
+type SavedPresetStore = Partial<Record<string, SavedPresetData>>;
+
+function loadSavedPresets(): SavedPresetStore {
+  try {
+    const saved = localStorage.getItem(PRESET_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch {
+    return {};
+  }
+}
+
+function normalizePresetSettings(settings: UserSettings): UserSettings {
+  return {
+    ...settings,
+    ...clampSettings(settings)
+  };
+}
+
+function getPresetDefaults(preset: Preset, settings: UserSettings, locale: Locale): SavedPresetData {
+  return {
+    settings: normalizePresetSettings({
+      ...settings,
+      noiseType: preset.noiseType,
+      baseFrequency: preset.baseFrequency,
+      differenceFrequency: binauralTargetByKey[preset.beatBand] ?? settings.differenceFrequency,
+      beatEnabled: true
+    }),
+    name: resolveLocalizedText(preset.label, locale),
+    description: resolveLocalizedText(preset.description, locale)
+  };
+}
+
+function normalizePresetData(data: SavedPresetData): SavedPresetData {
+  return {
+    ...data,
+    settings: normalizePresetSettings(data.settings)
+  };
 }
 
 function resolveLocale(): Locale {
@@ -106,7 +152,7 @@ function generateMediaArtwork(color: string, symbol?: string): string {
 }
 
 const binauralTargetByKey: Record<string, number> = {
-  delta: 2,
+  delta: 0.5,
   theta: 6,
   alpha: 10,
   beta: 18,
@@ -119,6 +165,9 @@ export function App() {
 
   const [settings, setSettings] = useState<UserSettings>(() => loadSettings());
   const { noiseType, volume, beatEnabled, beatMode, baseFrequency, differenceFrequency, timerMinutes } = settings;
+  const [presetDrafts, setPresetDrafts] = useState<SavedPresetStore>(() => loadSavedPresets());
+  const [editingPresetKey, setEditingPresetKey] = useState<string | null>(null);
+  const [editingPresetDraft, setEditingPresetDraft] = useState<SavedPresetData | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -170,18 +219,74 @@ export function App() {
   }, [isPlaying, startPlayback, stopPlayback]);
 
   const applyPreset = useCallback((preset: Preset) => {
-    const nextSettings: UserSettings = {
-      ...settings,
-      noiseType: preset.noiseType,
-      baseFrequency: preset.baseFrequency,
-      differenceFrequency: binauralTargetByKey[preset.beatBand] ?? settings.differenceFrequency,
-      beatEnabled: true
-    };
+    const nextSettings = (presetDrafts[preset.key] ?? getPresetDefaults(preset, settings, locale)).settings;
     setSettings(nextSettings);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextSettings));
     setActivePreset(preset.key);
     if (!isPlaying) void startPlayback(nextSettings);
-  }, [isPlaying, settings, startPlayback]);
+  }, [isPlaying, locale, presetDrafts, settings, startPlayback]);
+
+  const savePreset = useCallback((preset: Preset) => {
+    const currentDraft = normalizePresetData(presetDrafts[preset.key] ?? getPresetDefaults(preset, settings, locale));
+    const nextDrafts = { ...presetDrafts, [preset.key]: currentDraft };
+    setPresetDrafts(nextDrafts);
+    localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(nextDrafts));
+    setActivePreset(preset.key);
+  }, [locale, presetDrafts, settings]);
+
+  const updatePresetDraft = useCallback((presetKey: string, updater: (current: SavedPresetData) => SavedPresetData) => {
+    setPresetDrafts((prev) => {
+      const preset = presets.find((item) => item.key === presetKey) ?? presets[0];
+      const currentDraft = normalizePresetData(prev[presetKey] ?? getPresetDefaults(preset, settings, locale));
+      const nextDraft = normalizePresetData(updater(currentDraft));
+      return { ...prev, [presetKey]: nextDraft };
+    });
+  }, [locale, settings]);
+
+  const getPresetDraft = useCallback((preset: Preset): SavedPresetData => {
+    return normalizePresetData(presetDrafts[preset.key] ?? getPresetDefaults(preset, settings, locale));
+  }, [locale, presetDrafts, settings]);
+
+  const openPresetEditor = useCallback((preset: Preset) => {
+    setEditingPresetKey(preset.key);
+    setEditingPresetDraft(getPresetDraft(preset));
+  }, [getPresetDraft]);
+
+  const closePresetEditor = useCallback(() => {
+    setEditingPresetKey(null);
+    setEditingPresetDraft(null);
+  }, []);
+
+  const updateEditingPresetDraft = useCallback((updater: (current: SavedPresetData) => SavedPresetData) => {
+    setEditingPresetDraft((current) => {
+      if (!current) {
+        return current;
+      }
+      return normalizePresetData(updater(current));
+    });
+  }, []);
+
+  const saveEditingPreset = useCallback((applyAfterSave: boolean) => {
+    if (!editingPresetKey || !editingPresetDraft) {
+      return;
+    }
+
+    const nextPreset = normalizePresetData(editingPresetDraft);
+    const nextDrafts = { ...presetDrafts, [editingPresetKey]: nextPreset };
+    setPresetDrafts(nextDrafts);
+    localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(nextDrafts));
+    setActivePreset(editingPresetKey);
+
+    if (applyAfterSave) {
+      setSettings(nextPreset.settings);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPreset.settings));
+      if (!isPlaying) {
+        void startPlayback(nextPreset.settings);
+      }
+    }
+
+    closePresetEditor();
+  }, [closePresetEditor, editingPresetDraft, editingPresetKey, isPlaying, presetDrafts, startPlayback]);
 
   useEffect(() => {
     if (isPlaying && engineRef.current) {
@@ -343,16 +448,196 @@ export function App() {
           <h2 className="section-title">{strings.presetsTitle}</h2>
           <div className="preset-list">
             {presets.map((preset) => (
-              <button key={preset.key} className={`preset-card ${activePreset === preset.key ? 'active' : ''}`} onClick={() => applyPreset(preset)}>
-                <div className="preset-info">
-                  <strong>{resolveLocalizedText(preset.label, locale)}</strong>
-                  <p>{resolveLocalizedText(preset.description, locale)}</p>
-                </div>
-              </button>
+              <div key={preset.key} className={`preset-card ${activePreset === preset.key ? 'active' : ''}`}>
+                {(() => {
+                  const presetDraft = getPresetDraft(preset);
+                  return (
+                    <>
+                      <div className="preset-card-head">
+                        <strong>{presetDraft.name}</strong>
+                        <span className="preset-setting-summary">{buildPresetSummary(presetDraft.settings, locale)}</span>
+                      </div>
+                      <p className="preset-description-readonly">{presetDraft.description}</p>
+                      <div className="preset-card-actions">
+                        <button type="button" className="preset-edit-button" onClick={() => openPresetEditor(preset)}>{locale === 'ja' ? '編集' : 'Edit'}</button>
+                        <button type="button" className="preset-apply-button" onClick={() => applyPreset(preset)}>{locale === 'ja' ? '適用' : 'Apply'}</button>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
             ))}
           </div>
         </div>
       </section>
+
+      {editingPresetKey && editingPresetDraft && (
+        <div className="modal-overlay" onClick={closePresetEditor}>
+          <div className="modal-content card preset-editor-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{locale === 'ja' ? 'プリセット編集' : 'Preset editor'}</h2>
+              <button className="close-modal" onClick={closePresetEditor}>×</button>
+            </div>
+            <div className="modal-body preset-editor-body">
+              <div className="control-section">
+                <div className="label-row">
+                  <span className="label-text">{strings.volumeLabel}</span>
+                  <div className="value-with-stepper">
+                    <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
+                      ...current,
+                      settings: { ...current.settings, volume: Math.max(0, current.settings.volume - 1) }
+                    }))}>-</button>
+                    <span className="value-display">{editingPresetDraft.settings.volume}%</span>
+                    <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
+                      ...current,
+                      settings: { ...current.settings, volume: Math.min(100, current.settings.volume + 1) }
+                    }))}>+</button>
+                  </div>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={editingPresetDraft.settings.volume}
+                  onChange={(event) => updateEditingPresetDraft((current) => ({
+                    ...current,
+                    settings: { ...current.settings, volume: Number(event.target.value) }
+                  }))}
+                />
+              </div>
+
+              <div className="control-section">
+                <label>
+                  <div className="label-row">
+                    <span className="label-text">{locale === 'ja' ? 'プリセット名' : 'Preset name'}</span>
+                  </div>
+                  <input
+                    className="preset-name-input"
+                    value={editingPresetDraft.name}
+                    onChange={(event) => updateEditingPresetDraft((current) => ({ ...current, name: event.target.value }))}
+                  />
+                </label>
+                <label>
+                  <div className="label-row">
+                    <span className="label-text">{locale === 'ja' ? '説明' : 'Description'}</span>
+                  </div>
+                  <textarea
+                    className="preset-description-input"
+                    rows={4}
+                    value={editingPresetDraft.description}
+                    onChange={(event) => updateEditingPresetDraft((current) => ({ ...current, description: event.target.value }))}
+                  />
+                </label>
+              </div>
+
+              <div className="control-section">
+                <div className="preset-control-label">{strings.noiseType}</div>
+                <div className="noise-grid preset-noise-grid">
+                  {noiseTypes.map((type) => (
+                    <button
+                      key={type.key}
+                      type="button"
+                      className={`noise-chip noise-${type.key} ${editingPresetDraft.settings.noiseType === type.key ? 'selected' : ''}`}
+                      onClick={() => updateEditingPresetDraft((current) => ({
+                        ...current,
+                        settings: { ...current.settings, noiseType: type.key }
+                      }))}
+                    >
+                      <strong>{resolveLocalizedText(type.label, locale)}</strong>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="control-section">
+                <div className="toggle-row">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={editingPresetDraft.settings.beatEnabled}
+                      onChange={(event) => updateEditingPresetDraft((current) => ({
+                        ...current,
+                        settings: { ...current.settings, beatEnabled: event.target.checked }
+                      }))}
+                    />
+                    <span className="binaural-label">{strings.beatOn}</span>
+                  </label>
+                </div>
+
+                {editingPresetDraft.settings.beatEnabled && (
+                  <>
+                    <div className="mode-toggle-group">
+                      <button type="button" className={`mode-button ${editingPresetDraft.settings.beatMode === 'earphone' ? 'active' : ''}`} onClick={() => updateEditingPresetDraft((current) => ({
+                        ...current,
+                        settings: { ...current.settings, beatMode: 'earphone' }
+                      }))}>{strings.earphoneMode}</button>
+                      <button type="button" className={`mode-button ${editingPresetDraft.settings.beatMode === 'speaker' ? 'active' : ''}`} onClick={() => updateEditingPresetDraft((current) => ({
+                        ...current,
+                        settings: { ...current.settings, beatMode: 'speaker' }
+                      }))}>{strings.speakerMode}</button>
+                    </div>
+
+                    <div className="control-group preset-control-group">
+                      <label>
+                        <div className="label-row">
+                          <span className="label-text">{strings.baseFreq}</span>
+                          <div className="value-with-stepper">
+                            <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
+                              ...current,
+                              settings: { ...current.settings, baseFrequency: findNearestSolfeggio(current.settings.baseFrequency - 1) }
+                            }))}>-</button>
+                            <span className="value-display">{editingPresetDraft.settings.baseFrequency}Hz</span>
+                            <button className="step-button" type="button" onClick={() => updateEditingPresetDraft((current) => ({
+                              ...current,
+                              settings: { ...current.settings, baseFrequency: findNearestSolfeggio(current.settings.baseFrequency + 1) }
+                            }))}>+</button>
+                          </div>
+                        </div>
+                        <input
+                          type="range"
+                          min="174"
+                          max="963"
+                          step="1"
+                          value={editingPresetDraft.settings.baseFrequency}
+                          onChange={(event) => updateEditingPresetDraft((current) => ({
+                            ...current,
+                            settings: { ...current.settings, baseFrequency: findNearestSolfeggio(Number(event.target.value)) }
+                          }))}
+                        />
+                      </label>
+                    </div>
+
+                    <ul className="binaural-band-list compact-grid preset-band-list">
+                      {binauralBands.map((band) => {
+                        const activeBand = binauralBands.find((item) => editingPresetDraft.settings.differenceFrequency >= item.min && (item.key === 'gamma' ? editingPresetDraft.settings.differenceFrequency <= item.max : editingPresetDraft.settings.differenceFrequency < item.max)) ?? binauralBands[1];
+                        return (
+                          <li key={band.key}>
+                            <button
+                              type="button"
+                              className={`band-button ${band.key === activeBand.key ? 'active' : ''}`}
+                              onClick={() => updateEditingPresetDraft((current) => ({
+                                ...current,
+                                settings: { ...current.settings, differenceFrequency: binauralTargetByKey[band.key] ?? current.settings.differenceFrequency }
+                              }))}
+                            >
+                              {resolveLocalizedText(band.label, locale)} ({formatFrequency(binauralTargetByKey[band.key] ?? 0)})
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                )}
+              </div>
+
+              <div className="preset-card-actions">
+                <button type="button" className="preset-save-button" onClick={() => saveEditingPreset(false)}>{locale === 'ja' ? '保存' : 'Save'}</button>
+                <button type="button" className="preset-apply-button" onClick={() => saveEditingPreset(true)}>{locale === 'ja' ? '保存して適用' : 'Save and Apply'}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isSettingsOpen && (
         <div className="modal-overlay" onClick={() => setIsSettingsOpen(false)}>
@@ -461,6 +746,24 @@ function formatRemaining(locale: Locale, totalSeconds: number, strings: any): st
   const m = Math.floor(totalSeconds / 60); const s = totalSeconds % 60;
   if (['ja', 'zh-Hans', 'yue', 'ko'].includes(locale)) return `${m}${strings.minute}${String(s).padStart(2, '0')}${strings.second}`;
   return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function buildPresetSummary(settings: UserSettings, locale: Locale): string {
+  const noiseLabel = settings.noiseType === 'off'
+    ? (locale === 'ja' ? 'ノイズなし' : 'Noise off')
+    : getNoiseLabel(locale, settings.noiseType);
+  const modeLabel = settings.beatEnabled
+    ? settings.beatMode === 'earphone'
+      ? (locale === 'ja' ? 'イヤホン' : 'Earphone')
+      : (locale === 'ja' ? 'スピーカー' : 'Speaker')
+    : (locale === 'ja' ? 'ビートなし' : 'No beat');
+  const beatPart = settings.beatEnabled
+    ? settings.beatMode === 'earphone'
+      ? `${formatFrequency(Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2))} / ${formatFrequency(Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2))}`
+      : `${formatFrequency(settings.baseFrequency)} / ${formatFrequency(settings.differenceFrequency)}`
+    : formatFrequency(settings.baseFrequency);
+
+  return `${noiseLabel} · ${modeLabel} · ${beatPart}`;
 }
 
 interface BeforeInstallPromptEvent extends Event {
