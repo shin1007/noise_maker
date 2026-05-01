@@ -359,6 +359,38 @@ export function App() {
     navigator.mediaSession.setActionHandler('stop', () => { void stopPlayback(); });
   }, [activeBinauralBand.reading, activeBinauralBand.symbol, beatEnabled, isPlaying, locale, noiseType, startPlayback, stopPlayback, strings.appName, strings.appTagline]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return;
+      }
+
+      if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+        event.preventDefault();
+        updateSetting('volume', Math.min(100, volume + (event.key === 'PageUp' ? 5 : 1)));
+      }
+
+      if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+        event.preventDefault();
+        updateSetting('volume', Math.max(0, volume - (event.key === 'PageDown' ? 5 : 1)));
+      }
+
+      if (event.key === 'Home') {
+        event.preventDefault();
+        updateSetting('volume', 0);
+      }
+
+      if (event.key === 'End') {
+        event.preventDefault();
+        updateSetting('volume', 100);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [updateSetting, volume]);
+
   async function triggerInstall() {
     if (!installPrompt) { setInstallGuideOpen(true); return; }
     await installPrompt.prompt();
@@ -417,9 +449,9 @@ export function App() {
                 <div className="label-row">
                   <span className="label-text">{strings.volumeLabel}</span>
                   <div className="value-with-stepper">
-                    <button className="step-button" onClick={() => updateSetting('volume', Math.max(0, volume - 1))}>-</button>
+                    <button className="step-button" type="button" onClick={() => updateSetting('volume', Math.max(0, volume - 1))}>-</button>
                     <span className="value-display">{volume}%</span>
-                    <button className="step-button" onClick={() => updateSetting('volume', Math.min(100, volume + 1))}>+</button>
+                    <button className="step-button" type="button" onClick={() => updateSetting('volume', Math.min(100, volume + 1))}>+</button>
                   </div>
                 </div>
                 <input type="range" min="0" max="100" value={volume} onChange={(e) => updateSetting('volume', Number(e.target.value))} />
@@ -502,6 +534,17 @@ export function App() {
                   onChange={(event) => updateEditingPresetDraft((current) => ({
                     ...current,
                     settings: { ...current.settings, volume: Number(event.target.value) }
+                  }))}
+                />
+                <input
+                  className="preset-volume-input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={editingPresetDraft.settings.volume}
+                  onChange={(event) => updateEditingPresetDraft((current) => ({
+                    ...current,
+                    settings: { ...current.settings, volume: Math.max(0, Math.min(100, Number(event.target.value) || 0)) }
                   }))}
                 />
               </div>
@@ -748,6 +791,16 @@ function formatRemaining(locale: Locale, totalSeconds: number, strings: any): st
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
+function getBinauralBandForDifference(differenceFrequency: number) {
+  return binauralBands.find((band) => differenceFrequency >= band.min && (band.key === 'gamma' ? differenceFrequency <= band.max : differenceFrequency < band.max)) ?? binauralBands[1];
+}
+
+function formatBinauralBandLabel(settings: UserSettings, locale: Locale): string {
+  const band = getBinauralBandForDifference(settings.differenceFrequency);
+  const bandName = resolveLocalizedText(band.label, locale);
+  return locale === 'ja' ? `${bandName}波` : `${bandName} wave`;
+}
+
 function buildPresetSummary(settings: UserSettings, locale: Locale): string {
   const noiseLabel = settings.noiseType === 'off'
     ? (locale === 'ja' ? 'ノイズなし' : 'Noise off')
@@ -759,8 +812,8 @@ function buildPresetSummary(settings: UserSettings, locale: Locale): string {
     : (locale === 'ja' ? 'ビートなし' : 'No beat');
   const beatPart = settings.beatEnabled
     ? settings.beatMode === 'earphone'
-      ? `${formatFrequency(Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2))} / ${formatFrequency(Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2))}`
-      : `${formatFrequency(settings.baseFrequency)} / ${formatFrequency(settings.differenceFrequency)}`
+      ? `${formatBinauralBandLabel(settings, locale)} ${formatFrequency(Math.max(20, settings.baseFrequency - settings.differenceFrequency / 2))} / ${formatFrequency(Math.max(20, settings.baseFrequency + settings.differenceFrequency / 2))}`
+      : `${formatBinauralBandLabel(settings, locale)} ${formatFrequency(settings.baseFrequency)} / ${formatFrequency(settings.differenceFrequency)}`
     : formatFrequency(settings.baseFrequency);
 
   return `${noiseLabel} · ${modeLabel} · ${beatPart}`;

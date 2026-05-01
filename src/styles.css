@@ -530,6 +530,22 @@ input[type="range"]::-webkit-slider-thumb {
   width: 100%;
 }
 
+.preset-volume-input {
+  width: 100%;
+  max-width: 120px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.preset-editor-body .control-section .label-row {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .preset-name-input {
   width: 100%;
   border: 1px solid rgba(var(--accent-rgb), 0.2);
